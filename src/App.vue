@@ -6,7 +6,6 @@
 import { onBeforeMount } from 'vue';
 import useUserStore from '@/store/use-user-store.store';
 import router from './router';
-router
 
 onBeforeMount(() => {
   const userEmail = useUserStore().getEmail;
