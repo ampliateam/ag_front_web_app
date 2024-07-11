@@ -1,4 +1,4 @@
-const firebaseConfig = {
+export const firebaseConfigProd = {
   apiKey: 'AIzaSyDFHFYBcZRZ03Q7hwDbLYfYGWFUQQdG7DU',
   authDomain: 'agendalia-dev.firebaseapp.com',
   projectId: 'agendalia-dev',
@@ -7,5 +7,3 @@ const firebaseConfig = {
   appId: '1:318930231215:web:fa38ed184f3477e838d95a',
   measurementId: 'G-7FVKHSGYJ7',
 };
-
-export default firebaseConfig;

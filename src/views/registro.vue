@@ -110,18 +110,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-// eslint-disable-next-line import/no-cycle
-import useUserStore from '@/store/use-user-store.store';
-// eslint-disable-next-line import/no-cycle
+import usuarioLogeadoStore from '@/store/usuario-logeado.store';
 import router from '@/router';
 
+const email = ref('');
+const code = ref('');
 const pass = ref('');
 const passConfirmar = ref('');
-const email = ref('');
 
 async function registrarse() {
-  const userStore = useUserStore();
-  await userStore.registrarse(email.value, pass.value, passConfirmar.value);
+  const userStore = usuarioLogeadoStore();
+  await userStore.registrarUsuarioPersona({
+    correo: email.value,
+    codigo: code.value,
+    nombre: email.value.split('@')[0],
+    contrasena: pass.value,
+    confirmacionContrasena: passConfirmar.value
+  });
   router.push('/');
 }
 

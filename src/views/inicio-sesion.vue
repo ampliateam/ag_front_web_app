@@ -109,15 +109,18 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useUserStore from '@/store/use-user-store.store';
+import usuarioLogeadoStore from '@/store/usuario-logeado.store';
 import router from '@/router';
 
 const pass = ref('');
 const email = ref('');
 
 async function login() {
-  const userStore = useUserStore();
-  await userStore.login(email.value, pass.value);
+  const userStore = usuarioLogeadoStore();
+  await userStore.login({
+    correo: email.value,
+    contrasena: pass.value
+  });
   router.push('/');
 }
 
