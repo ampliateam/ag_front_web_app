@@ -1,14 +1,18 @@
 <template>
-  <router-view />
+  <div>
+    <div
+      v-if="
+        infoSistemaStore.getCargando && !infoSistemaStore.getExisteUsuarioLogeado"
+    >
+      Cargando!
+    </div>
+    <div v-else>
+      <router-view />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount } from 'vue';
-import useUserStore from '@/store/use-user-store.store';
-import router from './router';
-
-// onBeforeMount(() => {
-//   const userEmail = useUserStore().getEmail;
-//   if (!userEmail) router.push('/inicio-sesion');
-// });
+import useInfoSistemaStore from '@/store/info-sistema.store';
+const infoSistemaStore = useInfoSistemaStore();
 </script>
