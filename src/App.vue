@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="infoSistemaStore.getCargando && !infoSistemaStore.getExisteUsuarioLogeado">
+    <div
+      v-if="
+        infoSistemaStore.getCargando && !infoSistemaStore.getExisteUsuarioLogeado"
+    >
       Cargando!
     </div>
     <div v-else>

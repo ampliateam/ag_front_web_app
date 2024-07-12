@@ -1,9 +1,9 @@
 export const firebaseConfigProd = {
-  apiKey: 'AIzaSyDFHFYBcZRZ03Q7hwDbLYfYGWFUQQdG7DU',
-  authDomain: 'agendalia-dev.firebaseapp.com',
-  projectId: 'agendalia-dev',
-  storageBucket: 'agendalia-dev.appspot.com',
-  messagingSenderId: '318930231215',
-  appId: '1:318930231215:web:fa38ed184f3477e838d95a',
-  measurementId: 'G-7FVKHSGYJ7',
+  apiKey: import.meta.env.VITE_FIREBASE_CONFIG_APIKEY_PROD,
+  authDomain: import.meta.env.VITE_FIREBASE_CONFIG_AUTHDOMAIN_PROD,
+  projectId: import.meta.env.VITE_FIREBASE_CONFIG_PROJECTID_PROD,
+  storageBucket: import.meta.env.VITE_FIREBASE_CONFIG_STORAGEBUCKET_PROD,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_CONFIG_MESSAGINGSENDERID_PROD,
+  appId: import.meta.env.VITE_FIREBASE_CONFIG_APPID_PROD,
+  measurementId: import.meta.env.VITE_FIREBASE_CONFIG_MEASUREMENTID_PROD,
 };
