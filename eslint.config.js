@@ -1,7 +1,8 @@
 import vue3Recommended from "eslint-plugin-vue/lib/configs/vue3-recommended.js";
 import eslintPluginVue from "eslint-plugin-vue";
 import tseslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+import vueEslintParser from "vue-eslint-parser";
+import tsParse from "@typescript-eslint/parser"
 import requireIndexExport from "./eslint-rules/require-index-export.js";
 import noDirectFirebaseAuthImport from "./eslint-rules/no-direct-firebase-auth-import.js";
 
@@ -19,10 +20,9 @@ export default [
       },
     },
     languageOptions: {
-      parser: tsParser,
+      parser: vueEslintParser,
       parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: "module",
+        parser: tsParse,
       },
     },
     rules: {
@@ -30,9 +30,10 @@ export default [
       ...tseslint.configs.recommended.rules,
       quotes: ['error', 'single'],
       '@typescript-eslint/quotes': ['error', 'single'],
-      'vue/html-quotes': ['error', 'single'],
+      'vue/html-quotes': ['error', 'double'],
       "custom-rules/require-index-export": "error",
       "custom-rules/no-direct-firebase-auth-import": "error",
+      'jsx-a11y/no-redundant-roles': 'off',
     },
   }
 ];

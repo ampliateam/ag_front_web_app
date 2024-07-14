@@ -67,33 +67,32 @@
               <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label for="email" htmlFor="email" class="text-gray-700">Correo</label>
               <input
+                id="email"
+                v-model="email"
                 type="email"
                 name="email"
-                id="email"
                 placeholder="@email"
-                v-model="email"
                 class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none
                 focus:ring-indigo-600 :ring-indigo-600"
               />
             </div>
             <div>
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label for="password" class="text-gray-700">Contraseña</label>
               <input
+                id="password"
+                v-model="pass"
                 type="password"
                 name="password"
-                id="password"
                 placeholder="••••••••"
-                v-model="pass"
                 class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none
                 focus:ring-indigo-600 :ring-indigo-600"
               />
             </div>
 
             <button
-              @click="login"
               class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full
               text-center rounded-lg"
+              @click="login"
             >
               Iniciar Sesión
             </button>

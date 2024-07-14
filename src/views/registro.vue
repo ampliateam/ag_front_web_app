@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section>
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -69,9 +68,9 @@
               <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label for="email" htmlFor="email" class="text-gray-700">Correo</label>
               <input
+                id="email"
                 type="email"
                 name="email"
-                id="email"
                 placeholder="@email"
                 class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none
                 focus:ring-indigo-600 :ring-indigo-600"
@@ -81,9 +80,9 @@
               <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label for="password" class="text-gray-700">Contraseña</label>
               <input
+                id="password"
                 type="password"
                 name="password"
-                id="password"
                 placeholder="••••••••"
                 class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none
                 focus:ring-indigo-600 :ring-indigo-600"
@@ -94,6 +93,7 @@
               type="submit"
               class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full
               text-center rounded-lg"
+              @click="registrarse"
             >
               Iniciar Sesión
             </button>
