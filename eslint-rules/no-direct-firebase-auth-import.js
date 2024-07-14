@@ -21,11 +21,11 @@ export default {
         // Verificar si la importación es de firebase-auth
         // Permitir importaciones en index.ts
         if (path.basename(currentFile) === 'index.ts' &&
-          path.dirname(currentFile).endsWith('domain\\repository\\firebase-authentication')) {
+          path.dirname(currentFile).includes('\\domain')) {
           return;
         }
         // Verificar si la importación es desde index.ts
-        if (!importPath.endsWith('index') && importPath.includes('.repository')) {
+        if (!importPath.endsWith('index') && (importPath.includes('.repository') || importPath.includes('.service'))) {
           context.report({
             node,
             message: 'Solo se puede importar módulos desde index.ts',

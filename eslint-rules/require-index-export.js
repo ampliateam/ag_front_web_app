@@ -17,7 +17,7 @@ export default {
       Program(node) {
         const filename = context.getFilename();
 
-        if (!filename.includes('domain\\repository\\firebase-authentication')) return;
+        if (!filename.includes('\\domain')) return;
         
         const dirPath = path.dirname(filename);
         const indexPath = path.join(dirPath, 'index.ts');
