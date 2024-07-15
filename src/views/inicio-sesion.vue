@@ -89,20 +89,17 @@
             />
           </div>
 
-          <button
-            @click="login"
-            class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full text-center rounded-lg"
-          >
-            Iniciar Sesión
-          </button>
-          <p class="text-sm font-medium text-gray-400 dark:text-primary-500">
-            ¿No tienes una cuenta aun?
-            <RouterLink
-              to="/inicio-sesion"
-              class="text-sm font-medium text-blue-600 underline"
-              >Registrarse</RouterLink
+            <button
+              class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full
+              text-center rounded-lg"
+              @click="login"
             >
-          </p>
+              Iniciar Sesión
+            </button>
+            <p class="text-sm font-medium text-gray-400 dark:text-primary-500">
+              ¿No tienes una cuenta aun?
+              <a href="#" class="text-sm font-medium text-blue-600 underline">Registrarse</a>
+            </p>
         </div>
       </div>
     </div>

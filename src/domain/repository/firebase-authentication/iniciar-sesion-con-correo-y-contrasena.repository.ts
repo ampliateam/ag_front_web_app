@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { UserCredentialFirebase } from '@/interfaces/models';
 import { IniciarSesionConCorreoYContrasenaDTO } from '@/interfaces/dto';
 

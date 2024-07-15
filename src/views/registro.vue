@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section>
     <div
@@ -77,6 +76,7 @@
                 class="text-gray-700"
               >Correo</label>
               <input
+                id="email"
                 id="email"
                 v-model="email"
                 type="email"
