@@ -77,7 +77,6 @@
               >Correo</label>
               <input
                 id="email"
-                id="email"
                 v-model="email"
                 type="email"
                 name="email"
@@ -174,9 +173,9 @@ const passConfirmar = ref('');
 const esValidoRegistrarse = ref(false);
 
 // Lista de errores
-const erroresCorreo = ref<any>({});
-const erroresPass = ref<any>({});
-const errorespassConfirmar = ref<any>({});
+const erroresCorreo = ref<{ [key: string]: boolean }>({});
+const erroresPass = ref<{ [key: string]: boolean }>({});
+const errorespassConfirmar = ref<{ [key: string]: boolean }>({});
 
 async function registrarse() {
   const userStore = usuarioLogeadoStore();

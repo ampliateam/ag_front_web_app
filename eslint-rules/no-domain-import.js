@@ -4,7 +4,7 @@ export default {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Disallow direct imports from firebase-auth except in index.ts',
+      description: 'Deshabilita la importanción directa de módulos en domain que no sea a través de index.ts',
       category: 'Best Practices',
       recommended: false,
     },
