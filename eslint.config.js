@@ -4,7 +4,7 @@ import tseslint from "@typescript-eslint/eslint-plugin";
 import vueEslintParser from "vue-eslint-parser";
 import tsParse from "@typescript-eslint/parser"
 import requireIndexExport from "./eslint-rules/require-index-export.js";
-import noDirectFirebaseAuthImport from "./eslint-rules/no-domain-import.js";
+import noDomainImport from "./eslint-rules/no-domain-import.js";
 
 export default [
   {
@@ -15,7 +15,7 @@ export default [
       "custom-rules": {
         rules: {
           "require-index-export": requireIndexExport,
-          "no-direct-firebase-auth-import": noDirectFirebaseAuthImport,
+          "no-domain-import": noDomainImport,
         },
       },
     },
@@ -32,7 +32,7 @@ export default [
       '@typescript-eslint/quotes': ['error', 'single'],
       'vue/html-quotes': ['error', 'double'],
       "custom-rules/require-index-export": "error",
-      "custom-rules/no-direct-firebase-auth-import": "error",
+      "custom-rules/no-domain-import": "error",
       'jsx-a11y/no-redundant-roles': 'off',
     },
   }

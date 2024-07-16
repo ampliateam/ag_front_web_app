@@ -25,17 +25,33 @@ export default {
           return;
         }
         // Verificar si la importación es desde index.ts
-        if (!importPath.endsWith('index') && (importPath.includes('.repository') || importPath.includes('.service'))) {
-          context.report({
-            node,
-            message: 'Solo se puede importar módulos desde index.ts',
-            fix(fixer) {
-              const newImport = importPath.replace(/\/[^/]+$/, '/index');
-              return fixer.replaceText(source, `'${newImport}'`);
-            }
-          });
+        if(currentFile.includes('\\domain')){
+          if (!importPath.endsWith('index') && (importPath.includes('.repository') || importPath.includes('.service'))) {
+            context.report({
+              node,
+              message: 'Solo se puede importar módulos desde index.ts',
+              fix(fixer) {
+                const newImport = importPath.replace(/\/[^/]+$/, '');
+                return fixer.replaceText(source, `'${newImport}'`);
+              }
+            });
+          }
         }
-
+        // verificar si es externo a domain, si no se importa de otro lado que no sea service
+        if(!currentFile.includes('\\domain')){
+          console.log("aaaaaaaaa", importPath.includes('\\domain'), !importPath.endsWith('\\services\\index'), !importPath.endsWith('\\services'))
+          if (importPath.includes('domain/') && !importPath.endsWith('/services/index') && !importPath.endsWith('/services')) {
+            console.log("eeeeeeeeeee")
+            context.report({
+              node,
+              message: 'Solo se puede importar módulos desde services',
+              fix(fixer) {
+                const newImport = importPath.replace(/\/[^/]+$/, '/index');
+                return fixer.replaceText(source, `'${newImport}'`);
+              }
+            });
+          }
+        }
       }
     };
   },
