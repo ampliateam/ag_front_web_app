@@ -1,14 +1,18 @@
 <template>
   <section>
-    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-      <div class="w-full bg-white rounded-2xl shadow-lg md:mt-0 sm:max-w-md xl:p-0">
+    <div
+      class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+    >
+      <div
+        class="w-full bg-white rounded-2xl shadow-lg md:mt-0 sm:max-w-md xl:p-0"
+      >
         <div class="p-10 space-y-2 md:space-y-4 sm:p-8">
-          <h1 class="py-2 text-gray-700 font-extrabold text-2xl">Inicia Sesión</h1>
+          <h1 class="py-2 text-gray-700 font-extrabold text-2xl">
+            Inicia Sesión
+          </h1>
           <div class="flex flex-col md:flex-row items-center justify-center">
             <button
-              class="w-full max-w-xs md:max-w-none font-bold shadow-sm rounded-lg py-2 bg-blue-100
-              text-gray-800 flex items-center justify-center transition-all duration-300 mb-3
-              md:mb-0 md:mr-3"
+              class="w-full max-w-xs md:max-w-none font-bold shadow-sm rounded-lg py-2 bg-blue-100 text-gray-800 flex items-center justify-center transition-all duration-300 mb-3 md:mb-0 md:mr-3"
             >
               <div class="p-1 rounded-full">
                 <svg class="w-4" viewBox="0 0 533.5 544.3">
@@ -40,13 +44,11 @@
               <span class="ml-1"> Google </span>
             </button>
             <button
-              class="w-full max-w-xs md:max-w-none font-bold shadow-sm rounded-lg py-2 bg-blue-100
-              text-gray-800 flex items-center justify-center mb-3 md:mb-0 md:mr-3"
+              class="w-full max-w-xs md:max-w-none font-bold shadow-sm rounded-lg py-2 bg-blue-100 text-gray-800 flex items-center justify-center mb-3 md:mb-0 md:mr-3"
             >
               <!-- Facebook -->
               <span
-                class="me-2 rounded-full bg-blue-500 p-1 fill-white [&>svg]:mx-auto [&>svg]:h-3.5
-                [&>svg]:w-3.5"
+                class="me-2 rounded-full bg-blue-500 p-1 fill-white [&>svg]:mx-auto [&>svg]:h-3.5 [&>svg]:w-3.5"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                   <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
@@ -60,40 +62,37 @@
               Facebook
             </button>
           </div>
-          <div class="text-center">
-            <span class="text-gray-400">o</span>
+          <div>
+            <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
+            <label for="email" htmlFor="email" class="text-gray-700"
+              >Correo</label
+            >
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="@email"
+              v-model="email"
+              class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none focus:ring-indigo-600 :ring-indigo-600"
+            />
           </div>
-            <div>
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-              <label for="email" htmlFor="email" class="text-gray-700">Correo</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="@email"
-                v-model="email"
-                class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none
-                focus:ring-indigo-600 :ring-indigo-600"
-              />
-            </div>
-            <div>
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-              <label for="password" class="text-gray-700">Contraseña</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                v-model="pass"
-                class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none
-                focus:ring-indigo-600 :ring-indigo-600"
-              />
-            </div>
+          <div>
+            <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
+            <label for="password" class="text-gray-700">Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="••••••••"
+              v-model="pass"
+              class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none focus:ring-indigo-600 :ring-indigo-600"
+            />
+          </div>
 
             <button
-              @click="login"
               class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full
               text-center rounded-lg"
+              @click="login"
             >
               Iniciar Sesión
             </button>
@@ -109,15 +108,18 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useUserStore from '@/store/use-user-store.store';
+import usuarioLogeadoStore from '@/store/usuario-logeado.store';
 import router from '@/router';
 
 const pass = ref('');
 const email = ref('');
 
 async function login() {
-  const userStore = useUserStore();
-  await userStore.login(email.value, pass.value);
+  const userStore = usuarioLogeadoStore();
+  await userStore.login({
+    correo: email.value,
+    contrasena: pass.value
+  });
   router.push('/');
 }
 

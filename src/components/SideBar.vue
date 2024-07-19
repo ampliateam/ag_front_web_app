@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useUserStore from '@/store/use-user-store.store';
+import usuarioLogeadoStore from '@/store/usuario-logeado.store';
 import router from '@/router';
 
 const selectedIndex = ref();
@@ -139,7 +139,7 @@ function selectItem(index: number) {
 }
 
 async function logout() {
-  const userStore = useUserStore();
+  const userStore = usuarioLogeadoStore();
   await userStore.logout();
   router.push('/inicio-sesion');
 }

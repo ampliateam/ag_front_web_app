@@ -3,8 +3,8 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import './index.css';
-import './plugins/firebase';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import './plugins/firebase';
 
 const pinia = createPinia();
 
