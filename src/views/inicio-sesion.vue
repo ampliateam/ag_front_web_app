@@ -15,7 +15,10 @@
               class="w-full max-w-xs md:max-w-none font-bold shadow-sm rounded-lg py-2 bg-blue-100 text-gray-800 flex items-center justify-center transition-all duration-300 mb-3 md:mb-0 md:mr-3"
             >
               <div class="p-1 rounded-full">
-                <svg class="w-4" viewBox="0 0 533.5 544.3">
+                <svg
+                  class="w-4"
+                  viewBox="0 0 533.5 544.3"
+                >
                   <path
                     d="M533.5 278.4c0-18.5-1.5-37.1-4.7-55.3H272.1v104.8h147c-6.1 33.8-25.7
                             63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z"
@@ -50,7 +53,10 @@
               <span
                 class="me-2 rounded-full bg-blue-500 p-1 fill-white [&>svg]:mx-auto [&>svg]:h-3.5 [&>svg]:w-3.5"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                >
                   <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
                   <path
                     d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7
@@ -64,9 +70,11 @@
           </div>
           <div>
             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-            <label for="email" htmlFor="email" class="text-gray-700"
-              >Correo</label
-            >
+            <label
+              for="email"
+              htmlFor="email"
+              class="text-gray-700"
+            >Correo</label>
             <input
               type="email"
               name="email"
@@ -74,11 +82,14 @@
               placeholder="@email"
               v-model="email"
               class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none focus:ring-indigo-600 :ring-indigo-600"
-            />
+            >
           </div>
           <div>
             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-            <label for="password" class="text-gray-700">Contraseña</label>
+            <label
+              for="password"
+              class="text-gray-700"
+            >Contraseña</label>
             <input
               type="password"
               name="password"
@@ -86,20 +97,23 @@
               placeholder="••••••••"
               v-model="pass"
               class="w-full border border-gray-300 py-2 pl-3 rounded-lg mt-2 outline-none focus:ring-indigo-600 :ring-indigo-600"
-            />
+            >
           </div>
 
-            <button
-              class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full
+          <button
+            class="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white w-full
               text-center rounded-lg"
-              @click="login"
-            >
-              Iniciar Sesión
-            </button>
-            <p class="text-sm font-medium text-gray-400 dark:text-primary-500">
-              ¿No tienes una cuenta aun?
-              <a href="#" class="text-sm font-medium text-blue-600 underline">Registrarse</a>
-            </p>
+            @click="login"
+          >
+            Iniciar Sesión
+          </button>
+          <p class="text-sm font-medium text-gray-400 dark:text-primary-500">
+            ¿No tienes una cuenta aun?
+            <a
+              href="#"
+              class="text-sm font-medium text-blue-600 underline"
+            >Registrarse</a>
+          </p>
         </div>
       </div>
     </div>

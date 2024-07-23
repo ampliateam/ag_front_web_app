@@ -9,8 +9,6 @@ import { getUsuarioLogeadoLS } from '@/helpers';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
-console.log('prueba-firebase');
-
 onAuthStateChanged(auth, async (user) => {
   const infoSistemaStore = useInfoSistemaStore();
   infoSistemaStore.setCargando(true);
@@ -19,7 +17,9 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
-    console.log(user);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('user', user);
+    }
  
     const usuarioLogeadoLs = getUsuarioLogeadoLS();
 
