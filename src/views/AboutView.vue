@@ -83,8 +83,6 @@
   async function cerrarSesion() {
     const userStore = usuarioLogeadoStore();
     await userStore.logout();
-
-    console.log('sesion cerrada');
     router.push('/inicio-sesion');
   }
 </script>

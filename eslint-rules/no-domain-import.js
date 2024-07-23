@@ -39,12 +39,10 @@ export default {
         }
         // verificar si es externo a domain, si no se importa de otro lado que no sea service
         if(!currentFile.includes('\\domain')){
-          console.log("aaaaaaaaa", importPath.includes('\\domain'), !importPath.endsWith('\\services\\index'), !importPath.endsWith('\\services'))
           if (importPath.includes('domain/') && !importPath.endsWith('/services/index') && !importPath.endsWith('/services')) {
-            console.log("eeeeeeeeeee")
             context.report({
               node,
-              message: 'Solo se puede importar módulos desde services',
+              message: 'Solo se puede importar módulos desde \'@/domain/services\'',
               fix(fixer) {
                 const newImport = importPath.replace(/\/[^/]+$/, '/index');
                 return fixer.replaceText(source, `'${newImport}'`);
