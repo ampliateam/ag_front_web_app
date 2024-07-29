@@ -1,13 +1,45 @@
 <template>
   <!-- Barra lateral -->
-  <div id="sideNav" class="lg:block hidden bg-white w-64 h-screen fixed rounded-none border-none">
+  <div
+    id="sideNav"
+    class="lg:block hidden bg-white w-64 h-screen fixed rounded-none border-none"
+  >
+    <router-link :to="'#'" class="pt-10 space-y-7">
+      <div class="flex align-center mt-5 ml-3 mb-3 pt-3">
+        <div class="rhombus ml-5">
+          <svg
+            class="h-7 w-7 text-white pt-1"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="rotate: -45deg"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <rect x="4" y="5" width="16" height="16" rx="2" />
+            <line x1="16" y1="3" x2="16" y2="7" />
+            <line x1="8" y1="3" x2="8" y2="7" />
+            <line x1="4" y1="6" x2="20" y2="6" />
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="8" x2="20" y2="8" />
+          </svg>
+        </div>
+        <h2 class="px-4 font-extrabold text-lg text-blue-950">Agendalía</h2>
+      </div>
+    </router-link>
     <!-- Items -->
     <div class="p-4 space-y-4">
       <div class="text-sm">
         <router-link
           :to="'#'"
           class="px-2 py-3 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
-          :class="{ 'font-semibold bg-indigo-500 text-white': selectedIndex === 2 }"
+          :class="{
+            'font-semibold bg-indigo-500 text-white': selectedIndex === 2,
+          }"
           @click="selectItem(2)"
         >
           <i class="fas fa-exchange-alt"></i>
@@ -21,7 +53,10 @@
             fill="none"
             stroke-linecap="round"
             stroke-linejoin="round"
-            :class="{ 'text-white': selectedIndex === 2, 'text-gray-500': selectedIndex !== 2 }"
+            :class="{
+              'text-white': selectedIndex === 2,
+              'text-gray-500': selectedIndex !== 2,
+            }"
           >
             <path stroke="none" d="M0 0h24v24H0z" />
             <rect x="4" y="5" width="16" height="16" rx="2" />
@@ -37,7 +72,9 @@
         <router-link
           :to="'#'"
           class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
-          :class="{ 'font-semibold bg-indigo-500 text-white': selectedIndex === 1 }"
+          :class="{
+            'font-semibold bg-indigo-500 text-white': selectedIndex === 1,
+          }"
           @click="selectItem(1)"
         >
           <i class="fas fa-wallet"></i>
@@ -49,7 +86,10 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            :class="{ 'text-white': selectedIndex === 1, 'text-gray-500': selectedIndex !== 1 }"
+            :class="{
+              'text-white': selectedIndex === 1,
+              'text-gray-500': selectedIndex !== 1,
+            }"
           >
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
@@ -62,7 +102,9 @@
         <router-link
           :to="'#'"
           class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
-          :class="{ 'font-semibold bg-indigo-500 text-white': selectedIndex === 3 }"
+          :class="{
+            'font-semibold bg-indigo-500 text-white': selectedIndex === 3,
+          }"
           @click="selectItem(3)"
         >
           <i class="fas fa-user"></i>
@@ -74,7 +116,10 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            :class="{ 'text-white': selectedIndex === 3, 'text-gray-500': selectedIndex !== 3 }"
+            :class="{
+              'text-white': selectedIndex === 3,
+              'text-gray-500': selectedIndex !== 3,
+            }"
           >
             <circle cx="12" cy="12" r="3" />
             <path
@@ -97,8 +142,13 @@
         <router-link
           :to="'#'"
           class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
-          :class="{ 'font-semibold bg-indigo-500 text-white': selectedIndex === 4 }"
-          @click="selectItem(4); logout()"
+          :class="{
+            'font-semibold bg-indigo-500 text-white': selectedIndex === 4,
+          }"
+          @click="
+            selectItem(4);
+            logout();
+          "
         >
           <i class="fas fa-sign-out-alt"></i>
           <svg
@@ -109,7 +159,10 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            :class="{ 'text.white': selectedIndex === 4, 'text-gray-500': selectedIndex !== 4 }"
+            :class="{
+              'text.white': selectedIndex === 4,
+              'text-gray-500': selectedIndex !== 4,
+            }"
           >
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -120,7 +173,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
@@ -143,14 +195,13 @@ async function logout() {
   await userStore.logout();
   router.push('/inicio-sesion');
 }
-
 </script>
 
 <style>
 .rhombus {
   width: 33px; /* Adjust width as needed */
   height: 33px; /* Adjust height as needed */
-  background-color: #5D5FEF; /* Change color as desired */
+  background-color: #5d5fef; /* Change color as desired */
   transform: rotate(45deg); /* Rotate 45 degrees for rhombus shape */
   border-radius: 17%; /* Set rounded corners with 50% radius (full circle) */
 }
