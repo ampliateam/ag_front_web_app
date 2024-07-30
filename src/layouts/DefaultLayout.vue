@@ -1,37 +1,67 @@
 <template>
   <div>
-    <nav class="flex text-center justify-between relative">
-      <router-link :to="'#'">
-        <div class="flex align-center">
-          <div class="rhombus ml-5">
-            <svg
-              class="h-7 w-7 text-white pt-1"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              style="rotate: -45deg"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" />
-              <rect x="4" y="5" width="16" height="16" rx="2" />
-              <line x1="16" y1="3" x2="16" y2="7" />
-              <line x1="8" y1="3" x2="8" y2="7" />
-              <line x1="4" y1="6" x2="20" y2="6" />
-              <line x1="4" y1="7" x2="20" y2="7" />
-              <line x1="4" y1="8" x2="20" y2="8" />
-            </svg>
+    <nav class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-3 lg:px-3">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex-shrink-0 flex items-center">
+            <h1 class="text-2xl font-bold text-blue-900">
+              Pacientes
+            </h1>
           </div>
-          <h2 class="px-4 font-extrabold text-lg text-blue-950">Agendalía</h2>
+          <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end">
+            <div class="max-w-lg w-full lg:max-w-xs">
+              <label
+                for="search"
+                class="sr-only"
+              >Buscar paciente</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg
+                    class="h-5 w-5 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  id="search"
+                  name="search"
+                  class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Buscar paciente por nombre, apellido, numero..."
+                  type="search"
+                >
+              </div>
+            </div>
+          </div>
+          <div class="ml-4 flex items-center md:ml-6">
+            <div class="ml-3 relative">
+              <div>
+                <button
+                  type="button"
+                  class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  id="user-menu-button"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                >
+                  <span class="sr-only">Open user menu</span>
+                  <img
+                    class="h-8 w-8 rounded-full"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                  >
+                </button>
+              </div>
+            <!-- Dropdown menu, show/hide based on menu state. -->
+            </div>
+          </div>
         </div>
-      </router-link>
-      <div class="flex">
-        <router-link to="/" class="flex mt-1">Home</router-link>
-        <div class="flex mt-1 ml-1 mr-2">|</div>
-        <router-link to="/about" class="flex mt-1">About</router-link>
       </div>
     </nav>
     <SideBar />
@@ -44,17 +74,5 @@ import SideBar from '@/components/SideBar.vue';
 </script>
 
 <style>
-nav {
-  padding: 30px;
-  background-color: white;
-}
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
