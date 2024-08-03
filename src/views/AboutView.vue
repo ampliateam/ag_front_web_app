@@ -73,10 +73,15 @@
     >
       Cerrar sesion
     </button>
+
+    <AlgoliaListaCliente />
+
   </div>
 </template>
 
 <script setup lang="ts">
+  import AlgoliaListaCliente from '@/components/algolia/ListaCliente.vue';
+
   import usuarioLogeadoStore from '@/store/usuario-logeado.store';
   import router from '@/router';
 

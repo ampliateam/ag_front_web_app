@@ -35,7 +35,7 @@
         </router-link>
 
         <router-link
-          :to="'#'"
+          :to="'/clientes'"
           class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
           :class="{ 'font-semibold bg-indigo-500 text-white': selectedIndex === 1 }"
           @click="selectItem(1)"
