@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'local') {
 } else if (process.env.NODE_ENV === 'production') {
   baseURL = import.meta.env.VITE_BASE_URL_AG_USUARIO_PROD;
 } else {
-  console.log(`Problemas con el entorno, no existe [${process.env.NODE_ENV}]`);
+  console.error(`Problemas con el entorno, no existe [${process.env.NODE_ENV}]`);
 }
 
 const axiosInstance = axios.create({
