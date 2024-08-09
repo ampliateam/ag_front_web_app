@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#app {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  color: #2c3e50;
+  background-color: #F8F9FA;
+}
+
+/* En tu archivo de estilos globales */
+.btn-disabled {
+  opacity: 50%;
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.appglobal-clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #5d5fef;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.appglobal-input-container {
+  background: linear-gradient(145deg, #000000, #87CEFA, #0a0a0a, #87CEFA);
+  background-size: 400% 400%;
+  animation: animate 20s linear infinite;
+  border-radius: 12px;
+}
+
+.appglobal-input-container input {
+  outline: none;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 10px;
+}

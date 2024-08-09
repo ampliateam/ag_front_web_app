@@ -26,7 +26,8 @@
     "vite-plugin-babel": "^1.2.0",
     "vue": "^3.4.29",
     "vue-instantsearch": "^4.19.0",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.0",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",

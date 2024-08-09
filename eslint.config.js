@@ -34,6 +34,7 @@ export default [
       "custom-rules/require-index-export": "error",
       "custom-rules/no-domain-import": "error",
       'jsx-a11y/no-redundant-roles': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   }
 ];

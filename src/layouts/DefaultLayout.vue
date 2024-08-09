@@ -1,80 +1,162 @@
 <template>
-  <div>
-    <SideBar />
-    <nav class="bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-3 lg:px-3">
-        <div class="flex justify-between items-center h-16">
-          <div class="flex-shrink-0 flex items-center">
-            <h1 class="text-2xl font-bold text-gray-900">
-              Pacientes
-            </h1>
-          </div>
-          <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end">
-            <div class="max-w-lg w-full lg:max-w-xs">
-              <label
-                for="search"
-                class="sr-only"
-              >Buscar paciente</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    class="h-5 w-5 text-indigo-500"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  id="search"
-                  name="search"
-                  class="block w-full pl-10 pr-3 py-2 bg-gray-100 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Buscar paciente por nombre, apellido, numero..."
-                  type="search"
-                >
-              </div>
-            </div>
-          </div>
-          <div class="ml-4 flex items-center md:ml-6">
-            <div class="ml-3 relative">
-              <div>
-                <button
-                  type="button"
-                  class="max-w-xs bg-white flex items-center text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  id="user-menu-button"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                >
-                  <span class="sr-only">Open user menu</span>
-                  <img
-                    class="h-8 w-8 rounded-lg"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  >
-                </button>
-              </div>
-            <!-- Dropdown menu, show/hide based on menu state. -->
-            </div>
-          </div>
-        </div>
+  <div class="app" @keydown.esc="minimizacionGlobal">
+    <SideBar3 />
+    <div
+      :class="[
+        'main-container',
+        { 'sidebar-open': infoSistemaStore.getSideBar },
+        { 'sidebar-close': !infoSistemaStore.getSideBar },
+      ]"
+    >
+      <NavBar2 />
+      <div class="main-content">
+        <slot />
       </div>
-    </nav>
-    <slot />
+      <div
+        @click="minimizarSideBar"
+        :class="{
+          'overlay': infoSistemaStore.getSideBar,
+          'no-overlay': !infoSistemaStore.getSideBar,
+        }"
+      />
+      <div
+        @click="minimizarSideBarOG"
+        :class="{
+          'overlay-og': infoSistemaStore.getOperacionGlobal.sideBar,
+          'no-overlay-og': !infoSistemaStore.getOperacionGlobal.sideBar,
+        }"
+      />
+    </div>
+
+    <!-- Modal de operaciones -->
+    <!-- <div :class="{
+      'operacion-habilitada': !!infoSistemaStore.getOperacionGlobal.id,
+      'operacion-deshabilitada': !infoSistemaStore.getOperacionGlobal.id
+    }">
+      <Componente1 v-if="infoSistemaStore.getOperacionGlobal.id === 'buscador-global'" />
+    </div> -->
+    <SideBarOperacionGlobal :isOpen="infoSistemaStore.getOperacionGlobal.sideBar">
+      <!-- Contenido del sidebar aquí -->
+      <!-- <h2>Sidebar: {{ infoSistemaStore.getOperacionGlobal.id }}</h2>
+      <ul>
+        <li>Opción 1</li>
+        <li>Opción 2</li>
+        <li>Opción 3</li>
+      </ul> -->
+      <CrearPaciente v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-paciente'" />
+    </SideBarOperacionGlobal>
   </div>
 </template>
 
 <script lang="ts" setup>
-import SideBar from '@/components/SideBar.vue';
+import NavBar2 from '@/components/NavBar2.vue';
+import SideBar3 from '@/components/SideBar3.vue';
+import CrearPaciente from '@/components/operacion-global/CrearPaciente.vue';
+import SideBarOperacionGlobal from '@/components/operacion-global/SideBarOperacionGlobal.vue'
+import useInfoSistemaStore from '@/store/info-sistema.store';
+
+const infoSistemaStore = useInfoSistemaStore();
+
+const minimizacionGlobal = () => {
+  if (infoSistemaStore.getOperacionGlobal.sideBar) {
+    infoSistemaStore.setOperacionGlobal({
+      sideBar: !infoSistemaStore.getOperacionGlobal.sideBar
+    });
+  } else if (infoSistemaStore.getMenuPerfil) {
+    infoSistemaStore.setMenuPerfil(!infoSistemaStore.getMenuPerfil);
+  }
+}
+
+const minimizarSideBar = () => {
+  if (infoSistemaStore.getSideBar) {
+    infoSistemaStore.setSidebar(!infoSistemaStore.getSideBar);
+  }
+}
+
+const minimizarSideBarOG = () => {
+  if (infoSistemaStore.getOperacionGlobal.sideBar) {
+    infoSistemaStore.setOperacionGlobal({
+      sideBar: !infoSistemaStore.getOperacionGlobal.sideBar
+    });
+  }
+}
 </script>
 
-<style>
-nav{
-  margin-left: 16rem !important; 
+<style scoped>
+.main-container {
+  position: relative; /* Necesario para el posicionamiento del overlay */
 }
+
+.main-content {
+  position: relative;
+  z-index: 100;
+  flex-grow: 1;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.sidebar-open {
+  margin-left: 250px;
+  transition: 0.6s;
+}
+
+.sidebar-close {
+  margin-left: 110px;
+  transition: 0.6s;
+}
+
+.overlay-og {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
+  z-index: 600; /* Asegúrate de que esté por encima del contenido principal pero por debajo del sidebar */
+  transition: 0.6s;
+}
+
+.no-overlay-og {
+  display: none;
+  transition: 0.6s;
+}
+
+@media (max-width: 918px) {
+  .sidebar-open {
+    margin-left: 0px;
+    transition: 0.6s;
+  }
+
+  .sidebar-close {
+    margin-left: 0px;
+    transition: 0.6s;
+  }
+}
+
+@media (max-width: 660px) {
+  .main-content {
+    flex-grow: 1;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 918px) {
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
+    z-index: 200; /* Asegúrate de que esté por encima del contenido principal pero por debajo del sidebar */
+    transition: 0.6s;
+  }
+
+  .no-overlay {
+    display: none;
+    transition: 0.6s;
+  }
+}
+
 </style>
