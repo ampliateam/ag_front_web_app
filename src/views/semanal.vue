@@ -1,4 +1,5 @@
 <template>
+  <layout></layout>
   <div class="container mx-auto p-4">
     <!-- Cabecera con selectores y botones -->
     <div class="flex justify-between items-center mb-4">
@@ -129,7 +130,7 @@
         </div>
         <div class="flex items-center">
           <div
-            class="w-4 h-4 bg-teal-200 border border-teal-500 rounded-sm mr-2"
+            class="w-4 h-4 bg-teal-200 border border-teal-600 rounded-sm mr-2"
           ></div>
           <span class="text-sm text-gray-600">Confirmados</span>
         </div>
@@ -263,7 +264,7 @@ const getAgendamientoStyle = (agendamiento, date) => {
 const getAgendamientoClass = (agendamiento) => {
   switch (agendamiento.nombre) {
     case 'Guillermo Paiva':
-      return 'bg-teal-200 text-teal-500 border border-teal-500 ';
+      return 'bg-teal-200 text-teal-600 border border-teal-600 ';
     case 'Tobias Paiva':
       return 'bg-red-200 text-red-500 border border-red-500';
     case 'Hora libre':
