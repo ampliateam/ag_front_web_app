@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import * as routesHelper from './helpers';
 import DefaulfLayout from '../layouts/DefaultLayout.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -27,6 +28,8 @@ const routes: Array<RouteRecordRaw> = [
     // ruta de la vista del login
     component: () => import('../views/registro.vue'),
   },
+  ...routesHelper.clientes.routes,
+  ...routesHelper.pacientes.routes,
 ];
 
 const router = createRouter({
