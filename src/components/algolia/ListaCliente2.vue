@@ -10,7 +10,7 @@
         <ais-search-box style="width: 100% !important;">
           <template #default="{ currentRefinement, isSearchStalled, refine }">
             <BuscadorGenerico
-              propPlaceholder="Busca pacientes"
+              propPlaceholder="Busca clientes"
               @escritura="obtenerEscritura"
               :configAlgolia="{
                 currentRefinement,
@@ -24,9 +24,9 @@
         <button
           class="action-button new-patient"
           style="font-size: medium;"
-          @click="abrirSideBarOG('crear-paciente')"
+          @click="abrirSideBarOG('crear-cliente')"
         >
-          Nuevo Paciente
+          Nuevo cliente
         </button>
       </div>
 
@@ -75,7 +75,7 @@
                         viewBox="0 -960 960 960"
                         width="24px"
                         fill="#5d5fef"
-                        class="verPaciente"
+                        class="verCliente"
                       >
                         <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/>
                       </svg>
@@ -105,13 +105,13 @@
                   </td>
                   <td class="table-cell">
                     <svg
-                      class="ml-6 btnOperacionPaciente"
+                      class="ml-6 btnOperacionCliente"
                       xmlns="http://www.w3.org/2000/svg"
                       height="28px"
                       viewBox="0 -960 960 960"
                       width="28px"
                       fill="#6b7280"
-                      @click="abrirSideBarOG('operacion-paciente')"
+                      @click="abrirSideBarOG('operacion-cliente')"
                     >
                       <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
                     </svg>
@@ -245,12 +245,12 @@ obtenerEscritura('');
   cursor: pointer;
 }
 
-.verPaciente {
+.verCliente {
   cursor: pointer;
   margin-left: 0px;
 }
 
-.btnOperacionPaciente {
+.btnOperacionCliente {
   cursor: pointer;
 }
 

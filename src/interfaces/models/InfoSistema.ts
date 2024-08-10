@@ -4,8 +4,8 @@ export type TIdIdiomaSistema = 'espanol'
 
 export type TOperacionGlobalID = '' 
 | 'buscador-global' 
-| 'crear-paciente' 
-| 'operacion-paciente';
+| 'crear-cliente' 
+| 'operacion-cliente';
 
 export interface IOperacionGlobal {
   sideBar?: boolean;
@@ -13,13 +13,13 @@ export interface IOperacionGlobal {
   titulo?: string,
   data?: {
     'buscador-global'?: any,
-    'crear-paciente'?: any,
-    'operacion-paciente'?: any,
+    'crear-cliente'?: any,
+    'operacion-cliente'?: any,
   };
   response?: {
     'buscador-global'?: any,
-    'crear-paciente'?: any,
-    'operacion-paciente'?: any,
+    'crear-cliente'?: any,
+    'operacion-cliente'?: any,
   };
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <layout/>
+  <DefaulfLayout/>
 </template>
 
 <script setup lang="ts">

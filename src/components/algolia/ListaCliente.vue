@@ -19,7 +19,7 @@
                 :value="currentRefinement"
                 @input="refine($event.currentTarget.value)"
                 class="outline outline-offset-2 outline-blue-500 block w-full pl-10 pr-3 py-2 bg-gray-100 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Busca pacientes"
+                placeholder="Busca clientes"
               >
             </BuscadorGenerico>
             <span :hidden="!isSearchStalled">Loading...</span>
@@ -27,7 +27,7 @@
         </ais-search-box>
 
         <button class="action-button new-patient">
-          Nuevo Paciente
+          Nuevo cliente
         </button>
       </div>
 

@@ -46,6 +46,7 @@
 
       <button
         class="action-button-menu-perfil"
+        @click="logout"
       >
         Cerrar sesión
       </button>
@@ -66,11 +67,19 @@
 
 <script setup lang="ts">
 import useInfoSistemaStore from '@/store/info-sistema.store';
+import usuarioLogeadoStore from '@/store/usuario-logeado.store';
+import router from '@/router';
 
 const infoSistemaStore = useInfoSistemaStore();
 
 const cambiarEstado = () => {
   infoSistemaStore.setMenuPerfil(!infoSistemaStore.getMenuPerfil);
+}
+
+const logout = async () => {
+  const userStore = usuarioLogeadoStore();
+  await userStore.logout();
+  router.push('/inicio-sesion');
 }
 
 </script>

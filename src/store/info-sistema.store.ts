@@ -47,8 +47,8 @@ const useInfoSistemaStore = defineStore('info-sistema', {
       let titulo = 'Operaciones';
       
       if (operacionGlobal.id === 'buscador-global') titulo = 'Buscador';
-      else if (operacionGlobal.id === 'crear-paciente') titulo = 'Crear paciente';
-      else if (operacionGlobal.id === 'operacion-paciente') titulo = 'Operaciones';
+      else if (operacionGlobal.id === 'crear-cliente') titulo = 'Crear cliente';
+      else if (operacionGlobal.id === 'operacion-cliente') titulo = 'Operaciones';
 
       const data = {
         sideBar: operacionGlobal.sideBar !== undefined ? operacionGlobal.sideBar : this.operacionGlobal.sideBar,
