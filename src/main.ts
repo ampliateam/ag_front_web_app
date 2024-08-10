@@ -10,7 +10,7 @@ import './assets/global.css';
 const pinia = createPinia();
 
 createApp(App)
-  .component('layout', DefaultLayout)
+  .component('DefaulfLayout', DefaultLayout)
   .use(pinia)
   .use(router)
   .use(InstantSearch)
