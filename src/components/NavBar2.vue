@@ -26,7 +26,7 @@
                   class="buscadorFalso block w-full pl-10 pr-3 py-2 bg-gray-100 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Busca lo que necesites"
                   style="cursor: pointer;"
-                  @click="abrirSideBarOG('buscador-global')"
+                  @click="infoSistemaStore.abrirSideBarOG('buscador-global')"
                 >
               </div>
             </BuscadorGenerico>
@@ -69,7 +69,6 @@ import { useRoute } from 'vue-router';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
 import MenuPerfil from '@/components/MenuPerfil.vue';
-import { TOperacionGlobalID } from '@/interfaces/models';
 
 // const searchClient = algoliasearch(
 //   'BSDBYRKOOD',
@@ -78,10 +77,6 @@ import { TOperacionGlobalID } from '@/interfaces/models';
 // const indexName: 'cliente';
 const selectedIndex = ref(0);
 const infoSistemaStore = useInfoSistemaStore();
-
-const abrirSideBarOG = (id: TOperacionGlobalID) => {
-  infoSistemaStore.abrirSideBarOG(id);
-};
 
 const obtenerTituloNavbar = () => {
   if (selectedIndex.value === 1) return 'Agenda';
@@ -143,4 +138,4 @@ onMounted(() => {
     display: none;
   }
 }
-</style>
+</style>@/models/models

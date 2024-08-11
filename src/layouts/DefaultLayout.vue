@@ -43,18 +43,27 @@
         <li>Opción 2</li>
         <li>Opción 3</li>
       </ul> -->
-      <CrearCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-cliente'" />
+      <!-- <CrearCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-cliente'" /> -->
+      <FormularioCliente
+        v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-cliente'"
+        :accion="'crear'"
+      />
+      <OperacionesCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente'" />
     </SideBarOperacionGlobal>
   </div>
 </template>
 
 <script lang="ts" setup>
+// import { ref } from 'vue';
 import NavBar2 from '@/components/NavBar2.vue';
 import SideBar3 from '@/components/SideBar3.vue';
-import CrearCliente from '@/components/operacion-global/CrearCliente.vue';
+import OperacionesCliente from '@/components/operacion-global/OperacionesCliente.vue';
+import FormularioCliente from '@/components/operacion-global/FormularioCliente.vue';
 import SideBarOperacionGlobal from '@/components/operacion-global/SideBarOperacionGlobal.vue'
 import useInfoSistemaStore from '@/store/info-sistema.store';
+// import { TAccionFormularioCliente } from '@/models/types';
 
+// const accionFormularioCliente = ref<TAccionFormularioCliente>('actualizar');
 const infoSistemaStore = useInfoSistemaStore();
 
 const minimizacionGlobal = () => {
