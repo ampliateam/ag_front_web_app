@@ -2,7 +2,6 @@
   <div class="relative group">
     <button
       :class="props.buttonClass"
-      @click="$emit('click')"
     >
       <slot />
     </button>
