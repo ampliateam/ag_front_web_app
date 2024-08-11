@@ -25,14 +25,6 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: '/semanal',
-    name: 'semanal',
-    component: () => import('../views/semanal.vue'),
-    meta: {
-      layout: DefaultLayout,
-    },
-  },
-  {
     path: '/inicio-sesion',
     name: 'inicio-sesion',
     // ruta de la vista del login

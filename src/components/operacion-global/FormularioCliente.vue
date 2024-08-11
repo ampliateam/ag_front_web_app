@@ -13,7 +13,7 @@
             id="nombre"
             required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            :disabled="['obtener', 'eliminar'].includes(props.accion)"
+            :disabled="['obtener'].includes(props.accion)"
           >
         </div>
         <div>
@@ -24,7 +24,7 @@
             id="apellido"
             required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            :disabled="['obtener', 'eliminar'].includes(props.accion)"
+            :disabled="['obtener'].includes(props.accion)"
           >
         </div>
       </div>
@@ -37,7 +37,7 @@
           id="nota"
           :required="false"
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :disabled="['obtener', 'eliminar'].includes(props.accion)"
+          :disabled="['obtener'].includes(props.accion)"
         >
       </div>
 
@@ -49,7 +49,7 @@
           id="fechaNacimiento"
           :required="false"
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :disabled="['obtener', 'eliminar'].includes(props.accion)"
+          :disabled="['obtener'].includes(props.accion)"
         >
       </div>
 
@@ -61,7 +61,7 @@
           id="direccion_referencia"
           :required="false"
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :disabled="['obtener', 'eliminar'].includes(props.accion)"
+          :disabled="['obtener'].includes(props.accion)"
         >
       </div>
 
@@ -86,7 +86,7 @@
           handle=".drag-handle"
           :animation="200"
           ghost-class="ghost-class"
-          :disabled="['obtener', 'eliminar'].includes(props.accion)"
+          :disabled="['obtener'].includes(props.accion)"
         >
           <template #item="{ element, index }">
             <div class="mb-4 p-2 bg-gray-100 rounded-md">
@@ -100,7 +100,7 @@
                   type="button"
                   @click="toggleContactType(index)"
                   class="bg-gray-200 hover:bg-gray-300 rounded-md py-2 px-4 flex items-center justify-between"
-                  :disabled="['obtener', 'eliminar'].includes(props.accion)"
+                  :disabled="['obtener'].includes(props.accion)"
                 >
                   <span>{{ element.tipo === 'telefono-movil' ? 'Teléfono' : 'Correo' }}</span>
                 </button>
@@ -110,7 +110,7 @@
                       type="button"
                       @click="indexContactoSeleccionado = index; showModal = true;"
                       class="w-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between"
-                      :disabled="['obtener', 'eliminar'].includes(props.accion)"
+                      :disabled="['obtener'].includes(props.accion)"
                     >
                       <span>{{ element.codigoTelefono }}</span>
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +122,7 @@
                       type="tel"
                       placeholder="123456789"
                       class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      :disabled="['obtener', 'eliminar'].includes(props.accion)"
+                      :disabled="['obtener'].includes(props.accion)"
                     />
                   </div>
                 </template>
@@ -132,11 +132,11 @@
                     type="email"
                     placeholder="email@example.com"
                     class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    :disabled="['obtener', 'eliminar'].includes(props.accion)"  
+                    :disabled="['obtener'].includes(props.accion)"  
                   />
                 </template>
                 <button
-                  v-if="!['obtener', 'eliminar'].includes(props.accion)"
+                  v-if="!['obtener'].includes(props.accion)"
                   type="button"
                   @click="removeContact(index)"
                   class="text-red-500 hover:text-red-600"
@@ -150,7 +150,7 @@
           </template>
         </draggable>
         <button
-          v-if="!['obtener', 'eliminar'].includes(props.accion)"
+          v-if="!['obtener'].includes(props.accion)"
           type="button"
           @click="addContact"
           class="text-blue-500 hover:text-blue-600"
@@ -163,7 +163,7 @@
       </div>
 
       <button
-        v-if="['crear', 'actualizar', 'eliminar'].includes(props.accion)"
+        v-if="['crear', 'actualizar'].includes(props.accion)"
         type="submit"
         :class="[
           '',
@@ -295,43 +295,12 @@ const selectPhoneCode = (code: string) => {
 
 const operacionFormulario = async () => {
   if (props.accion === 'crear') await crearCliente();
-  // if (props.accion === 'actualizar') await actualizarCliente();
-  // if (props.accion === 'eliminar') await eliminarCliente();
+  else if (props.accion === 'actualizar') await actualizarCliente();
 }
 
 const crearCliente = async () => {
   try {
-    if (!nombre.value) {
-      throw new Error('El nombre es obligatorio.');
-    }
-
-    if (!apellido.value) {
-      throw new Error('El apellido es obligatorio.');
-    }
-
-    if (!direccion.value.referencia) {
-      throw new Error('La direccion es obligatoria.');
-    }
-
-    if (contactos.value.length) {
-      const infoValida = contactos.value.map(v => {
-        if (v.tipo === 'telefono-movil') {
-          return !!v.codigoTelefono && !!v.telefono;
-        } else if (v.tipo === 'correo') {
-          return !!v.correo
-        } else {
-          return false;
-        }
-      });
-
-      const esValido = !infoValida.includes(false);
-    
-      if (!esValido) {
-        throw new Error('Los campos de contacto tienen que estar completos.');
-      }
-    } else {
-      throw new Error('Se necesita al menos un contacto.');
-    }
+    verificacionDeExistenciaDeDatos();
 
     // Handle form submission
     console.log('Form submitted', {
@@ -346,6 +315,61 @@ const crearCliente = async () => {
     alert(error.message);
   }
 }
+
+const actualizarCliente = async () => {
+  try {
+    // Verificacion de existencia de datos
+    verificacionDeExistenciaDeDatos();
+
+    // Filtro de los nuevos datos
+
+    // Handle form submission
+    console.log('Form submitted', {
+      nombre: nombre.value,
+      apellido: apellido.value,
+      nota: nota.value,
+      fechaNacimiento: fechaNacimiento.value,
+      direccion: direccion,
+      contactos: contactos.value,
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+const verificacionDeExistenciaDeDatos = () => {
+  if (!nombre.value) {
+    throw new Error('El nombre es obligatorio.');
+  }
+
+  if (!apellido.value) {
+    throw new Error('El apellido es obligatorio.');
+  }
+
+  if (!direccion.value.referencia) {
+    throw new Error('La direccion es obligatoria.');
+  }
+
+  if (contactos.value.length) {
+    const infoValida = contactos.value.map(v => {
+      if (v.tipo === 'telefono-movil') {
+        return !!v.codigoTelefono && !!v.telefono;
+      } else if (v.tipo === 'correo') {
+        return !!v.correo
+      } else {
+        return false;
+      }
+    });
+
+    const esValido = !infoValida.includes(false);
+  
+    if (!esValido) {
+      throw new Error('Los campos de contacto tienen que estar completos.');
+    }
+  } else {
+    throw new Error('Se necesita al menos un contacto.');
+  }
+} 
 
 const filterCodes = () => {
   filteredCodes.value = listaDataPais.filter((dataPais) => {
@@ -402,35 +426,30 @@ const inicializarDatosDeCliente = async () => {
   dataClienteInicial['contactos'] = JSON.parse(JSON.stringify( contactos.value ));
 };
 
-const volverADatosActualesDeCliente = () => {
-  id.value = dataClienteInicial['id'];
-  nombre.value = dataClienteInicial['nombre'];
-  apellido.value = dataClienteInicial['apellido'];
-  nota.value = dataClienteInicial['nota'];
-  fechaNacimiento.value = dataClienteInicial['fechaNacimiento'];
-  direccion.value.referencia = dataClienteInicial['direccion'].referencia;
-  direccion.value.ubicacion = dataClienteInicial['direccion'].ubicacion;
-  contactos.value = dataClienteInicial['contactos'];
-};
+// const volverADatosActualesDeCliente = () => {
+//   id.value = dataClienteInicial['id'];
+//   nombre.value = dataClienteInicial['nombre'];
+//   apellido.value = dataClienteInicial['apellido'];
+//   nota.value = dataClienteInicial['nota'];
+//   fechaNacimiento.value = dataClienteInicial['fechaNacimiento'];
+//   direccion.value.referencia = dataClienteInicial['direccion'].referencia;
+//   direccion.value.ubicacion = dataClienteInicial['direccion'].ubicacion;
+//   contactos.value = dataClienteInicial['contactos'];
+// };
 
 const actualizarNombresEnFormCliente = () => {
   if (props.accion === 'crear') {
     tituloFormBTN.value = 'Nuevo cliente';
     nombreFunctionBTN.value = 'Crear';
-  }
-  if (props.accion === 'actualizar') {
+  } else if (props.accion === 'actualizar') {
     tituloFormBTN.value = 'Actualizar cliente';
     nombreFunctionBTN.value = 'Actualizar';
-  }
-  if (props.accion === 'eliminar') {
-    tituloFormBTN.value = 'Eliminar cliente';
-    nombreFunctionBTN.value = 'Eliminar'; 
   }
 };
 
 watch(() => props.accion, () => {
   actualizarNombresEnFormCliente();
-  volverADatosActualesDeCliente();
+  // volverADatosActualesDeCliente();
 }, { deep: true });
 
 watch(() => props.idCliente, async () => {
@@ -440,7 +459,7 @@ watch(() => props.idCliente, async () => {
 onBeforeMount(async () => {
   actualizarNombresEnFormCliente();
 
-  const operacionesParaObtener = ['obtener', 'actualizar', 'eliminar'];
+  const operacionesParaObtener = ['obtener', 'actualizar'];
   if (operacionesParaObtener.includes(props.accion)) {
     // Inicializar datos de cliente
     await inicializarDatosDeCliente();
