@@ -17,6 +17,22 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: '/agenda',
+    name: 'agenda',
+    component: () => import('../views/agenda.vue'),
+    meta: {
+      layout: DefaulfLayout,
+    },
+  },
+  {
+    path: '/semanal',
+    name: 'semanal',
+    component: () => import('../views/semanal.vue'),
+    meta: {
+      layout: DefaulfLayout,
+    },
+  },
+  {
     path: '/inicio-sesion',
     name: 'inicio-sesion',
     // ruta de la vista del login

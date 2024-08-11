@@ -1,5 +1,8 @@
 <template>
-  <div class="app" @keydown.esc="minimizacionGlobal">
+  <div
+    class="app"
+    @keydown.esc="minimizacionGlobal"
+  >
     <SideBar3 />
     <div
       :class="[
@@ -35,7 +38,7 @@
     }">
       <Componente1 v-if="infoSistemaStore.getOperacionGlobal.id === 'buscador-global'" />
     </div> -->
-    <SideBarOperacionGlobal :isOpen="infoSistemaStore.getOperacionGlobal.sideBar">
+    <SideBarOperacionGlobal :is-open="infoSistemaStore.getOperacionGlobal.sideBar">
       <!-- Contenido del sidebar aquí -->
       <!-- <h2>Sidebar: {{ infoSistemaStore.getOperacionGlobal.id }}</h2>
       <ul>
@@ -110,7 +113,7 @@ const minimizarSideBarOG = () => {
 }
 
 .sidebar-close {
-  margin-left: 110px;
+  margin-left: 100px;
   transition: 0.6s;
 }
 

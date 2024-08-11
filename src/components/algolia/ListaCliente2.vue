@@ -198,14 +198,14 @@ obtenerEscritura('');
 </script>
 
 <style scoped>
-.containerV2 {
+/* .containerV2 {
   font-family: Arial, sans-serif;
   background-color: white;
   border-radius: 15px;
   padding: 20px;
   box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.2);
   width: 100%;
-}
+} */
 
 .search-and-button {
   display: flex;
@@ -293,7 +293,7 @@ obtenerEscritura('');
   cursor: not-allowed;
 }
 
-@media (max-width: 660px) {
+/* @media (max-width: 660px) {
   .containerV2 {
     font-family: Arial, sans-serif;
     background-color: white;
@@ -302,7 +302,7 @@ obtenerEscritura('');
     box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);
     width: 100%;
   }
-}
+} */
 
 @media (max-width: 600px) {
   .search-and-button {
