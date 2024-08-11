@@ -69,7 +69,7 @@ import { useRoute } from 'vue-router';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
 import MenuPerfil from '@/components/MenuPerfil.vue';
-import { IOperacionGlobal, TOperacionGlobalID } from '@/interfaces/models';
+import { TOperacionGlobalID } from '@/interfaces/models';
 
 // const searchClient = algoliasearch(
 //   'BSDBYRKOOD',
@@ -85,7 +85,7 @@ const abrirSideBarOG = (id: TOperacionGlobalID) => {
 
 const obtenerTituloNavbar = () => {
   if (selectedIndex.value === 1) return 'Agenda';
-  else if (selectedIndex.value === 2) return 'Pacientes';
+  else if (selectedIndex.value === 2) return 'Clientes';
   else if (selectedIndex.value === 3) return 'Configuracion';
   else if (selectedIndex.value === 4) return 'Perfil';
   else return 'Agendalia'

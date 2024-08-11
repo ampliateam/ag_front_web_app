@@ -1,9 +1,9 @@
 <template>
   <div class="">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Nuevo Paciente</h2>
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Nuevo cliente</h2>
     <p class="text-sm text-gray-600 mb-4">Los campos con * son obligatorios</p>
 
-    <form @submit.prevent="crearPaciente">
+    <form @submit.prevent="crearCliente">
       <div class="mb-4 grid grid-cols-2 gap-4">
         <div>
           <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
@@ -198,7 +198,7 @@ const selectPhoneCode = (code: string) => {
   indexContactoSeleccionado.value = -1;
 };
 
-const crearPaciente = async () => {
+const crearCliente = async () => {
   try {
     if (!nombre.value) {
       throw new Error('El nombre es obligatorio.');

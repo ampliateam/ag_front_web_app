@@ -46,7 +46,7 @@
         <li>Opción 2</li>
         <li>Opción 3</li>
       </ul> -->
-      <CrearPaciente v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-paciente'" />
+      <CrearCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-cliente'" />
     </SideBarOperacionGlobal>
   </div>
 </template>
@@ -54,7 +54,7 @@
 <script lang="ts" setup>
 import NavBar from '@/components/NavBar.vue';
 import SideBar from '@/components/SideBar.vue';
-import CrearPaciente from '@/components/operacion-global/CrearPaciente.vue';
+import CrearCliente from '@/components/operacion-global/CrearCliente.vue';
 import SideBarOperacionGlobal from '@/components/operacion-global/SideBarOperacionGlobal.vue'
 import useInfoSistemaStore from '@/store/info-sistema.store';
 

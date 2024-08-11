@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'about',
     component: () => import('../views/AboutView.vue'),
     meta: {
-      layout: DefaulfLayout,
+      DefaulfLayout: DefaulfLayout,
     },
   },
   {
@@ -21,15 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'agenda',
     component: () => import('../views/agenda.vue'),
     meta: {
-      layout: DefaulfLayout,
-    },
-  },
-  {
-    path: '/semanal',
-    name: 'semanal',
-    component: () => import('../views/semanal.vue'),
-    meta: {
-      layout: DefaulfLayout,
+      DefaulfLayout: DefaulfLayout,
     },
   },
   {

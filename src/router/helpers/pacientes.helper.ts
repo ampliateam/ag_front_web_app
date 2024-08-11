@@ -7,7 +7,7 @@ export const routes: Array<RouteRecordRaw> = [
     name: 'pacientes',
     component: () => import('../../views/pacientes.vue'),
     meta: {
-      layout: DefaulfLayout,
+      DefaulfLayout: DefaulfLayout,
     },
   },
 ];
