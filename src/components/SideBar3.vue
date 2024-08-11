@@ -76,7 +76,7 @@
       </div>
     </router-link>
 
-    <hr class="h-px mt-6 bg-gray-200 border-10 dark:bg-gray-700">
+    <hr class="h-px mt-6 bg-gray-300 border-10">
 
     <!-- Items -->
     <div 
@@ -230,7 +230,7 @@
           <span v-if="infoSistemaStore.getSideBar">Configuración</span>
         </router-link>
 
-        <hr class="h-px bg-gray-200 border-10 dark:bg-gray-700">
+        <hr class="h-px bg-gray-300 border-10">
 
         <router-link
           :to="'#'"
