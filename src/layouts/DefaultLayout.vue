@@ -3,7 +3,7 @@
     class="app"
     @keydown.esc="minimizacionGlobal"
   >
-    <SideBar3 />
+    <SideBar />
     <div
       :class="[
         'main-container',
@@ -11,7 +11,7 @@
         { 'sidebar-close': !infoSistemaStore.getSideBar },
       ]"
     >
-      <NavBar2 />
+      <NavBar />
       <div class="main-content">
         <slot />
       </div>
@@ -52,8 +52,8 @@
 </template>
 
 <script lang="ts" setup>
-import NavBar2 from '@/components/NavBar2.vue';
-import SideBar3 from '@/components/SideBar3.vue';
+import NavBar from '@/components/NavBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import CrearPaciente from '@/components/operacion-global/CrearPaciente.vue';
 import SideBarOperacionGlobal from '@/components/operacion-global/SideBarOperacionGlobal.vue'
 import useInfoSistemaStore from '@/store/info-sistema.store';
