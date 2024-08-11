@@ -1,29 +1,30 @@
 <template>
-  <layout />
-  <div class="lg:ml-64 lg:pl-4 lg:flex lg:flex-col lg:w-75% mt-5 mx-2">
-    <div class="flex">
-      <button class="btn-primary" @click="reset()">Hoy</button>
-      <button class="btn" @click="shiftMonth(-1)">Anterior</button>
-      <button class="btn" @click="shiftMonth(1)">Siguiente</button>
-    </div>
-    <span class="text-3xl">{{ viewDate.format('MMMM YYYY') }}</span>
-    <div class="grid grid-cols-7 gap-1">
-      <div v-for="d in weekDays" class="text-center">
-        <div>{{ d }}</div>
+  <DefaultLayout>
+    <div class="lg:ml-64 lg:pl-4 lg:flex lg:flex-col lg:w-75% mt-5 mx-2">
+      <div class="flex">
+        <button class="btn-primary" @click="reset()">Hoy</button>
+        <button class="btn" @click="shiftMonth(-1)">Anterior</button>
+        <button class="btn" @click="shiftMonth(1)">Siguiente</button>
       </div>
-    </div>
-    <div class="grid grid-cols-7">
-      <div v-for="p in daystoPrepend"></div>
-      <div
-        v-for="d in units"
-        class="border border-slate-200 flex flex-col h-32"
-      >
-        <div :class="[d.isToday() ? 'bg-red-300' : '']" class="text-center">
-          {{ d.format('D') }}
+      <span class="text-3xl">{{ viewDate.format('MMMM YYYY') }}</span>
+      <div class="grid grid-cols-7 gap-1">
+        <div v-for="d in weekDays" class="text-center">
+          <div>{{ d }}</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-7">
+        <div v-for="p in daystoPrepend"></div>
+        <div
+          v-for="d in units"
+          class="border border-slate-200 flex flex-col h-32"
+        >
+          <div :class="[d.isToday() ? 'bg-red-300' : '']" class="text-center">
+            {{ d.format('D') }}
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
 </template>
 
 <script setup lang="ts">

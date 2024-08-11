@@ -1,7 +1,7 @@
 <template>
-  <DefaulfLayout>
+  <DefaultLayout>
     <AlgoliaListaCliente class="my-7" />
-  </DefaulfLayout>
+  </DefaultLayout>
 </template>
 
 <script setup lang="ts">

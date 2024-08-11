@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-import DefaulfLayout from '../../layouts/DefaultLayout.vue';
+import DefaultLayout from '../../layouts/DefaultLayout.vue';
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -7,7 +7,7 @@ export const routes: Array<RouteRecordRaw> = [
     name: 'clientes',
     component: () => import('../../views/clientes.vue'),
     meta: {
-      layout: DefaulfLayout,
+      layout: DefaultLayout,
     },
   },
 ];
