@@ -8,7 +8,7 @@
         <div>
           <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
           <input 
-            v-model="nombre"
+            v-model="operacionGlobalData.nombre"
             type="text"
             id="nombre"
             required
@@ -19,7 +19,7 @@
         <div>
           <label for="apellido" class="block text-sm font-medium text-gray-700 mb-1">Apellido *</label>
           <input 
-            v-model="apellido"
+            v-model="operacionGlobalData.apellido"
             type="text"
             id="apellido"
             required
@@ -32,7 +32,7 @@
       <div class="mb-4">
         <label for="nota" class="block text-sm font-medium text-gray-700 mb-1">Nota</label>
         <input
-          v-model="nota"
+          v-model="operacionGlobalData.nota"
           type="text"
           id="nota"
           :required="false"
@@ -44,7 +44,7 @@
       <div class="mb-4">
         <label for="fechaNacimiento" class="block text-sm font-medium text-gray-700 mb-1">Fecha De Nacimiento</label>
         <input
-          v-model="fechaNacimiento"
+          v-model="operacionGlobalData.fechaNacimiento"
           type="date"
           id="fechaNacimiento"
           :required="false"
@@ -56,7 +56,7 @@
       <div class="mb-6">
         <label for="direccion_referencia" class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
         <input
-          v-model="direccion.referencia"
+          v-model="operacionGlobalData.direccion.referencia"
           type="text"
           id="direccion_referencia"
           :required="false"
@@ -78,7 +78,7 @@
         > -->
 
         <draggable 
-          v-model="contactos" 
+          v-model="operacionGlobalData.contactos" 
           item-key="id"
           group="people" 
           @start="drag=true" 
@@ -169,7 +169,6 @@
           '',
           { 'w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2': props.accion === 'crear' },
           { 'w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2': props.accion === 'actualizar' },
-          { 'w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2': props.accion === 'eliminar' },
         ]"
       >
         {{ nombreFunctionBTN }}
@@ -237,32 +236,22 @@ const props = defineProps({
     required: false,
     default: 'obtener'
   },
-  idCliente: {
-    type: String,
+  dataCliente: {
+    type: Object,
     required: false,
-    default: ''
+    default: {}
+  },
+  componenteVisible: {
+    type: Boolean,
+    required: true
   }
 });
+const emit = defineEmits<{
+  (e: 'actualizacionFormulario', value: object): void // Solo valido para "algolia" y "normal"
+}>();
 
 // Data de cliente nuevo
-const id = ref('');
-const nombre = ref('');
-const apellido = ref('');
-const nota = ref('');
-const fechaNacimiento = ref('');
-const direccion = ref<{
-  referencia: string;
-  ubicacion: [number, number];
-}>({
-  referencia: '',
-  ubicacion: [0,0]
-});
-const contactos = ref<{
-  tipo: 'telefono-movil' | 'correo'; 
-  codigoTelefono: string;
-  telefono: string;
-  correo: string;
-}[]>([]);
+const operacionGlobalData = ref<any>({});
 
 // Variables del componente
 const indexContactoSeleccionado = ref(-1);
@@ -270,12 +259,11 @@ const showModal = ref(false);
 const filteredCodes = ref(listaDataPais);
 const searchQuery = ref('');
 const drag = ref(false);
-const dataClienteInicial = {};
 const tituloFormBTN = ref('');
 const nombreFunctionBTN = ref('');
 
 const addContact = () => {
-  contactos.value.push({
+  operacionGlobalData.value.contactos.push({
     tipo: 'telefono-movil',
     codigoTelefono: '+595',
     telefono: '',
@@ -284,92 +272,14 @@ const addContact = () => {
 };
 
 const removeContact = (index: number) => {
-  contactos.value.splice(index, 1);
+  operacionGlobalData.value.contactos.splice(index, 1);
 };
 
 const selectPhoneCode = (code: string) => {
-  contactos.value[indexContactoSeleccionado.value].codigoTelefono = code;
+  operacionGlobalData.value.contactos[indexContactoSeleccionado.value].codigoTelefono = code;
   showModal.value = false;
   indexContactoSeleccionado.value = -1;
 };
-
-const operacionFormulario = async () => {
-  if (props.accion === 'crear') await crearCliente();
-  else if (props.accion === 'actualizar') await actualizarCliente();
-}
-
-const crearCliente = async () => {
-  try {
-    verificacionDeExistenciaDeDatos();
-
-    // Handle form submission
-    console.log('Form submitted', {
-      nombre: nombre.value,
-      apellido: apellido.value,
-      nota: nota.value,
-      fechaNacimiento: fechaNacimiento.value,
-      direccion: direccion,
-      contactos: contactos.value
-    });
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-const actualizarCliente = async () => {
-  try {
-    // Verificacion de existencia de datos
-    verificacionDeExistenciaDeDatos();
-
-    // Filtro de los nuevos datos
-
-    // Handle form submission
-    console.log('Form submitted', {
-      nombre: nombre.value,
-      apellido: apellido.value,
-      nota: nota.value,
-      fechaNacimiento: fechaNacimiento.value,
-      direccion: direccion,
-      contactos: contactos.value,
-    });
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-const verificacionDeExistenciaDeDatos = () => {
-  if (!nombre.value) {
-    throw new Error('El nombre es obligatorio.');
-  }
-
-  if (!apellido.value) {
-    throw new Error('El apellido es obligatorio.');
-  }
-
-  if (!direccion.value.referencia) {
-    throw new Error('La direccion es obligatoria.');
-  }
-
-  if (contactos.value.length) {
-    const infoValida = contactos.value.map(v => {
-      if (v.tipo === 'telefono-movil') {
-        return !!v.codigoTelefono && !!v.telefono;
-      } else if (v.tipo === 'correo') {
-        return !!v.correo
-      } else {
-        return false;
-      }
-    });
-
-    const esValido = !infoValida.includes(false);
-  
-    if (!esValido) {
-      throw new Error('Los campos de contacto tienen que estar completos.');
-    }
-  } else {
-    throw new Error('Se necesita al menos un contacto.');
-  }
-} 
 
 const filterCodes = () => {
   filteredCodes.value = listaDataPais.filter((dataPais) => {
@@ -392,49 +302,29 @@ const closeModal = () => {
 };
 
 const toggleContactType = (index: number) => {
-  contactos.value[index].tipo = contactos.value[index].tipo === 'telefono-movil' ? 'correo' : 'telefono-movil';
+  operacionGlobalData.value.contactos[index].tipo = 
+  operacionGlobalData.value.contactos[index].tipo === 'telefono-movil' ? 'correo' : 'telefono-movil';
 };
 
-const inicializarDatosDeCliente = async () => {
-  // TODO: Obtiene los datos del backend
-  id.value = props.idCliente;
-  nombre.value = 'Guillermo';
-  apellido.value = 'Paiva';
-  nota.value = '';
-  fechaNacimiento.value = '2000-05-16';
-  direccion.value.referencia = 'Una referencia';
-  direccion.value.ubicacion = [1, 1];
-  contactos.value.push({
-    tipo: 'telefono-movil',
-    codigoTelefono: '+595',
-    telefono: '982139653',
-    correo: null
-  });
-  contactos.value.push({
-    tipo: 'correo',
-    codigoTelefono: null,
-    telefono: null,
-    correo: 'guillepaivag@gmail.com'
-  });
-
-  dataClienteInicial['id'] = id.value;
-  dataClienteInicial['nombre'] = nombre.value;
-  dataClienteInicial['apellido'] = apellido.value;
-  dataClienteInicial['nota'] = nota.value;
-  dataClienteInicial['fechaNacimiento'] = fechaNacimiento.value;
-  dataClienteInicial['direccion'] = JSON.parse(JSON.stringify( direccion.value ));
-  dataClienteInicial['contactos'] = JSON.parse(JSON.stringify( contactos.value ));
+const inicializarDatosDeCliente = () => {
+  operacionGlobalData.value = {};
+  operacionGlobalData.value.id = props.dataCliente['id'];
+  operacionGlobalData.value.nombre = props.dataCliente['nombre'];
+  operacionGlobalData.value.apellido = props.dataCliente['apellido'];
+  operacionGlobalData.value.nota = props.dataCliente['nota'];
+  operacionGlobalData.value.fechaNacimiento = props.dataCliente['fechaNacimiento'];
+  operacionGlobalData.value.direccion = JSON.parse(JSON.stringify(props.dataCliente['direccion']));
+  operacionGlobalData.value.contactos = JSON.parse(JSON.stringify(props.dataCliente['contactos']));
 };
 
 // const volverADatosActualesDeCliente = () => {
-//   id.value = dataClienteInicial['id'];
-//   nombre.value = dataClienteInicial['nombre'];
-//   apellido.value = dataClienteInicial['apellido'];
-//   nota.value = dataClienteInicial['nota'];
-//   fechaNacimiento.value = dataClienteInicial['fechaNacimiento'];
-//   direccion.value.referencia = dataClienteInicial['direccion'].referencia;
-//   direccion.value.ubicacion = dataClienteInicial['direccion'].ubicacion;
-//   contactos.value = dataClienteInicial['contactos'];
+//   id.value = props.dataCliente['id'];
+//   nombre.value = props.dataCliente['nombre'];
+//   apellido.value = props.dataCliente['apellido'];
+//   nota.value = props.dataCliente['nota'];
+//   fechaNacimiento.value = props.dataCliente['fechaNacimiento'];
+//   direccion.value = JSON.parse(JSON.stringify(props.dataCliente['direccion']));
+//   contactos.value = JSON.parse(JSON.stringify(props.dataCliente['contactos']));
 // };
 
 const actualizarNombresEnFormCliente = () => {
@@ -447,24 +337,105 @@ const actualizarNombresEnFormCliente = () => {
   }
 };
 
+const verificacionDeExistenciaDeDatos = () => {
+  if (!operacionGlobalData.value.nombre) {
+    throw new Error('El nombre es obligatorio.');
+  }
+
+  if (!operacionGlobalData.value.apellido) {
+    throw new Error('El apellido es obligatorio.');
+  }
+
+  if (!operacionGlobalData.value.direccion.referencia) {
+    throw new Error('La direccion es obligatoria.');
+  }
+
+  if (operacionGlobalData.value.contactos.length) {
+    const infoValida = operacionGlobalData.value.contactos.map(v => {
+      if (v.tipo === 'telefono-movil') {
+        return !!v.codigoTelefono && !!v.telefono;
+      } else if (v.tipo === 'correo') {
+        return !!v.correo
+      } else {
+        return false;
+      }
+    });
+
+    const esValido = !infoValida.includes(false);
+  
+    if (!esValido) {
+      throw new Error('Los campos de contacto tienen que estar completos.');
+    }
+  } else {
+    throw new Error('Se necesita al menos un contacto.');
+  }
+};
+
+const operacionFormulario = async () => {
+  if (props.accion === 'crear') await crearCliente();
+  else if (props.accion === 'actualizar') await actualizarCliente();
+}
+
+const crearCliente = async () => {
+  try {
+    verificacionDeExistenciaDeDatos();
+
+    // Handle form submission
+    console.log('Form submitted', {
+      nombre: operacionGlobalData.value.nombre,
+      apellido: operacionGlobalData.value.apellido,
+      nota: operacionGlobalData.value.nota,
+      fechaNacimiento: operacionGlobalData.value.fechaNacimiento,
+      direccion: operacionGlobalData.value.direccion,
+      contactos: operacionGlobalData.value.contactos
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+const actualizarCliente = async () => {
+  try {
+    // Verificacion de existencia de datos
+    verificacionDeExistenciaDeDatos();
+
+    // Filtro de los nuevos datos
+
+    // Handle form submission
+    console.log('Form submitted', {
+      nombre: operacionGlobalData.value.nombre,
+      apellido: operacionGlobalData.value.apellido,
+      nota: operacionGlobalData.value.nota,
+      fechaNacimiento: operacionGlobalData.value.fechaNacimiento,
+      direccion: operacionGlobalData.value.direccion,
+      contactos: operacionGlobalData.value.contactos
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+watch(() => operacionGlobalData, () => {
+  const aux = JSON.parse(JSON.stringify(operacionGlobalData.value));
+  emit('actualizacionFormulario', aux);
+}, { deep: true });
+
 watch(() => props.accion, () => {
   actualizarNombresEnFormCliente();
   // volverADatosActualesDeCliente();
 }, { deep: true });
 
-watch(() => props.idCliente, async () => {
-  await inicializarDatosDeCliente();
+watch(() => props.componenteVisible, async () => {
+  if (props.componenteVisible) {
+    actualizarNombresEnFormCliente();
+    inicializarDatosDeCliente();
+  }
 }, { deep: true });
 
 onBeforeMount(async () => {
   actualizarNombresEnFormCliente();
-
-  const operacionesParaObtener = ['obtener', 'actualizar'];
-  if (operacionesParaObtener.includes(props.accion)) {
-    // Inicializar datos de cliente
-    await inicializarDatosDeCliente();
-  }
-})
+  inicializarDatosDeCliente();
+});
 </script>
 
 

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-  import AlgoliaListaCliente from '@/components/algolia/ListaCliente2.vue';
+  import AlgoliaListaCliente from '@/components/algolia/ListaCliente.vue';
 </script>
 
 <style>

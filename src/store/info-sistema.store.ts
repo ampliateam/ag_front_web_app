@@ -81,7 +81,7 @@ const useInfoSistemaStore = defineStore('info-sistema', {
           const verificador = Object.keys(extraData.dataInicial).map(campo => {
             return extraData.dataInicial[campo] === this.operacionGlobal.dataInicial[campo];
           });
-  
+
           if (!verificador.includes(false)) {
             data.data = this.operacionGlobal.data;
             data.response = this.operacionGlobal.response;

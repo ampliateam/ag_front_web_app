@@ -28,7 +28,6 @@
           required
           :placeholder="props.valorParaEliminar"
         />
-        <!-- <p v-if="showError" class="text-red-500 text-xs mt-1">Required</p> -->
       </div>
       <div class="flex justify-end space-x-2">
         <button @click="closeDialog" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
@@ -76,7 +75,7 @@ const closeDialog = () => {
 };
 
 const deleteCollection = () => {
-  if (confirmationText.value !== 'ParametrosSistema') {
+  if (confirmationText.value === props.valorParaEliminar) {
     emit('dataConfirmacion', confirmationText.value);
     emit('showModel', false);
     return;

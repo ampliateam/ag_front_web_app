@@ -32,41 +32,23 @@
     </div>
 
     <!-- Modal de operaciones -->
-    <!-- <div :class="{
-      'operacion-habilitada': !!infoSistemaStore.getOperacionGlobal.id,
-      'operacion-deshabilitada': !infoSistemaStore.getOperacionGlobal.id
-    }">
-      <Componente1 v-if="infoSistemaStore.getOperacionGlobal.id === 'buscador-global'" />
-    </div> -->
     <SideBarOperacionGlobal :is-open="infoSistemaStore.getOperacionGlobal.sideBar">
-      <!-- Contenido del sidebar aquí -->
-      <!-- <h2>Sidebar: {{ infoSistemaStore.getOperacionGlobal.id }}</h2>
-      <ul>
-        <li>Opción 1</li>
-        <li>Opción 2</li>
-        <li>Opción 3</li>
-      </ul> -->
-      <!-- <CrearCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-cliente'" /> -->
-      <FormularioCliente
-        v-if="infoSistemaStore.getOperacionGlobal.id === 'crear-cliente'"
-        :accion="'crear'"
+      <OperacionCliente
+        v-if="infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente'"
+        :componenteVisible="esOperacionClienteVisible"
       />
-      <OperacionesCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente'" />
     </SideBarOperacionGlobal>
   </div>
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue';
+import { computed } from 'vue';
 import NavBar from '@/components/NavBar.vue';
 import SideBar from '@/components/SideBar.vue';
-import OperacionesCliente from '@/components/operacion-global/OperacionesCliente.vue';
-import FormularioCliente from '@/components/operacion-global/FormularioCliente.vue';
-import SideBarOperacionGlobal from '@/components/operacion-global/SideBarOperacionGlobal.vue'
+import OperacionCliente from '@/components/operacion-global/OperacionCliente.vue';
+import SideBarOperacionGlobal from '@/components/SideBarOperacionGlobal.vue'
 import useInfoSistemaStore from '@/store/info-sistema.store';
-// import { TAccionFormularioCliente } from '@/models/types';
 
-// const accionFormularioCliente = ref<TAccionFormularioCliente>('actualizar');
 const infoSistemaStore = useInfoSistemaStore();
 
 const minimizacionGlobal = () => {
@@ -91,7 +73,11 @@ const minimizarSideBarOG = () => {
       sideBar: !infoSistemaStore.getOperacionGlobal.sideBar
     });
   }
-}
+};
+
+const esOperacionClienteVisible = computed(() => {
+  return infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente' && infoSistemaStore.getOperacionGlobal.sideBar;
+});
 </script>
 
 <style scoped>
