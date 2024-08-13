@@ -1,5 +1,5 @@
 <template>
-  <DefaulfLayout>
+  <DefaultLayout>
     <div class="">
       <!-- Contenedor Principal -->
       <div class="lg:flex gap-4 items-stretch">
@@ -76,7 +76,7 @@
 
       <AlgoliaListaCliente />
     </div>
-  </DefaulfLayout>
+  </DefaultLayout>
 </template>
 
 <script setup lang="ts">

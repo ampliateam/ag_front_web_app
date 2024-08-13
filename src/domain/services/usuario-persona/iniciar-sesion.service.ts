@@ -1,5 +1,5 @@
-import { IniciarSesionConCorreoYContrasenaDTO } from '@/interfaces/dto';
-import { UserCredentialFirebase } from '@/interfaces/models';
+import { IniciarSesionConCorreoYContrasenaDTO } from '@/models/dto';
+import { UserCredentialFirebase } from '@/models/models';
 import * as repository from '../../repository';
 
 export const iniciarSesionConCorreoYContrasena = async (dto: IniciarSesionConCorreoYContrasenaDTO): Promise<UserCredentialFirebase> => {

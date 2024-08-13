@@ -1,0 +1,1 @@
+export type TAccionFormularioCliente = 'crear' | 'obtener' | 'actualizar' | 'eliminar';

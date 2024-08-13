@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 
 import * as services from '../domain/services';
-import { UsuarioLogeado } from '@/interfaces/models';
-import { IniciarSesionConCorreoYContrasenaDTO, RegistrarConCorreoYContrasenaDTO } from '@/interfaces/dto';
+import { UsuarioLogeado } from '@/models/models';
+import { IniciarSesionConCorreoYContrasenaDTO, RegistrarConCorreoYContrasenaDTO } from '@/models/dto';
 import { setUsuarioLogeadoLS, setUsuarioLogeadoTokenLS } from '@/helpers';
 import useInfoSistemaStore from './info-sistema.store';
 

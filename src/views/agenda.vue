@@ -1,5 +1,5 @@
 <template>
-  <DefaulfLayout>
+  <DefaultLayout>
     <div class="containerV2 mt-6 mb-6">
       <div class="calendar-container">
         <!-- Cabecera con selectores y botones -->
@@ -179,7 +179,7 @@
         </div>
       </div>
     </div>
-  </DefaulfLayout>
+  </DefaultLayout>
 </template>
 
 <script setup>

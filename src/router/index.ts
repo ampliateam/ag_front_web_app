@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import * as routesHelper from './helpers';
-import DefaulfLayout from '../layouts/DefaultLayout.vue';
+import DefaultLayout from '../layouts/DefaultLayout.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'about',
     component: () => import('../views/AboutView.vue'),
     meta: {
-      DefaulfLayout: DefaulfLayout,
+      layout: DefaultLayout,
     },
   },
   {
@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'agenda',
     component: () => import('../views/agenda.vue'),
     meta: {
-      DefaulfLayout: DefaulfLayout,
+      layout: DefaultLayout,
     },
   },
   {

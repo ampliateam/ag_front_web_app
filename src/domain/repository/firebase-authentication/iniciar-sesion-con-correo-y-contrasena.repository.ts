@@ -1,6 +1,6 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { UserCredentialFirebase } from '@/interfaces/models';
-import { IniciarSesionConCorreoYContrasenaDTO } from '@/interfaces/dto';
+import { UserCredentialFirebase } from '@/models/models';
+import { IniciarSesionConCorreoYContrasenaDTO } from '@/models/dto';
 
 export const iniciarSesionConCorreoYContrasena = async (iniciarSesionConCorreoYContrasenaDTO: IniciarSesionConCorreoYContrasenaDTO): Promise<UserCredentialFirebase> => {
   const auth = getAuth();
