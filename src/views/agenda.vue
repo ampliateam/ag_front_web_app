@@ -35,16 +35,16 @@
             >
               Hoy
             </button>
-            <div class="flex mt-2 sm:mt-0">
+            <div class="flex mt-2 sm:mt-0 mr-2 space-x-2">
               <TooltipButton 
-                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg mr-2"
+                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
                 tooltip-text="Semana anterior"
                 @click="previousWeek"
               >
                 &lt; <!-- Flecha izquierda -->
               </TooltipButton>
               <TooltipButton
-                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg mr-2"
+                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
                 tooltip-text="Semana siguiente"
                 @click="nextWeek"
               >
@@ -55,8 +55,8 @@
           <div class="flex space-x-2 acciones">
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
-              tooltip-text="Semana siguiente"
-              @click="agendarPaciente"
+              tooltip-text="Agendar paciente"
+              @click="abrirModalAgendarCliente"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
               tooltip-text="Modificar agenda"
-              @click="agendarPaciente"
+              @click="abrirModalModificarAgenda"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
               tooltip-text="Agregar hora libre"
-              @click="agendarPaciente"
+              @click="abrirAgregarHora"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,8 @@
                 :key="agendamiento.id"
                 :class="getAgendamientoClass(agendamiento)"
                 :style="getAgendamientoStyle(agendamiento, date)"
-                class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded"
+                class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded cursor-pointer"
+                @click="abrirVerAgendamiento"
               >
                 {{ agendamiento.nombre || 'Hora libre' }}
                 <br>
@@ -180,6 +181,12 @@
       </div>
     </div>
   </DefaulfLayout>
+  <SideBarOperacionGlobal :is-open="infoSistemaStore.getOperacionGlobal.sideBar">
+    <AgendarPaciente v-if="esAgendarCliente" />
+    <AgendarPaciente v-if="esModificarAgenda" />
+    <AgendarPaciente v-if="esAgregarHora" />
+    <AgendarPaciente v-if="esVerAgendamiento" />
+  </SideBarOperacionGlobal>
 </template>
 
 <script setup>
@@ -187,12 +194,62 @@ import { ref, onMounted, computed, watch } from 'vue';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import TooltipButton from '@/components/TooltipButton.vue'
+import AgendarPaciente from '@/components/operacion-global/AgendarPaciente.vue';
+import SideBarOperacionGlobal from '@/components/operacion-global/SideBarOperacionGlobal.vue'
+import useInfoSistemaStore from '@/store/info-sistema.store';
+
+const infoSistemaStore = useInfoSistemaStore();
 
 dayjs.locale('es');
 
 const weekDays = ref([]);
 const weekDates = ref([]);
 const agendamientos = ref([]);
+
+const esAgendarCliente = ref(false)
+const esModificarAgenda = ref(false)
+const esAgregarHora = ref(false)
+const esVerAgendamiento = ref(false)
+
+const abrirModalAgendarCliente = () => {
+  esAgendarCliente.value = true
+  esModificarAgenda.value = false
+  esAgregarHora.value = false
+  esVerAgendamiento.value = false
+  abrirModal()
+}
+
+const abrirModalModificarAgenda = () => {
+  esAgendarCliente.value = false
+  esModificarAgenda.value = true
+  esAgregarHora.value = false
+  esVerAgendamiento.value = false
+  abrirModal()
+}
+
+const abrirAgregarHora = () => {
+  esAgendarCliente.value = false
+  esModificarAgenda.value = false
+  esAgregarHora.value = true
+  esVerAgendamiento.value = false
+  abrirModal()
+}
+
+const abrirVerAgendamiento = () => {
+  esAgendarCliente.value = false
+  esModificarAgenda.value = false
+  esAgregarHora.value = false
+  esVerAgendamiento.value = true
+  abrirModal()
+}
+
+const abrirModal = () => {
+  if (!infoSistemaStore.getOperacionGlobal.sideBar) {
+    infoSistemaStore.setOperacionGlobal({
+      sideBar: !infoSistemaStore.getOperacionGlobal.sideBar,
+    });
+  }
+}
 
 // const hours = ref([
 //   '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
@@ -330,10 +387,6 @@ const getDayClass = (date, isWeekDay = false) => {
   }
   return `${baseClass} text-gray-400`;
 };
-
-const agendarPaciente= () => {
-
-}
 
 const formatTime = (date) => dayjs(date).format('HH:mm');
 

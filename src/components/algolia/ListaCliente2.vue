@@ -3,16 +3,16 @@
     :search-client="searchClient"
     :index-name="indexName"
   >
-    <ais-configure :hitsPerPage="10" />
+    <ais-configure :hits-per-page="10" />
 
     <div class="containerV2">
       <div class="search-and-button">
         <ais-search-box style="width: 100% !important;">
           <template #default="{ currentRefinement, isSearchStalled, refine }">
             <BuscadorGenerico
-              propPlaceholder="Busca clientes"
+              prop-placeholder="Busca clientes"
               @escritura="obtenerEscritura"
-              :configAlgolia="{
+              :config-algolia="{
                 currentRefinement,
                 isSearchStalled,
                 refine
@@ -97,8 +97,14 @@
                     {{ item.doble_recordatorio ? 'Si' : 'No' }}
                   </td>
                   <td class="table-cell">
-                    <a :href="`/ficha/${item.id}`" target="_blank">
-                      <button class="action-button" style="font-size: small;">
+                    <a
+                      :href="`/ficha/${item.id}`"
+                      target="_blank"
+                    >
+                      <button
+                        class="action-button"
+                        style="font-size: small;"
+                      >
                         Ver Ficha
                       </button>
                     </a>
@@ -113,7 +119,7 @@
                       fill="#6b7280"
                       @click="abrirSideBarOG('operacion-cliente')"
                     >
-                      <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+                      <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
                     </svg>
                   </td>
                 </tr>
