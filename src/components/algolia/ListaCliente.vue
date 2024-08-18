@@ -3,43 +3,44 @@
     :search-client="searchClient"
     :index-name="indexName"
   >
-    <ais-configure :hitsPerPage="1" />
+    <ais-configure :hitsPerPage="10" />
 
     <div class="containerV2">
       <div class="search-and-button">
-        <ais-search-box>
+        <ais-search-box style="width: 100% !important;">
           <template #default="{ currentRefinement, isSearchStalled, refine }">
             <BuscadorGenerico
-              :conSlot="true"
+              propPlaceholder="Busca clientes"
               @escritura="obtenerEscritura"
-            >
-              <input
-                id="search"
-                name="search"
-                :value="currentRefinement"
-                @input="refine($event.currentTarget.value)"
-                class="outline outline-offset-2 outline-blue-500 block w-full pl-10 pr-3 py-2 bg-gray-100 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Busca clientes"
-              >
-            </BuscadorGenerico>
-            <span :hidden="!isSearchStalled">Loading...</span>
+              :configAlgolia="{
+                currentRefinement,
+                isSearchStalled,
+                refine
+              }"
+            />
           </template>
         </ais-search-box>
 
-        <button class="action-button new-patient">
+        <button
+          class="action-button new-patient"
+          style="font-size: medium;"
+          @click="infoSistemaStore.abrirSideBarOG('operacion-cliente', {
+            dataInicial: { accion: 'crear-cliente' }
+          })"
+        >
           Nuevo cliente
         </button>
       </div>
 
       <div class="table-container">
-        <ais-hits>
+        <ais-hits :transform-items="transformItems">
           <template #default="{ items }">
             <table class="patient-table">
               <thead>
                 <tr>
-                  <th class="table-cell table-header">
-                    Nro
-                  </th>
+                  <!-- <th class="table-cell table-header">
+                    Ver
+                  </th> -->
                   <th class="table-cell table-header">
                     Nombre y apellido
                   </th>
@@ -59,7 +60,7 @@
                     Ficha
                   </th>
                   <th class="table-cell table-header">
-                    Opciones
+                    Operaciones
                   </th>
                 </tr>
               </thead>
@@ -68,10 +69,20 @@
                   v-for="(item, index) in items"
                   :key="item.objectID"
                 >
-                  <!-- {{ item }} -->
-                  <td class="table-cell">
-                    {{ index + 1 }}
-                  </td>
+                  <!-- <td class="table-cell">
+                    <a :href="`/cliente/${item.id}`" target="_blank">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#5d5fef"
+                        class="verCliente"
+                      >
+                        <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/>
+                      </svg>
+                    </a>
+                  </td> -->
                   <td class="table-cell patient-name">
                     {{ item.nombre }} {{ item.apellido }}
                   </td>
@@ -88,12 +99,29 @@
                     {{ item.doble_recordatorio ? 'Si' : 'No' }}
                   </td>
                   <td class="table-cell">
-                    <button class="action-button">
-                      Ver Ficha
-                    </button>
+                    <a :href="`/ficha/${item.id}`" target="_blank">
+                      <button class="action-button" style="font-size: small;">
+                        Ver Ficha
+                      </button>
+                    </a>
                   </td>
                   <td class="table-cell">
-                    ...
+                    <svg
+                      class="ml-6 btnOperacionCliente"
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="28px"
+                      viewBox="0 -960 960 960"
+                      width="28px"
+                      fill="#6b7280"
+                      @click="infoSistemaStore.abrirSideBarOG('operacion-cliente', {
+                        dataInicial: {
+                          accion: 'actualizar-cliente',
+                          idCliente: item.id
+                        }
+                      })"
+                    >
+                      <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+                    </svg>
                   </td>
                 </tr>
               </tbody>
@@ -138,7 +166,9 @@
 import { ref } from 'vue';
 import algoliasearch from 'algoliasearch/lite';
 
+import useInfoSistemaStore from '@/store/info-sistema.store';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
+import { TOperacionGlobalID } from '@/models/types';
 
 const searchClient = algoliasearch(
   'BSDBYRKOOD',
@@ -146,42 +176,47 @@ const searchClient = algoliasearch(
 );
 const indexName = 'cliente';
 const searchQuery = ref('');
-// const items = ref([]);
+const infoSistemaStore = useInfoSistemaStore();
 
 const obtenerEscritura = async (val: string) => {
   searchQuery.value = val;
+  // NO ELIMINAR: Sirve como referencia para realizar multiples busquedas
   // const r = await searchClient.search([{
   //   indexName,
   //   params: { query: val, hitsPerPage: 2 }
   // }], {});
   // const rr: any = r.results[0];
   // items.value = rr.hits;
-}
+};
+
+const transformItems = (items: any[], data: any) => {
+  const { results } = data;
+  
+  return items.map((item, index) => ({
+    ...item,
+    position: { index, page: results.page },
+  }));
+};
 
 obtenerEscritura('');
 
 </script>
 
 <style scoped>
-.containerV2 {
+/* .containerV2 {
   font-family: Arial, sans-serif;
   background-color: white;
   border-radius: 15px;
   padding: 20px;
   box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.2);
   width: 100%;
-}
+} */
 
 .search-and-button {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-}
-
-.search-box {
-  flex-grow: 1;
-  margin-right: 10px;
 }
 
 .patient-table {
@@ -208,8 +243,17 @@ obtenerEscritura('');
   background-color: #5d5fef;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 4px 8px;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.verCliente {
+  cursor: pointer;
+  margin-left: 0px;
+}
+
+.btnOperacionCliente {
   cursor: pointer;
 }
 
@@ -254,16 +298,16 @@ obtenerEscritura('');
   cursor: not-allowed;
 }
 
-@media (max-width: 660px) {
+/* @media (max-width: 660px) {
   .containerV2 {
     font-family: Arial, sans-serif;
     background-color: white;
     border-radius: 0px;
-    padding: 20px;
+    padding: 10px;
     box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);
     width: 100%;
   }
-}
+} */
 
 @media (max-width: 600px) {
   .search-and-button {
@@ -271,27 +315,12 @@ obtenerEscritura('');
     align-items: stretch;
   }
 
-  .search-box {
-    margin-right: 0;
-    margin-top: 10px;
-  }
-
   .new-patient {
     width: 100%;
   }
+
+  .action-button {
+    margin-bottom: 7px;
+  }
 }
-
-.clear-search {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #5d5fef;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-
 </style>

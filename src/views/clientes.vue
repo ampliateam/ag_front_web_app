@@ -1,11 +1,11 @@
 <template>
-  <DefaulfLayout>
+  <DefaultLayout>
     <AlgoliaListaCliente class="my-7" />
-  </DefaulfLayout>
+  </DefaultLayout>
 </template>
 
 <script setup lang="ts">
-  import AlgoliaListaCliente from '@/components/algolia/ListaCliente2.vue';
+  import AlgoliaListaCliente from '@/components/algolia/ListaCliente.vue';
 </script>
 
 <style>

@@ -1,4 +1,4 @@
-import { UsuarioLogeado } from "@/interfaces/models";
+import { UsuarioLogeado } from "@/models/models";
 
 export const setUsuarioLogeadoLS = (usuarioLogeado?: UsuarioLogeado) => {
   localStorage.setItem('usuario-logeado', JSON.stringify({

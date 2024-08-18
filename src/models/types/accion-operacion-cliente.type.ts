@@ -1,0 +1,1 @@
+export type TAccionOperacionCliente = 'crear-cliente' | 'ver-cliente' | 'actualizar-cliente';

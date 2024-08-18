@@ -1,5 +1,5 @@
-import { RegistrarConCorreoYContrasenaDTO } from '@/interfaces/dto';
-import { UsuarioPersona } from '@/interfaces/models';
+import { RegistrarConCorreoYContrasenaDTO } from '@/models/dto';
+import { UsuarioPersona } from '@/models/models';
 import * as repository from '../../repository';
 
 export const registrarConCorreoYContrasena = async (dto: RegistrarConCorreoYContrasenaDTO): Promise<UsuarioPersona> => {
