@@ -6,4 +6,5 @@ export type TOperacionGlobalID = ''
 | 'buscador-global' 
 | 'crear-cliente' 
 | 'operacion-cliente'
-| 'agendar-cliente';
+| 'agendar-cliente'
+| 'ver-agendamiento';

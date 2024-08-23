@@ -146,7 +146,15 @@
                 :class="getAgendamientoClass(agendamiento)"
                 :style="getAgendamientoStyle(agendamiento, date)"
                 class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded cursor-pointer"
-                @click="abrirVerAgendamiento"
+                @click="infoSistemaStore.abrirSideBarOG('ver-agendamiento', {
+                  dataInicial: { 
+                    idCliente: agendamiento.idCliente, 
+                    idAgendamiento: agendamiento.id,
+                    nombre: agendamiento.nombre,
+                    agendamientoInicio: agendamiento.agendamientoInicio,
+                    agendamientoFin: agendamiento.agendamientoFin
+                  }
+                })"
               >
                 {{ agendamiento.nombre || 'Hora libre' }}
                 <br>
@@ -319,7 +327,7 @@ const getAgendamientoClass = (agendamiento) => {
   switch (agendamiento.nombre) {
     case 'Guillermo Paiva':
       return 'bg-teal-200 text-teal-600 border border-teal-600 ';
-    case 'Tobias Paiva':
+    case 'Cris Velazquez':
       return 'bg-red-200 text-red-500 border border-red-500';
     case 'Hora libre':
       return 'bg-gray-200 text-gray-500 border border-gray-500';
@@ -347,54 +355,63 @@ onMounted(() => {
   agendamientos.value = [
     {
       id: '1',
-      nombre: 'Tobias Paiva',
+      idCliente: '',
+      nombre: 'Cris Velazquez',
       agendamientoInicio: dayjs().day(2).hour(10).minute(0).toDate(),
       agendamientoFin: dayjs().day(2).hour(12).minute(0).toDate(),
     },
     {
       id: '2',
+      idCliente: 'aaaaaaa00000000000000000',
       nombre: 'Guillermo Paiva',
       agendamientoInicio: dayjs().day(3).hour(9).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(11).minute(0).toDate(),
     },
     {
       id: '3',
-      nombre: 'Tobias Paiva',
+      idCliente: 'aaaaaaa00000000000000002',
+      nombre: 'Cris Velazquez',
       agendamientoInicio: dayjs().day(3).hour(11).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(11).minute(30).toDate(),
     },
     {
       id: '4',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(1).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(1).hour(13).minute(0).toDate(),
     },
     {
       id: '5',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(2).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(2).hour(13).minute(0).toDate(),
     },
     {
       id: '6',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(3).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(13).minute(0).toDate(),
     },
     {
       id: '7',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(4).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(4).hour(13).minute(0).toDate(),
     },
     {
       id: '8',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(5).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(5).hour(13).minute(0).toDate(),
     },
     {
       id: '2',
+      idCliente: 'aaaaaaa00000000000000000',
       nombre: 'Guillermo Paiva',
       agendamientoInicio: dayjs().day(5).hour(14).minute(30).toDate(),
       agendamientoFin: dayjs().day(5).hour(15).minute(30).toDate(),

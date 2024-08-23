@@ -35,6 +35,7 @@ export default [
       "custom-rules/no-domain-import": "error",
       'jsx-a11y/no-redundant-roles': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      "vue/attribute-hyphenation": "off"
     },
   }
 ];

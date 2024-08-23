@@ -1,153 +1,212 @@
 <template>
   <div class="">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">
-      Agendar Cliente
-    </h2>
-    <p class="text-sm text-gray-600 mb-4">
-      Los campos con * son obligatorios
-    </p>
+    <div class="card-content">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">
+        Agendar Cliente
+      </h2>
+
+      <button
+        class="action-button text-sm font-medium"
+        @click="infoSistemaStore.abrirSideBarOG('operacion-cliente', {
+          dataInicial: { accion: 'crear-cliente' }
+        })"
+      >
+        Nuevo cliente
+      </button>
+    </div>
     <ais-instant-search
       :search-client="searchClient"
       :index-name="indexName"
     >
-      <ais-configure :hits-per-page="10" />
-      <form @submit.prevent="crearCliente">
+      <ais-configure :hitsPerPage="10" />
+      
+      <ais-search-box
+        style="width: 100% !important;"
+        class="mb-3"
+      >
+        <template #default="{ currentRefinement, isSearchStalled, refine }">
+          <BuscadorGenerico
+            prop-placeholder="Busca clientes"
+            @escritura="obtenerEscritura"
+            :config-algolia="{
+              currentRefinement,
+              isSearchStalled,
+              refine
+            }"
+          />
+        </template>
+      </ais-search-box>
+      <div
+        class="table-container"
+        v-if="!cliente"
+      >
+        <ais-hits :transform-items="transformItems">
+          <template #default="{ items }">
+            <table class="patient-table">
+              <thead>
+                <tr>
+                  <!-- <th class="table-cell table-header">
+                    Ver
+                  </th> -->
+                  <th class="table-cell table-header">
+                    Nombre y apellido
+                  </th>
+                  <th class="table-cell table-header">
+                    Nota
+                  </th>
+                  <th class="table-cell table-header">
+                    Contacto
+                  </th>
+                  <th class="table-cell table-header">
+                    Seleccionar
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in items"
+                  :key="item.objectID"
+                >
+                  <td class="table-cell patient-name">
+                    {{ item.nombre }} {{ item.apellido }}
+                  </td>
+                  <td class="table-cell">
+                    {{ item.nota }}
+                  </td>
+                  <td class="table-cell">
+                    {{ item.contactos[0].contacto }}
+                  </td>
+                  <td
+                    class="table-cell"
+                  >
+                    <button
+                      class="action-button"
+                      @click="searchQuery='';cliente=item;"
+                    >
+                      Seleccionar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </template>
+        </ais-hits>
+      </div>
+      <!-- tabla de busqueda de cliente por buscador -->
+      <form
+        @submit.prevent="crearCliente"
+        v-if="!!cliente"
+      >
+        <p class="text-sm text-gray-600 mb-4">
+          Los campos con * son obligatorios
+        </p>
         <div class="mb-4 grid grid-cols-2 gap-4">
-          <ais-search-box style="width: 100% !important;">
-            <template #default="{ currentRefinement, isSearchStalled, refine }">
-              <BuscadorGenerico
-                prop-placeholder="Busca clientes"
-                @escritura="obtenerEscritura"
-                :config-algolia="{
-                  currentRefinement,
-                  isSearchStalled,
-                  refine
-                }"
-              />
-            </template>
-          </ais-search-box>
+          <!-- Formulario crear agendamiento -->
           <div>
-            <label
-              for="nombre"
-              class="block text-sm font-medium text-gray-700 mb-1"
-            >Nombre *</label>
-            <input
-              v-model="nombre"
-              type="text"
-              id="nombre"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <div>
+              <label
+                for="nombre"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Nombre y apellido *</label>
+              <input
+                :value="cliente.nombre + ' ' + cliente.apellido "
+                type="text"
+                id="nombre"
+                required
+                disabled
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div>
+              <label
+                for="apellido"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Nota</label>
+              <input
+                :value="cliente.nota"
+                type="text"
+                id="apellido"
+                disabled
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div class="mb-4">
+              <label
+                for="nota"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Contacto</label>
+              <input
+                :value="cliente.contactos[0].contacto"
+                type="text"
+                id="nota"
+                disabled
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div class="mb-4">
+              <label
+                for="nota"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Dirección</label>
+              <input
+                :value="cliente.direccion.referencia"
+                type="text"
+                id="nota"
+                disabled
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
           </div>
+
           <div>
-            <label
-              for="apellido"
-              class="block text-sm font-medium text-gray-700 mb-1"
-            >Apellido *</label>
-            <input
-              v-model="apellido"
-              type="text"
-              id="apellido"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <div>
+              <label
+                for="fechaNacimiento"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Fecha *</label>
+              <input
+                v-model="fecha"
+                type="date"
+                id="fechaNacimiento"
+                :required="false"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div>
+              <label
+                for="apellido"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Hora inicio *</label>
+              <input
+                v-model="horaInicio"
+                type="time"
+                id="apellido"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
+            <div class="mb-4">
+              <label
+                for="nota"
+                class="block text-sm font-medium text-gray-700 mb-1"
+              >Hora fin *</label>
+              <input
+                v-model="horaFin"
+                type="time"
+                id="nota"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+            </div>
           </div>
         </div>
-
-        <div class="mb-4">
-          <label
-            for="nota"
-            class="block text-sm font-medium text-gray-700 mb-1"
-          >Nota *</label>
-          <input
-            v-model="nota"
-            type="text"
-            id="nota"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="fechaNacimiento"
-            class="block text-sm font-medium text-gray-700 mb-1"
-          >Fecha De Cumpleaños *</label>
-          <input
-            v-model="fechaNacimiento"
-            type="date"
-            id="fechaNacimiento"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-        </div>
-
         <button
           type="submit"
-          class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          class="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Guardar
         </button>
       </form>
-
-      <div
-        v-if="showModal"
-        class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-75"
-      >
-        <div class="bg-white p-6 rounded-lg shadow-md max-w-md w-full relative">
-          <button
-            @click="closeModal"
-            class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-          <h3 class="text-lg font-medium text-gray-800 mb-4">
-            Seleccionar Código de País
-          </h3>
-          <div class="mb-4">
-            <input
-              v-model="searchQuery"
-              type="text"
-              @input="filterCodes"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Buscar por país o código"
-            >
-          </div>
-          <div class="max-h-[400px] overflow-y-auto">
-            <div
-              v-for="country in filteredCodes"
-              :key="country.codigoTelefono"
-              @click="selectPhoneCode(country.codigoTelefono)"
-              class="flex items-center justify-between bg-white border border-blue-500 rounded-md py-2 px-4 cursor-pointer mb-2"
-            >
-              <div class="flex items-center">
-                <span class="text-xl mr-2">{{ country.abreviatura }}</span>
-                <span>{{ country.codigoTelefono }}</span>
-              </div>
-              <span>{{ getNombrePais(country.id) }}</span>
-            </div>
-          </div>
-          <button
-            @click="closeModal"
-            class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-          >
-            Cerrar
-          </button>
-        </div>
-      </div>
     </ais-instant-search>
   </div>
 </template>
@@ -155,10 +214,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import draggable from 'vuedraggable';
-import { listaDataPais } from '@/helpers/data-pais.helper';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import algoliasearch from 'algoliasearch/lite';
+import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
 
 const searchClient = algoliasearch(
   'BSDBYRKOOD',
@@ -188,29 +246,19 @@ const contactos = ref<{
   correo: string;
 }[]>([]);
 
-// Variables del componente
-const indexContactoSeleccionado = ref(-1);
-const showModal = ref(false);
-const filteredCodes = ref(listaDataPais);
-const drag = ref(false);
+const cliente = ref(null)
 
-const addContact = () => {
-  contactos.value.push({
-    tipo: 'telefono-movil',
-    codigoTelefono: '+595',
-    telefono: '',
-    correo: ''
-  });
-};
+const fecha = ref(null)
+const horaInicio = ref(null)
+const horaFin = ref(null)
 
-const removeContact = (index: number) => {
-  contactos.value.splice(index, 1);
-};
-
-const selectPhoneCode = (code: string) => {
-  contactos.value[indexContactoSeleccionado.value].codigoTelefono = code;
-  showModal.value = false;
-  indexContactoSeleccionado.value = -1;
+const transformItems = (items: any[], data: any) => {
+  const { results } = data;
+  
+  return items.map((item, index) => ({
+    ...item,
+    position: { index, page: results.page },
+  }));
 };
 
 const crearCliente = async () => {
@@ -261,42 +309,129 @@ const crearCliente = async () => {
   }
 }
 
-const filterCodes = () => {
-  filteredCodes.value = listaDataPais.filter((dataPais) => {
-    const idIdioma = infoSistemaStore.getIdIdiomaSistema;
-    const codigoPaisMinuscula = dataPais.codigoTelefono.toLowerCase();
-    const nombrePaisMinuscula = dataPais.porIdioma[idIdioma].titulo.toLowerCase()
-
-    return codigoPaisMinuscula.includes(searchQuery.value) || nombrePaisMinuscula.includes(searchQuery.value.toLowerCase())
-  }
-  );
-};
-
-const getNombrePais = (idPais: string) => {
-  return listaDataPais.find(v => v.id === idPais).porIdioma[infoSistemaStore.getIdIdiomaSistema].titulo;
-};
-
-const closeModal = () => {
-  showModal.value = false;
-  indexContactoSeleccionado.value = -1;
-};
-
-const toggleContactType = (index: number) => {
-  contactos.value[index].tipo = contactos.value[index].tipo === 'telefono-movil' ? 'correo' : 'telefono-movil';
-};
-
 const obtenerEscritura = async (val: string) => {
+  if (!!cliente){
+    cliente.value = null
+  }
   searchQuery.value = val;
 };
 </script>
-
-
-
 
 
 <style scoped>
 .ghost-class {
   opacity: 0.5;
   background: #c8ebfb;
+}
+
+/* .containerV2 {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.2);
+  width: 100%;
+} */
+
+.search-and-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.patient-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-cell {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-header {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.patient-name {
+  color: #4CAF50;
+}
+
+.action-button {
+  background-color: #5d5fef;
+  color: white;
+  border: none;
+  padding: 8px 8px;
+  border-radius: 4px;
+  height: fit-content;
+  cursor: pointer;
+}
+
+.verCliente {
+  cursor: pointer;
+  margin-left: 0px;
+}
+
+.btnOperacionCliente {
+  cursor: pointer;
+}
+
+.new-patient {
+  /* float: right;
+  margin-bottom: 10px; */
+  white-space: nowrap;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.pagination {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination li {
+  margin: 0 4px;
+}
+
+.pagination a {
+  background-color: #5d5fef;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.pagination .active a {
+  background-color: #5d5fef;
+}
+
+.pagination .disabled a {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.card-content {
+    /* min-height: 50%; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+@media (max-width: 600px) {
+  .search-and-button {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
 }
 </style>

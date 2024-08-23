@@ -41,6 +41,10 @@
         v-if="infoSistemaStore.getOperacionGlobal.id === 'agendar-cliente'"
         :componenteVisible="esAgendarClienteVisible"
       />
+      <VerAgendamiento
+        v-if="infoSistemaStore.getOperacionGlobal.id === 'ver-agendamiento'"
+        :componenteVisible="esVerAgendamiento"
+      />
     </SideBarOperacionGlobal>
   </div>
 </template>
@@ -52,6 +56,7 @@ import SideBar from '@/components/SideBar.vue';
 import OperacionCliente from '@/components/operacion-global/OperacionCliente.vue';
 import SideBarOperacionGlobal from '@/components/SideBarOperacionGlobal.vue'
 import AgendarCliente from '@/components/operacion-global/AgendarCliente.vue'
+import VerAgendamiento from '@/components/operacion-global/VerAgendamiento.vue'
 import useInfoSistemaStore from '@/store/info-sistema.store';
 
 const infoSistemaStore = useInfoSistemaStore();
@@ -86,6 +91,10 @@ const esOperacionClienteVisible = computed(() => {
 
 const esAgendarClienteVisible = computed(() => {
   return infoSistemaStore.getOperacionGlobal.id === 'agendar-cliente' && infoSistemaStore.getOperacionGlobal.sideBar;
+});
+
+const esVerAgendamiento = computed(() => {
+  return infoSistemaStore.getOperacionGlobal.id === 'ver-agendamiento' && infoSistemaStore.getOperacionGlobal.sideBar;
 });
 </script>
 
