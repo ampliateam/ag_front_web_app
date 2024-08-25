@@ -7,4 +7,6 @@ export type TOperacionGlobalID = ''
 | 'crear-cliente' 
 | 'operacion-cliente'
 | 'agendar-cliente'
-| 'ver-agendamiento';
+| 'ver-agendamiento'
+| 'agregar-hora-libre'
+| 'modificar-agenda';

@@ -71,7 +71,9 @@
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
               tooltip-text="Modificar agenda"
-              @click="abrirModalModificarAgenda"
+              @click="infoSistemaStore.abrirSideBarOG('modificar-agenda', {
+                dataInicial: { }
+              })"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +86,9 @@
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
               tooltip-text="Agregar hora libre"
-              @click="abrirAgregarHora"
+              @click="infoSistemaStore.abrirSideBarOG('agregar-hora-libre', {
+                dataInicial: { }
+              })"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

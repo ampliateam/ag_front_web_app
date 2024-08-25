@@ -207,7 +207,7 @@ const crearCliente = async () => {
 }
 
 const obtenerFecha = (fecha) => {
-  return dayjs(fecha).format('YYYY-MM-DD');
+  return dayjs(fecha).format('DD/MM/YYYY');
 }
 
 const obtenerHora = (fecha) => {
