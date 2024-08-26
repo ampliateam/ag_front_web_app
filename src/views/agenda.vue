@@ -35,16 +35,16 @@
             >
               Hoy
             </button>
-            <div class="flex mt-2 sm:mt-0">
+            <div class="flex mt-2 sm:mt-0 mr-2 space-x-2">
               <TooltipButton 
-                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg mr-2"
+                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
                 tooltip-text="Semana anterior"
                 @click="previousWeek"
               >
                 &lt; <!-- Flecha izquierda -->
               </TooltipButton>
               <TooltipButton
-                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg mr-2"
+                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
                 tooltip-text="Semana siguiente"
                 @click="nextWeek"
               >
@@ -55,8 +55,10 @@
           <div class="flex space-x-2 acciones">
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
-              tooltip-text="Semana siguiente"
-              @click="agendarPaciente"
+              tooltip-text="Agendar paciente"
+              @click="infoSistemaStore.abrirSideBarOG('agendar-cliente', {
+                dataInicial: { }
+              })"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +71,9 @@
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
               tooltip-text="Modificar agenda"
-              @click="agendarPaciente"
+              @click="infoSistemaStore.abrirSideBarOG('modificar-agenda', {
+                dataInicial: { }
+              })"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +86,9 @@
             <TooltipButton 
               button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
               tooltip-text="Agregar hora libre"
-              @click="agendarPaciente"
+              @click="infoSistemaStore.abrirSideBarOG('agregar-hora-libre', {
+                dataInicial: { }
+              })"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +149,16 @@
                 :key="agendamiento.id"
                 :class="getAgendamientoClass(agendamiento)"
                 :style="getAgendamientoStyle(agendamiento, date)"
-                class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded"
+                class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded cursor-pointer"
+                @click="infoSistemaStore.abrirSideBarOG('ver-agendamiento', {
+                  dataInicial: { 
+                    idCliente: agendamiento.idCliente, 
+                    idAgendamiento: agendamiento.id,
+                    nombre: agendamiento.nombre,
+                    agendamientoInicio: agendamiento.agendamientoInicio,
+                    agendamientoFin: agendamiento.agendamientoFin
+                  }
+                })"
               >
                 {{ agendamiento.nombre || 'Hora libre' }}
                 <br>
@@ -187,6 +202,9 @@ import { ref, onMounted, computed, watch } from 'vue';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import TooltipButton from '@/components/TooltipButton.vue'
+import useInfoSistemaStore from '@/store/info-sistema.store';
+
+const infoSistemaStore = useInfoSistemaStore();
 
 dayjs.locale('es');
 
@@ -313,7 +331,7 @@ const getAgendamientoClass = (agendamiento) => {
   switch (agendamiento.nombre) {
     case 'Guillermo Paiva':
       return 'bg-teal-200 text-teal-600 border border-teal-600 ';
-    case 'Tobias Paiva':
+    case 'Cris Velazquez':
       return 'bg-red-200 text-red-500 border border-red-500';
     case 'Hora libre':
       return 'bg-gray-200 text-gray-500 border border-gray-500';
@@ -331,10 +349,6 @@ const getDayClass = (date, isWeekDay = false) => {
   return `${baseClass} text-gray-400`;
 };
 
-const agendarPaciente= () => {
-
-}
-
 const formatTime = (date) => dayjs(date).format('HH:mm');
 
 onMounted(() => {
@@ -345,54 +359,63 @@ onMounted(() => {
   agendamientos.value = [
     {
       id: '1',
-      nombre: 'Tobias Paiva',
+      idCliente: '',
+      nombre: 'Cris Velazquez',
       agendamientoInicio: dayjs().day(2).hour(10).minute(0).toDate(),
       agendamientoFin: dayjs().day(2).hour(12).minute(0).toDate(),
     },
     {
       id: '2',
+      idCliente: 'aaaaaaa00000000000000000',
       nombre: 'Guillermo Paiva',
       agendamientoInicio: dayjs().day(3).hour(9).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(11).minute(0).toDate(),
     },
     {
       id: '3',
-      nombre: 'Tobias Paiva',
+      idCliente: 'aaaaaaa00000000000000002',
+      nombre: 'Cris Velazquez',
       agendamientoInicio: dayjs().day(3).hour(11).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(11).minute(30).toDate(),
     },
     {
       id: '4',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(1).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(1).hour(13).minute(0).toDate(),
     },
     {
       id: '5',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(2).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(2).hour(13).minute(0).toDate(),
     },
     {
       id: '6',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(3).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(13).minute(0).toDate(),
     },
     {
       id: '7',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(4).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(4).hour(13).minute(0).toDate(),
     },
     {
       id: '8',
+      idCliente: '',
       nombre: 'Hora libre',
       agendamientoInicio: dayjs().day(5).hour(12).minute(0).toDate(),
       agendamientoFin: dayjs().day(5).hour(13).minute(0).toDate(),
     },
     {
       id: '2',
+      idCliente: 'aaaaaaa00000000000000000',
       nombre: 'Guillermo Paiva',
       agendamientoInicio: dayjs().day(5).hour(14).minute(30).toDate(),
       agendamientoFin: dayjs().day(5).hour(15).minute(30).toDate(),

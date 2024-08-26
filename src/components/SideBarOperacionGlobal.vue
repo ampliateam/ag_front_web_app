@@ -4,11 +4,18 @@
       <!-- Scroll -->
       <div class="modal">
         <header class="modal-header">
-          <h2 class="modal-title">{{ infoSistemaStore.getOperacionGlobal.titulo }}</h2>
-          <button class="modal-close" @click="close">×</button>
+          <h2 class="modal-title">
+            {{ infoSistemaStore.getOperacionGlobal.titulo }}
+          </h2>
+          <button
+            class="modal-close"
+            @click="close"
+          >
+            ×
+          </button>
         </header>
         <div class="modal-body">
-          <slot></slot>
+          <slot />
         </div>
       </div>
     </div>

@@ -5,4 +5,8 @@ export type TIdIdiomaSistema = 'espanol'
 export type TOperacionGlobalID = '' 
 | 'buscador-global' 
 | 'crear-cliente' 
-| 'operacion-cliente';
+| 'operacion-cliente'
+| 'agendar-cliente'
+| 'ver-agendamiento'
+| 'agregar-hora-libre'
+| 'modificar-agenda';
