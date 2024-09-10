@@ -16,4 +16,5 @@ export interface InfoSistema {
   menuPerfil: boolean;
   operacionGlobal: IOperacionGlobal;
   idIdiomaSistema: TIdIdiomaSistema;
+  cambiandoProfesional: boolean;
 };

@@ -12,7 +12,7 @@
       <div
         ref="tooltipContent"
         class="bg-white text-gray-800 text-xs text-center rounded-md py-1.5 px-3 shadow-tooltip animate-slide-up break-words max-w-[250px] min-w-[125px]"
-        :style="tooltipStyle"
+        :style="`${tooltipStyle} z-index: 999;`"
       >
         {{ props.tooltipText }}
         <div

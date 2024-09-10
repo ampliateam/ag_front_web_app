@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Tooltip2 
+    <TooltipBtn 
       v-if="infoSistemaStore.getOperacionGlobal.dataInicial.accion !== 'crear-cliente' && !clienteEliminado"
       style="display: inline-block;"
       button-class="bg-red-500 text-white rounded-md px-3 py-1 mb-5 text-sm"
@@ -26,13 +26,12 @@
       >
         Eliminar
       </span>
-    </Tooltip2>
+    </TooltipBtn>
 
     <FormularioCliente
       v-if="clienteData && !clienteEliminado"
-      :componenteVisible="props.componenteVisible"
       :accion="accionFormulario"
-      :dataCliente="clienteData"
+      :modeloInicial="clienteData"
       @actualizacionFormulario="actualizarDataGlobal($event)"
     />
 
@@ -54,28 +53,20 @@
 <script setup lang="ts">
 import {
   ref,
-  watch,
-  onBeforeMount,
-  defineProps,
+  onMounted,
 } from 'vue';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import FormularioCliente from '@/components/FormularioCliente.vue';
 import ConfirmarEliminacion from '@/components/ConfirmarEliminacion.vue';
-import Tooltip2 from '@/components/Tooltip2.vue';
+import TooltipBtn from '@/components/TooltipBtn.vue';
 import { TAccionFormularioCliente } from '@/models/types';
+import { getUbicacion } from '@/helpers';
 
 const infoSistemaStore = useInfoSistemaStore();
 const accionFormulario = ref<TAccionFormularioCliente>('obtener');
 const clienteData = ref(null);
 const modalEliminarCliente = ref(false);
 const clienteEliminado = ref(false);
-
-const props = defineProps({
-  componenteVisible: {
-    type: Boolean,
-    required: true
-  }
-});
 
 const obtenerCliente = async (idCliente: string) => {
   const d = {};
@@ -88,7 +79,7 @@ const obtenerCliente = async (idCliente: string) => {
   d['direccion'] = {};
   d['contactos'] = [];
   d['direccion'].referencia = 'Una referencia';
-  d['direccion'].ubicacion = [0,0];
+  d['direccion'].ubicacion = getUbicacion() as any;
   d['contactos'].push(...[
     {
       tipo: 'telefono-movil',
@@ -117,31 +108,36 @@ const inicializarDatosDeCliente = async () => {
   
   // Si no hay data en OG quiere decir que hubo un cambio de operacion
   const hayDataEnOG = Object.keys(infoSistemaStore.getOperacionGlobal.data).length;
-
-  if (hayDataEnOG) {
-    clienteData.value = JSON.parse(JSON.stringify(infoSistemaStore.getOperacionGlobal.data));
-    return;
-  }
+  const clienteDataAux = JSON.parse(JSON.stringify(infoSistemaStore?.getOperacionGlobal?.data || {}));
 
   if (infoSistemaStore.getOperacionGlobal.dataInicial.accion === 'crear-cliente') {
     accionFormulario.value = 'crear';
-    clienteData.value = {
-      id: '',
-      nombre: '',
-      apellido: '',
-      nota: '',
-      fechaNacimiento: '',
-      direccion: { referencia: '', ubicacion: [0,0] },
-      contactos: [],
-    };
+    if (hayDataEnOG) clienteData.value = clienteDataAux;
+    else {
+      clienteData.value = {
+        id: '',
+        nombre: '',
+        apellido: '',
+        nota: '',
+        fechaNacimiento: '',
+        direccion: { referencia: '', ubicacion: getUbicacion() },
+        contactos: [],
+      };
+    }
   } else if (infoSistemaStore.getOperacionGlobal.dataInicial.accion === 'ver-cliente') {
     accionFormulario.value = 'obtener';
-    const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
-    clienteData.value = d;
+    if (hayDataEnOG) clienteData.value = clienteDataAux;
+    else {
+      const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
+      clienteData.value = d;
+    }
   } else if (infoSistemaStore.getOperacionGlobal.dataInicial.accion === 'actualizar-cliente') {
     accionFormulario.value = 'actualizar';
-    const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
-    clienteData.value = d;
+    if (hayDataEnOG) clienteData.value = clienteDataAux;
+    else {
+      const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
+      clienteData.value = d;
+    }
   }
 
   infoSistemaStore.setOperacionGlobal({
@@ -153,12 +149,7 @@ const actualizarDataGlobal = (data: object) => {
   infoSistemaStore.setOperacionGlobal({ data });
 };
 
-watch(() => props.componenteVisible, async () => {
-  if (!props.componenteVisible) return;
-  await inicializarDatosDeCliente();
-}, { deep: true });
-
-onBeforeMount(async () => {
+onMounted(async () => {
   await inicializarDatosDeCliente();
 });
 </script>

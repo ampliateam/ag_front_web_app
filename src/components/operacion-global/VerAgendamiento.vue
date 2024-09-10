@@ -134,6 +134,7 @@ import { ref } from 'vue';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
+import { getUbicacion } from '@/helpers';
 
 const infoSistemaStore = useInfoSistemaStore();
 
@@ -149,7 +150,7 @@ const direccion = ref<{
   ubicacion: [number, number];
 }>({
   referencia: '',
-  ubicacion: [0,0]
+  ubicacion: getUbicacion() as any,
 });
 const contactos = ref<{
   tipo: 'telefono-movil' | 'correo'; 

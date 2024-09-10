@@ -68,7 +68,7 @@
             type="submit"
             class="w-full mt-4 bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            Guardar
+            Crear hora libre
           </button>
         </div>
         <div class="col-span-2">
@@ -214,7 +214,7 @@ onMounted(() => {
     idCliente: 'cli001',
     idUsuarioCliente: 'uc001',
     tipo: '',  // Asumiendo que TAgendamientoTipo es desconocido
-    nota: 'Primera consulta',
+    nota: 'Lucha libre con una vaca',
     agendamientoInicio: new Date('2024-08-24T10:00:00'),
     agendamientoFin: new Date('2024-08-24T11:00:00'),
     estado: '',  // Asumiendo que TAgendamientoEstado es desconocido
@@ -230,7 +230,7 @@ onMounted(() => {
     idCliente: null,
     idUsuarioCliente: null,
     tipo: '',
-    nota: null,
+    nota: 'Ir a la luna con Elon Musk',
     agendamientoInicio: new Date('2024-08-25T15:30:00'),
     agendamientoFin: new Date('2024-08-25T16:30:00'),
     estado: '',
@@ -246,7 +246,7 @@ onMounted(() => {
     idCliente: 'cli002',
     idUsuarioCliente: 'uc002',
     tipo: '',
-    nota: 'Seguimiento mensual',
+    nota: 'Buscar a la bendi',
     agendamientoInicio: new Date('2024-08-26T09:00:00'),
     agendamientoFin: new Date('2024-08-26T10:00:00'),
     estado: '',

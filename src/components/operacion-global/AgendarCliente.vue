@@ -217,6 +217,7 @@ import { ref } from 'vue';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import algoliasearch from 'algoliasearch/lite';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
+import { getUbicacion } from '@/helpers';
 
 const searchClient = algoliasearch(
   'BSDBYRKOOD',
@@ -237,7 +238,7 @@ const direccion = ref<{
   ubicacion: [number, number];
 }>({
   referencia: '',
-  ubicacion: [0,0]
+  ubicacion: getUbicacion() as any
 });
 const contactos = ref<{
   tipo: 'telefono-movil' | 'correo'; 

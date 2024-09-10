@@ -1,5 +1,6 @@
 ## Valores del .env
 ```
+VITE_ID_DEV_AMPLIA=codigo_de_desarrollador_de_amplia
 VITE_BASE_URL_AG_USUARIO=http://localhost:7000/v1
 VITE_FIREBASE_CONFIG_APIKEY=XXXXXX
 VITE_FIREBASE_CONFIG_AUTHDOMAIN=XXXXXX

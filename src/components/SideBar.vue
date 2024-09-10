@@ -3,11 +3,11 @@
   <div
     id="sideNav"
     class="sidebar lg:block bg-white w-64 h-screen fixed rounded-none border-none"
-    :class="{ 'minimized': !infoSistemaStore.getSideBar }"
+    :class="{ 'minimized': !infoSistemaStore().getSideBar }"
   >
     <!-- LOGO -->
     <router-link
-      :to="'#'"
+      :to="'/agenda'"
       class="pt-10 space-y-7"
     >
       <div class="flex align-center mt-2 ml-3 mb-3 pt-3">
@@ -68,7 +68,7 @@
           </svg>
         </div>
         <h2
-          v-if="infoSistemaStore.getSideBar"
+          v-if="infoSistemaStore().getSideBar"
           class="px-4 font-extrabold text-lg text-blue-950"
         >
           Agendalía
@@ -85,10 +85,11 @@
       <div class="text-sm">
         <router-link
           :to="'/agenda'"
-          class="px-2 py-3 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
-          :class="{
-            'font-semibold bg-indigo-500 text-white': selectedIndex === 1,
-          }"
+          :class="[
+            'px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group',
+            { 'btnDeshabilitado font-semibold bg-gray-200': !tieneProfesionales },
+            { 'font-semibold bg-indigo-500 text-white': tieneProfesionales && selectedIndex === 1 },
+          ]"
           @click="selectItem(1)"
         >
           <i class="fas fa-exchange-alt" />
@@ -103,8 +104,8 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             :class="{
-              'text-white': selectedIndex === 1,
-              'text-gray-500': selectedIndex !== 1,
+              'text-white': tieneProfesionales && selectedIndex === 1,
+              'text-gray-500': !tieneProfesionales || selectedIndex !== 1,
             }"
           >
             <path
@@ -149,15 +150,16 @@
               y2="18"
             />
           </svg>
-          <span v-if="infoSistemaStore.getSideBar">Agenda</span>
+          <span v-if="infoSistemaStore().getSideBar">Agenda</span>
         </router-link>
 
         <router-link
           :to="'/clientes'"
-          class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
-          :class="{
-            'font-semibold bg-indigo-500 text-white': selectedIndex === 2,
-          }"
+          :class="[
+            'px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group',
+            { 'btnDeshabilitado font-semibold bg-gray-200': !tieneProfesionales },
+            { 'font-semibold bg-indigo-500 text-white': tieneProfesionales && selectedIndex === 2 },
+          ]"
           @click="selectItem(2)"
         >
           <i class="fas fa-wallet" />
@@ -170,8 +172,8 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             :class="{
-              'text-white': selectedIndex === 2,
-              'text-gray-500': selectedIndex !== 2,
+              'text-white': tieneProfesionales && selectedIndex === 2,
+              'text-gray-500': !tieneProfesionales || selectedIndex !== 2,
             }"
           >
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -183,7 +185,7 @@
             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
           </svg>
-          <span v-if="infoSistemaStore.getSideBar">Clientes</span>
+          <span v-if="infoSistemaStore().getSideBar">Clientes</span>
         </router-link>
 
         <router-link
@@ -227,7 +229,7 @@
           2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
             />
           </svg>
-          <span v-if="infoSistemaStore.getSideBar">Configuración</span>
+          <span v-if="infoSistemaStore().getSideBar">Configuración</span>
         </router-link>
 
         <hr class="h-px bg-gray-300 border-10">
@@ -266,7 +268,7 @@
               y2="12"
             />
           </svg>
-          <span v-if="infoSistemaStore.getSideBar">Cerrar sesión</span>
+          <span v-if="infoSistemaStore().getSideBar">Cerrar sesión</span>
         </router-link>
       </div>
     </div>
@@ -279,7 +281,7 @@
       >
         <i />
         <svg
-          v-if="!infoSistemaStore.getSideBar"
+          v-if="!infoSistemaStore().getSideBar"
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
           viewBox="0 -960 960 960"
@@ -290,7 +292,7 @@
         </svg>
 
         <svg
-          v-if="infoSistemaStore.getSideBar"
+          v-if="infoSistemaStore().getSideBar"
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6 text-gray-500"
           height="24px"
@@ -300,7 +302,7 @@
         >
           <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
         </svg>
-        <span v-if="infoSistemaStore.getSideBar">Atras</span>
+        <span v-if="infoSistemaStore().getSideBar">Atras</span>
       </div>
     </div>
 
@@ -316,34 +318,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import usuarioLogeadoStore from '@/store/usuario-logeado.store';
+import {
+  infoSistemaStore,
+  profesionalStore,
+  usuarioLogeadoStore,
+} from '@/store';
 import router from '@/router';
 
 const selectedIndex = ref(1);
-const infoSistemaStore = useInfoSistemaStore();
 
 const emit = defineEmits<{
   (e: 'cambioEstado', value: boolean): void
 }>();
 
 const cambioEstadoSideBar = () => {
-  infoSistemaStore.setSidebar(!infoSistemaStore.getSideBar);
-  emit('cambioEstado', !infoSistemaStore.getSideBar);
+  infoSistemaStore().setSidebar(!infoSistemaStore().getSideBar);
+  emit('cambioEstado', !infoSistemaStore().getSideBar);
 };
 
 function selectItem(index: number) {
+  if (!tieneProfesionales) {
+    const iIgnore = [1, 2];
+    if (iIgnore.includes(index)) return;
+  }
+
   if (selectedIndex.value === index) return;
   selectedIndex.value = index;
 }
 
 async function logout() {
-  const userStore = usuarioLogeadoStore();
-  await userStore.logout();
+  await usuarioLogeadoStore().logout();
   router.push('/inicio-sesion');
-}
+};
+
+// function getTieneProfesionales() {
+//   return !!profesionalStore().getListaProfesional.length;};
+
+const tieneProfesionales = computed(() => {
+  return !!profesionalStore().getListaProfesional.length;
+});
 
 onMounted(() => {
   const route = useRoute();
@@ -361,6 +376,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.btnDeshabilitado {
+  cursor: default;
+}
+
 .rhombus {
   width: 33px; /* Adjust width as needed */
   height: 33px; /* Adjust height as needed */
@@ -378,7 +397,12 @@ onMounted(() => {
   background-color: #ffffff;
   transition: width 0.6s;
   overflow-x: hidden;
-  z-index: 300;
+}
+
+@media (max-width: 918px) {
+  .sidebar {
+    z-index: 300;
+  }
 }
 
 .minimized {

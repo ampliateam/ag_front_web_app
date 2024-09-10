@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="containerV2 mt-6 mb-6">
+    <div :class="`${agendaliaBorderCard} my-4`">
       <div class="calendar-container">
         <!-- Cabecera con selectores y botones -->
         <div class="flex flex-col md-custom:flex-row justify-between items-start md-custom:items-center mb-4 space-y-4 md-custom:space-y-0">
@@ -203,6 +203,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import TooltipButton from '@/components/TooltipButton.vue'
 import useInfoSistemaStore from '@/store/info-sistema.store';
+import { agendaliaBorderCard } from '@/helpers';
 
 const infoSistemaStore = useInfoSistemaStore();
 
@@ -426,8 +427,6 @@ onMounted(() => {
 </script>
 
 <style>
-body{background-color: #F8F9FA;}
-
 @media (max-width: 727px) {
   .calendar-container {
     overflow-x:scroll;
