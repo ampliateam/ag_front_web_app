@@ -1,0 +1,1 @@
+export const agendaliaBorderCard = 'agendalia-border-card bg-white p-4 border-2 rounded-lg relative w-full mx-auto';

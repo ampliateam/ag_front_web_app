@@ -3,6 +3,7 @@ import { InfoSistema, IOperacionGlobal } from '@/models/models';
 import { TOperacionGlobalID, TIdIdiomaSistema } from '@/models/types';
 
 const useInfoSistemaStore = defineStore('info-sistema', {
+  persist: true,
   state: ():InfoSistema => {
     return {
       existeUsuarioLogeado: false,
@@ -18,6 +19,7 @@ const useInfoSistemaStore = defineStore('info-sistema', {
         response: {}
       },
       idIdiomaSistema: 'espanol',
+      cambiandoProfesional: false,
     }
   },
   getters: {
@@ -27,6 +29,7 @@ const useInfoSistemaStore = defineStore('info-sistema', {
     getMenuPerfil: (state) => state.menuPerfil,
     getOperacionGlobal: (state) => state.operacionGlobal,
     getIdIdiomaSistema: (state) => state.idIdiomaSistema,
+    getCambiandoProfesional: (state) => state.cambiandoProfesional,
   },
   actions: {
     setInfoSistema(dto: InfoSistema) {
@@ -44,6 +47,9 @@ const useInfoSistemaStore = defineStore('info-sistema', {
     },
     setMenuPerfil(menuPerfil: boolean) {
       this.menuPerfil = menuPerfil;
+    },
+    setCambiandoProfesional(cambiandoProfesional: boolean) {
+      this.cambiandoProfesional = cambiandoProfesional;
     },
     setOperacionGlobal(operacionGlobal: IOperacionGlobal) {
       let titulo = 'Operaciones';
@@ -99,5 +105,7 @@ const useInfoSistemaStore = defineStore('info-sistema', {
     },
   },
 });
+
+export const infoSistemaStore = () => useInfoSistemaStore();
 
 export default useInfoSistemaStore;

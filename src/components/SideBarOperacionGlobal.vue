@@ -14,7 +14,7 @@
             ×
           </button>
         </header>
-        <div class="modal-body">
+        <div class="modal-body" v-if="props.isOpen">
           <slot />
         </div>
       </div>

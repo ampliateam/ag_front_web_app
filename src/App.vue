@@ -1,10 +1,7 @@
 <template>
   <div>
-    <div
-      v-if="
-        infoSistemaStore.getCargando && !infoSistemaStore.getExisteUsuarioLogeado"
-    >
-      Cargando!
+    <div v-if="infoSistemaStore.getCargando">
+      <Cargando />
     </div>
     <div v-else>
       <router-view />
@@ -13,6 +10,13 @@
 </template>
 
 <script lang="ts" setup>
+import Cargando from '@/components/Cargando.vue';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 const infoSistemaStore = useInfoSistemaStore();
 </script>
+
+<style>
+  body {
+    background-color: #F8F9FA;
+  }
+</style>

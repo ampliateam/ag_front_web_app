@@ -91,7 +91,3 @@
     router.push('/inicio-sesion');
   }
 </script>
-
-<style>
-body{background-color: #F8F9FA;}
-</style>

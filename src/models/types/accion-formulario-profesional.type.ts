@@ -1,0 +1,1 @@
+export type TAccionFormularioProfesional = 'crear' | 'obtener' | 'actualizar';

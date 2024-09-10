@@ -12,14 +12,21 @@
       ]"
     >
       <NavBar />
-      <div class="main-content">
+      <div v-if="cargandoMainContent">
+        <Cargando />
+      </div>
+      <div v-else class="main-content">
+        <h1 v-if="titulo" class="tituloNavBar text-2xl font-bold text-gray-900">
+          {{ titulo }}
+        </h1>
         <slot />
       </div>
+
       <div
         @click="minimizarSideBar"
         :class="{
-          'overlay': infoSistemaStore.getSideBar,
-          'no-overlay': !infoSistemaStore.getSideBar,
+          'overlay-sidebar': infoSistemaStore.getSideBar,
+          'no-overlay-sidebar': !infoSistemaStore.getSideBar,
         }"
       />
       <div
@@ -33,43 +40,32 @@
 
     <!-- Modal de operaciones -->
     <SideBarOperacionGlobal :is-open="infoSistemaStore.getOperacionGlobal.sideBar">
-      <OperacionCliente
-        v-if="infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente'"
-        :componenteVisible="esOperacionClienteVisible"
-      />
-      <AgendarCliente
-        v-if="infoSistemaStore.getOperacionGlobal.id === 'agendar-cliente'"
-        :componenteVisible="esAgendarClienteVisible"
-      />
-      <VerAgendamiento
-        v-if="infoSistemaStore.getOperacionGlobal.id === 'ver-agendamiento'"
-        :componenteVisible="esVerAgendamiento"
-      />
-      <AgendarHoraLibre
-        v-if="infoSistemaStore.getOperacionGlobal.id === 'agregar-hora-libre'"
-        :componenteVisible="esVerAgendamiento"
-      />
-      <ModificarAgenda
-        v-if="infoSistemaStore.getOperacionGlobal.id === 'modificar-agenda'"
-        :componenteVisible="esVerAgendamiento"
-      />
+      <OperacionCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente'" />
+      <AgendarCliente v-if="infoSistemaStore.getOperacionGlobal.id === 'agendar-cliente'" />
+      <VerAgendamiento v-if="infoSistemaStore.getOperacionGlobal.id === 'ver-agendamiento'" />
+      <AgendarHoraLibre v-if="infoSistemaStore.getOperacionGlobal.id === 'agregar-hora-libre'" />
+      <ModificarAgenda v-if="infoSistemaStore.getOperacionGlobal.id === 'modificar-agenda'" />
     </SideBarOperacionGlobal>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { ref, computed, watch, onBeforeMount } from 'vue';
+import { useRoute } from 'vue-router';
 import NavBar from '@/components/NavBar.vue';
 import SideBar from '@/components/SideBar.vue';
 import OperacionCliente from '@/components/operacion-global/OperacionCliente.vue';
-import SideBarOperacionGlobal from '@/components/SideBarOperacionGlobal.vue'
-import AgendarCliente from '@/components/operacion-global/AgendarCliente.vue'
-import VerAgendamiento from '@/components/operacion-global/VerAgendamiento.vue'
-import AgendarHoraLibre from '@/components/operacion-global/AgregarHoraLibre.vue'
-import ModificarAgenda from '@/components/operacion-global/ModificarAgenda.vue'
+import SideBarOperacionGlobal from '@/components/SideBarOperacionGlobal.vue';
+import Cargando from '@/components/Cargando2.vue';
+import AgendarCliente from '@/components/operacion-global/AgendarCliente.vue';
+import VerAgendamiento from '@/components/operacion-global/VerAgendamiento.vue';
+import AgendarHoraLibre from '@/components/operacion-global/AgregarHoraLibre.vue';
+import ModificarAgenda from '@/components/operacion-global/ModificarAgenda.vue';
 import useInfoSistemaStore from '@/store/info-sistema.store';
 
+const route = useRoute();
 const infoSistemaStore = useInfoSistemaStore();
+const titulo = ref('');
 
 const minimizacionGlobal = () => {
   if (infoSistemaStore.getOperacionGlobal.sideBar) {
@@ -95,16 +91,32 @@ const minimizarSideBarOG = () => {
   }
 };
 
-const esOperacionClienteVisible = computed(() => {
-  return infoSistemaStore.getOperacionGlobal.id === 'operacion-cliente' && infoSistemaStore.getOperacionGlobal.sideBar;
+const cargandoMainContent = computed(() => {
+  return true && infoSistemaStore.getCambiandoProfesional;
 });
 
-const esAgendarClienteVisible = computed(() => {
-  return infoSistemaStore.getOperacionGlobal.id === 'agendar-cliente' && infoSistemaStore.getOperacionGlobal.sideBar;
-});
+const obtenerTituloNavbar = () => {
+  titulo.value = '';
 
-const esVerAgendamiento = computed(() => {
-  return infoSistemaStore.getOperacionGlobal.id === 'ver-agendamiento' && infoSistemaStore.getOperacionGlobal.sideBar;
+  if (route.path.startsWith('/agenda')) {
+    titulo.value = 'Agenda';
+  } else if (route.path.startsWith('/clientes') || route.path.startsWith('/pacientes')) {
+    titulo.value = 'Clientes';
+  } else if (route.path.startsWith('/configuracion')) {
+    titulo.value = 'Configuracion';
+  } else if (route.path.startsWith('/perfil-profesional')) {
+    titulo.value = 'Perfil profesional';
+  }  else if (route.path.startsWith('/perfil')) {
+    titulo.value = 'Perfil';
+  }
+};
+
+watch(() => route.path, () => {
+  obtenerTituloNavbar();
+}, { deep: true });
+
+onBeforeMount(() => {
+  obtenerTituloNavbar();
 });
 </script>
 
@@ -131,21 +143,7 @@ const esVerAgendamiento = computed(() => {
   transition: 0.6s;
 }
 
-.overlay-og {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
-  z-index: 600; /* Asegúrate de que esté por encima del contenido principal pero por debajo del sidebar */
-  transition: 0.6s;
-}
 
-.no-overlay-og {
-  display: none;
-  transition: 0.6s;
-}
 
 @media (max-width: 918px) {
   .sidebar-open {
@@ -164,24 +162,6 @@ const esVerAgendamiento = computed(() => {
     flex-grow: 1;
     margin-left: 0;
     margin-right: 0;
-  }
-}
-
-@media (max-width: 918px) {
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
-    z-index: 200; /* Asegúrate de que esté por encima del contenido principal pero por debajo del sidebar */
-    transition: 0.6s;
-  }
-
-  .no-overlay {
-    display: none;
-    transition: 0.6s;
   }
 }
 
