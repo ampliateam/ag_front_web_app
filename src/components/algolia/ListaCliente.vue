@@ -226,7 +226,7 @@ onMounted(() => {
 });
 
 onBeforeMount(() => {
-  cantidadClientePorProfesional.value = 0;
+  cantidadClientePorProfesional.value = 1;
 });
 </script>
 
