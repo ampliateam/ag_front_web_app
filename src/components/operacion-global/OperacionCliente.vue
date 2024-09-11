@@ -1,32 +1,34 @@
 <template>
   <div>
-    <TooltipBtn 
+    <TooltipHover
       v-if="infoSistemaStore.getOperacionGlobal.dataInicial.accion !== 'crear-cliente' && !clienteEliminado"
-      style="display: inline-block;"
-      button-class="bg-red-500 text-white rounded-md px-3 py-1 mb-5 text-sm"
-      tooltip-text="Eliminar cliente"
-      tipo-tooltip="bottom"
-      @click="modalEliminarCliente = !modalEliminarCliente;"
-      :disabled="!clienteData"
+      text="Eliminar cliente"
+      position="derecha"
     >
-      <svg
-        style="display: inline-block;"
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#e8eaed"
+      <button
+        class="bg-red-500 text-white rounded-md px-3 py-1 mb-5 text-sm"
+        @click="modalEliminarCliente = !modalEliminarCliente;"
+        :disabled="!clienteData"
       >
-        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-      </svg>
+        <svg
+          style="display: inline-block;"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#e8eaed"
+        >
+          <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+        </svg>
 
-      <span
-        class="ml-1"
-        style="display: inline-block;"
-      >
-        Eliminar
-      </span>
-    </TooltipBtn>
+        <span
+          class="ml-1"
+          style="display: inline-block;"
+        >
+          Eliminar
+        </span>
+      </button>
+    </TooltipHover>
 
     <FormularioCliente
       v-if="clienteData && !clienteEliminado"
@@ -58,7 +60,7 @@ import {
 import useInfoSistemaStore from '@/store/info-sistema.store';
 import FormularioCliente from '@/components/FormularioCliente.vue';
 import ConfirmarEliminacion from '@/components/ConfirmarEliminacion.vue';
-import TooltipBtn from '@/components/TooltipBtn.vue';
+import TooltipHover from '@/components/TooltipHover.vue';
 import { TAccionFormularioCliente } from '@/models/types';
 import { getUbicacion } from '@/helpers';
 
