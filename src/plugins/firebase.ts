@@ -2,9 +2,7 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import 'firebase/firestore';
 import firebaseConfig from '@/config/firebase';
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import useUsuarioLogeadoStore from '@/store/usuario-logeado.store';
-import useProfesionalStore from '@/store/profesional.store';
+import { useInfoSistemaStore, useUsuarioLogeadoStore, useProfesionalStore } from '@/store';
 import { getUsuarioLogeadoLS } from '@/helpers';
 
 const app = initializeApp(firebaseConfig);

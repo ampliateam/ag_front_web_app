@@ -9,6 +9,7 @@ const routes: Array<RouteRecordRaw> = [
   ...routesHelper.clientes.routes,
   ...routesHelper.pacientes.routes,
   ...routesHelper.perfilProfesional.routes,
+  ...routesHelper.planesYSuscripciones.routes,
 ];
 
 const router = createRouter({

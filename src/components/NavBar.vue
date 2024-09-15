@@ -68,7 +68,7 @@
 <script setup lang="ts">
 // import { ref, onMounted } from 'vue';
 // import algoliasearch from 'algoliasearch/lite';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
 import ListaProfesionalSelect from '@/components/ListaProfesionalSelect.vue';
 import MenuPerfil from '@/components/MenuPerfil.vue';

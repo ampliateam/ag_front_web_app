@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import { getUbicacion } from '@/helpers';

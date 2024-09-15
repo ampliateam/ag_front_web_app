@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
 import Cargando from '@/components/Cargando.vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 const infoSistemaStore = useInfoSistemaStore();
 </script>
 

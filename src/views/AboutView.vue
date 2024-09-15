@@ -81,12 +81,11 @@
 
 <script setup lang="ts">
   import AlgoliaListaCliente from '@/components/algolia/ListaCliente.vue';
-
-  import usuarioLogeadoStore from '@/store/usuario-logeado.store';
+  import { useUsuarioLogeadoStore } from '@/store';
   import router from '@/router';
 
   async function cerrarSesion() {
-    const userStore = usuarioLogeadoStore();
+    const userStore = useUsuarioLogeadoStore();
     await userStore.logout();
     router.push('/inicio-sesion');
   }

@@ -11,6 +11,7 @@
         leave-to-class="opacity-0"
       >
         <div
+          @mouseenter="showTooltip" @mouseleave="hideTooltip"
           ref="tooltip"
           class="tooltip"
           :class="position"
@@ -38,6 +39,7 @@ export default {
     },
     position: {
       type: String,
+      required: false,
       default: 'derecha',
       validator(value) {
         return ['arriba', 'derecha', 'abajo', 'izquierda'].includes(value);

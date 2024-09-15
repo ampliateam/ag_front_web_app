@@ -30,3 +30,4 @@ export * as autenticacion from './autenticacion.route';
 export * as clientes from './clientes.route';
 export * as pacientes from './pacientes.route';
 export * as perfilProfesional from './perfil-profesional.route';
+export * as planesYSuscripciones from './planes-y-suscripciones.route';

@@ -3,7 +3,7 @@
   <div
     id="sideNav"
     class="sidebar lg:block bg-white w-64 h-screen fixed rounded-none border-none"
-    :class="{ 'minimized': !infoSistemaStore().getSideBar }"
+    :class="{ 'minimized': !infoSistemaStore.getSideBar }"
   >
     <!-- LOGO -->
     <router-link
@@ -68,7 +68,7 @@
           </svg>
         </div>
         <h2
-          v-if="infoSistemaStore().getSideBar"
+          v-if="infoSistemaStore.getSideBar"
           class="px-4 font-extrabold text-lg text-blue-950"
         >
           Agendalía
@@ -83,7 +83,7 @@
       class="sidebar-content"
     >
       <div class="text-sm">
-        <TooltipHover text="Agenda" position="derecha" :disabled="infoSistemaStore().getSideBar">
+        <TooltipHover text="Agenda" position="derecha" :disabled="infoSistemaStore.getSideBar">
           <router-link
             :to="'/agenda'"
             :class="[
@@ -151,11 +151,11 @@
                 y2="18"
               />
             </svg>
-            <span v-if="infoSistemaStore().getSideBar">Agenda</span>
+            <span v-if="infoSistemaStore.getSideBar">Agenda</span>
           </router-link>
         </TooltipHover>
 
-        <TooltipHover text="Clientes" position="derecha" :disabled="infoSistemaStore().getSideBar">
+        <TooltipHover text="Clientes" position="derecha" :disabled="infoSistemaStore.getSideBar">
           <router-link
             :to="'/clientes'"
             :class="[
@@ -188,11 +188,11 @@
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            <span v-if="infoSistemaStore().getSideBar">Clientes</span>
+            <span v-if="infoSistemaStore.getSideBar">Clientes</span>
           </router-link>
         </TooltipHover>
 
-        <TooltipHover text="Configuración" position="derecha" :disabled="infoSistemaStore().getSideBar">
+        <TooltipHover text="Configuración" position="derecha" :disabled="infoSistemaStore.getSideBar">
           <router-link
             :to="'configuracion'"
             class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
@@ -234,13 +234,13 @@
             2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
               />
             </svg>
-            <span v-if="infoSistemaStore().getSideBar">Configuración</span>
+            <span v-if="infoSistemaStore.getSideBar">Configuración</span>
           </router-link>
         </TooltipHover>
 
         <hr class="h-px bg-gray-300 border-10">
 
-        <TooltipHover text="Cerrar sesión" position="derecha" :disabled="infoSistemaStore().getSideBar">
+        <TooltipHover text="Cerrar sesión" position="derecha" :disabled="infoSistemaStore.getSideBar">
           <router-link
             :to="'#'"
             class="px-2 py-3 my-4 mx-3 flex items-center space-x-4 rounded-xl text-gray-500 group"
@@ -275,7 +275,7 @@
                 y2="12"
               />
             </svg>
-            <span v-if="infoSistemaStore().getSideBar">Cerrar sesión</span>
+            <span v-if="infoSistemaStore.getSideBar">Cerrar sesión</span>
           </router-link>
         </TooltipHover>
       </div>
@@ -289,7 +289,7 @@
       >
         <i />
         <svg
-          v-if="!infoSistemaStore().getSideBar"
+          v-if="!infoSistemaStore.getSideBar"
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
           viewBox="0 -960 960 960"
@@ -300,7 +300,7 @@
         </svg>
 
         <svg
-          v-if="infoSistemaStore().getSideBar"
+          v-if="infoSistemaStore.getSideBar"
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6 text-gray-500"
           height="24px"
@@ -310,7 +310,7 @@
         >
           <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
         </svg>
-        <span v-if="infoSistemaStore().getSideBar">Atras</span>
+        <span v-if="infoSistemaStore.getSideBar">Atras</span>
       </div>
     </div>
 
@@ -328,14 +328,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import {
-  infoSistemaStore,
-  profesionalStore,
-  usuarioLogeadoStore,
-} from '@/store';
+import { useInfoSistemaStore, useUsuarioLogeadoStore, useProfesionalStore } from '@/store';
 import router from '@/router';
 import TooltipHover from '@/components/TooltipHover.vue';
 
+const infoSistemaStore = useInfoSistemaStore();
+const profesionalStore = useProfesionalStore();
+const usuarioLogeadoStore = useUsuarioLogeadoStore();
 const selectedIndex = ref(1);
 
 const emit = defineEmits<{
@@ -343,8 +342,8 @@ const emit = defineEmits<{
 }>();
 
 const cambioEstadoSideBar = () => {
-  infoSistemaStore().setSidebar(!infoSistemaStore().getSideBar);
-  emit('cambioEstado', !infoSistemaStore().getSideBar);
+  infoSistemaStore.setSidebar(!infoSistemaStore.getSideBar);
+  emit('cambioEstado', !infoSistemaStore.getSideBar);
 };
 
 function selectItem(index: number) {
@@ -358,15 +357,15 @@ function selectItem(index: number) {
 }
 
 async function logout() {
-  await usuarioLogeadoStore().logout();
+  await usuarioLogeadoStore.logout();
   router.push('/inicio-sesion');
 };
 
 // function getTieneProfesionales() {
-//   return !!profesionalStore().getListaProfesional.length;};
+//   return !!profesionalStore.getListaProfesional.length;};
 
 const tieneProfesionales = computed(() => {
-  return !!profesionalStore().getListaProfesional.length;
+  return !!profesionalStore.getListaProfesional.length;
 });
 
 onMounted(() => {

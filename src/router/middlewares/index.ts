@@ -35,3 +35,4 @@ export const setMiddlewares = (router: Router) => {
 // Todos los middlewares y agregar a los archivos necesarios en [@/router/routes]
 export * from './autenticacion.mw';
 export * from './tiene-profesional.mw';
+export * from './redireccion.mw';
