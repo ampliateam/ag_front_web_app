@@ -61,7 +61,7 @@ import AgendarCliente from '@/components/operacion-global/AgendarCliente.vue';
 import VerAgendamiento from '@/components/operacion-global/VerAgendamiento.vue';
 import AgendarHoraLibre from '@/components/operacion-global/AgregarHoraLibre.vue';
 import ModificarAgenda from '@/components/operacion-global/ModificarAgenda.vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 
 const route = useRoute();
 const infoSistemaStore = useInfoSistemaStore();

@@ -214,7 +214,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import algoliasearch from 'algoliasearch/lite';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
 import { getUbicacion } from '@/helpers';

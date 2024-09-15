@@ -6,7 +6,7 @@ import {
   getProfesionalLS,
 } from '@/helpers/profesional.helper';
 
-const useProfesionalStore = defineStore('profesional', {
+export const useProfesionalStore = defineStore('profesional', {
   persist: true,
   state: () => {
     return {
@@ -65,7 +65,3 @@ const useProfesionalStore = defineStore('profesional', {
     },
   },
 });
-
-export const profesionalStore = () => useProfesionalStore();
-
-export default useProfesionalStore;

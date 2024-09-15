@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { InfoSistema, IOperacionGlobal } from '@/models/models';
 import { TOperacionGlobalID, TIdIdiomaSistema } from '@/models/types';
 
-const useInfoSistemaStore = defineStore('info-sistema', {
+export const useInfoSistemaStore = defineStore('info-sistema', {
   persist: true,
   state: ():InfoSistema => {
     return {
@@ -105,7 +105,3 @@ const useInfoSistemaStore = defineStore('info-sistema', {
     },
   },
 });
-
-export const infoSistemaStore = () => useInfoSistemaStore();
-
-export default useInfoSistemaStore;

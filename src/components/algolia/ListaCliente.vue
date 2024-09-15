@@ -181,8 +181,7 @@
 import { ref, onBeforeMount, onMounted } from 'vue';
 import algoliasearch from 'algoliasearch/lite';
 
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import useProfesionalStore from '@/store/profesional.store';
+import { useInfoSistemaStore, useProfesionalStore } from '@/store';
 import { agendaliaBorderCard } from '@/helpers';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
 

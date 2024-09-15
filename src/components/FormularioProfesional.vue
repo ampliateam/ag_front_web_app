@@ -13,12 +13,9 @@
         v-if="['obtener', 'actualizar'].includes(props.accion)"
         class="mb-4"
       >
-        <label
-          for="id"
-          class="block text-sm font-medium text-gray-700 mb-1"
-        >
+        <h3 class="text-lg font-medium text-gray-800 mb-2">
           ID Profesional
-        </label>
+        </h3>
         <input 
           v-model="operacionData.id"
           type="text"
@@ -42,6 +39,7 @@
         </h3>
 
         <select
+          v-if="props.accion === 'crear'"
           id="etiqueta"
           v-model="operacionData.etiqueta"
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -60,6 +58,16 @@
             <span v-else>{{ etiquetaProfesional.propio(option) }}</span>
           </option>
         </select>
+        <input 
+          v-else
+          :value="etiquetaProfesional.propio(operacionData.etiqueta)"
+          type="text"
+          id="etiqueta2"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :class="{ 'bg-gray-200': ['obtener', 'actualizar'].includes(props.accion) }"
+          :disabled="['obtener', 'actualizar'].includes(props.accion)"
+        >
       </div>
 
       <div class="mb-4">
@@ -257,9 +265,7 @@ import draggable from 'vuedraggable';
 import Map from '@/components/maps/Map.vue';
 import OverlayGenerico from '@/components/OverlayGenerico.vue';
 import { listaDataPais, etiquetaProfesional } from '@/helpers';
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import useUsuarioLogeadoStore from '@/store/usuario-logeado.store';
-import useProfesionalStore from '@/store/profesional.store';
+import { useInfoSistemaStore, useUsuarioLogeadoStore, useProfesionalStore } from '@/store';
 import { TAccionFormularioProfesional } from '@/models/types';
 
 // Variables globales y props

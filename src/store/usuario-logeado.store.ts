@@ -3,9 +3,9 @@ import { defineStore } from 'pinia';
 import * as services from '../domain/services';
 import { UsuarioLogeado } from '@/models/models';
 import { IniciarSesionConCorreoYContrasenaDTO, RegistrarConCorreoYContrasenaDTO } from '@/models/dto';
-import useInfoSistemaStore from './info-sistema.store';
+import { useInfoSistemaStore } from './info-sistema.store';
 
-const useUsuarioStore = defineStore('usuario-logeado', {
+export const useUsuarioLogeadoStore = defineStore('usuario-logeado', {
   persist: true,
   state: ():UsuarioLogeado => {
     return {
@@ -69,7 +69,3 @@ const useUsuarioStore = defineStore('usuario-logeado', {
     }
   },
 });
-
-export const usuarioLogeadoStore = () => useUsuarioStore();
-
-export default useUsuarioStore;

@@ -8,27 +8,27 @@
     <!-- Contenido de la tarjeta -->
     <div class="">
       <p class="text-gray-800 text-lg font-semibold">
-        {{ props.funcionalidad.texto }}
+        {{ props.titulo }}
       </p>
       <hr class="mb-5">
 
-      <div v-if="props.funcionalidad.tipo === 'seleccion-profesional'">
+      <div v-if="props.funcionalidad?.tipo === 'seleccion-profesional'">
         <button
           :class="[
             'text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-            {'bg-blue-500 hover:bg-blue-600': props.funcionalidad.data.idProfesional !== profesionalStore.getIdProfesionalSeleccionado},
-            {'bg-gray-500': props.funcionalidad.data.idProfesional === profesionalStore.getIdProfesionalSeleccionado},
+            {'bg-blue-500 hover:bg-blue-600': props.funcionalidad?.data?.idProfesional !== profesionalStore.getIdProfesionalSeleccionado},
+            {'bg-gray-500': props.funcionalidad?.data?.idProfesional === profesionalStore.getIdProfesionalSeleccionado},
           ]"
           @click="cambiarProfesional"
-          :disabled="props.funcionalidad.data.idProfesional === profesionalStore.getIdProfesionalSeleccionado"
+          :disabled="props.funcionalidad?.data?.idProfesional === profesionalStore.getIdProfesionalSeleccionado"
         >
-          <span v-if="props.funcionalidad.data.idProfesional !== profesionalStore.getIdProfesionalSeleccionado">
+          <span v-if="props.funcionalidad?.data?.idProfesional !== profesionalStore.getIdProfesionalSeleccionado">
             Seleccionar
           </span>
           <span v-else>Seleccionado</span>
         </button>
       </div>
-      <div v-else-if="props.funcionalidad.tipo === 'personalizado' || props.funcionalidad.tipo === ''">
+      <div v-else-if="props.funcionalidad?.tipo === 'personalizado' || props.funcionalidad?.tipo === ''">
         <slot />
       </div>
     </div>
@@ -37,9 +37,7 @@
 
 <script setup lang="ts">
 import { defineProps, PropType } from 'vue';
-
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import useProfesionalStore from '@/store/profesional.store';
+import { useInfoSistemaStore, useProfesionalStore } from '@/store';
 
 const infoSistemaStore = useInfoSistemaStore();
 const profesionalStore = useProfesionalStore();
@@ -48,10 +46,14 @@ type TTipoFuncionalidad = 'seleccion-profesional'
 | 'personalizado';
 
 const props = defineProps({
-  funcionalidad: {
-    type: Object as PropType<{ texto: string, tipo?: TTipoFuncionalidad, data?: any }>,
+  titulo: {
+    type: String,
     required: true,
-    default: { texto: 'Ninguna', tipo: '', data: {} },
+  },
+  funcionalidad: {
+    type: Object as PropType<{ tipo?: TTipoFuncionalidad, data?: any }>,
+    required: false,
+    default: null,
   },
   etiqueta: {
     type: Object as PropType<{ texto: string; mostrar: boolean }>,

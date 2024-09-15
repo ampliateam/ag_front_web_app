@@ -274,7 +274,7 @@ import draggable from 'vuedraggable';
 import Map from '@/components/maps/Map.vue';
 import OverlayGenerico from '@/components/OverlayGenerico.vue';
 import { listaDataPais } from '@/helpers/data-pais.helper';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import { TAccionFormularioCliente } from '@/models/types';
 
 // Variables globales y props

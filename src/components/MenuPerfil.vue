@@ -67,8 +67,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import usuarioLogeadoStore from '@/store/usuario-logeado.store';
+import { useInfoSistemaStore, useUsuarioLogeadoStore } from '@/store';
 import router from '@/router';
 
 const infoSistemaStore = useInfoSistemaStore();
@@ -79,7 +78,7 @@ const cambiarEstado = () => {
 };
 
 const logout = async () => {
-  const userStore = usuarioLogeadoStore();
+  const userStore = useUsuarioLogeadoStore();
   await userStore.logout();
   router.push('/inicio-sesion');
 };

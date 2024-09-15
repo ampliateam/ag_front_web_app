@@ -47,7 +47,7 @@
           <li
             class="px-4 py-2 text-gray-500 font-bold"
           >
-            Otros
+            Funcionalidades
           </li>
           
           <li 
@@ -72,8 +72,7 @@ import {
 } from 'vue';
 import { etiquetaProfesional } from '@/helpers';
 import router from '@/router';
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import useProfesionalStore from '@/store/profesional.store';
+import { useInfoSistemaStore, useProfesionalStore } from '@/store';
 
 const infoSistemaStore = useInfoSistemaStore();
 const profesionalStore = useProfesionalStore();

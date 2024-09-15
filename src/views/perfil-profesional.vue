@@ -1,140 +1,235 @@
 <template>
   <DefaultLayout>
-    <div class="">
-      <!-- Lista horizontal scrolleable -->
-      <div class="list-prof-etiqueta overflow-x-auto whitespace-nowrap mt-3 mb-5">
-        <ul class="inline-flex space-x-4">
-          <li
-            @click="procesoCrear();"
-            class="cursor-pointer p-4 border rounded-lg bg-green-500 text-white"
-            :class="{ 'bg-green-700 text-white': selectedIndex === -1 }"
-          >
-            + Nuevo profesional
-          </li>
-          <li
-            v-for="(item, index) in profesionalStore.listaProfesional"
-            :key="index"
-            @click="selectItem(index);"
-            class="cursor-pointer p-4 border rounded-lg"
-            :class="{ 
-              'bg-blue-300 text-white': selectedIndex === index,
-              'bg-blue-500 text-white': selectedIndex !== index,
-            }"
-          >
-            {{ getNombreEtiquetaProfesional(item.etiqueta, 'propio') }}
-          </li>
-        </ul>
-      </div>
-      
-      <div class="containerAux mt-6 mb-6">
-        <div class="left">
-          <div :class="agendaliaBorderCard">
-            <!-- Formulario -->
-            <FormularioProfesional
-              v-if="selectedItem"
-              :accion="accionFormulario"
-              :modeloInicial="selectedItem"
-            />
-          </div>
+    <div class="my-5">
+      <TabConjunto>
+        <div v-for="tabProfesional in tabsProfesionales" :key="tabProfesional.id">
+          <TabUnidad :tab="tabProfesional" />
         </div>
-        <div class="right">
-          <div v-if="accionFormulario === 'crear'">
-            <!-- Agregar terminos y condiciones de profesional aqui -->
-            Terminos y condiciones
-          </div>
-          <div v-else>
-            <!-- Agregar otras funcionalidades con relacion al profesional -->
-            <CardFuncionalidad
-              v-if="selectedItem"
-              class="mb-4"
-              :funcionalidad="{
-                texto: 'Seleccionar profesional',
-                tipo: 'seleccion-profesional',
-                data: { idProfesional: selectedItem.id },
-              }"
-            />
-            <CardFuncionalidad
-              class="mb-4"
-              :funcionalidad="{ texto: '¡Nuevas funcionalidades!' }"
-              :etiqueta="{texto: 'Proximamente', mostrar: true}"
-            />
-          </div>
-        </div>
-      </div>
+      </TabConjunto>
     </div>
+
+    <div v-if="!estaEnPaginaCreacionProfesional()" class="my-5">
+      <TabConjunto>
+        <div v-for="tabFuncionalidad in tabsFuncionalidad" :key="tabFuncionalidad.id">
+          <TabUnidad :tab="tabFuncionalidad" />
+        </div>
+      </TabConjunto>
+    </div>
+
+    <!-- <div class="my-5">
+      <Tabs :tabs="tabsProfesionales" />
+    </div> -->
+
+    <!-- <div v-if="!estaEnPaginaCreacionProfesional()" class="my-5">
+      <Tabs v-if="tabsFuncionalidad.length" :tabs="tabsFuncionalidad" />
+    </div> -->
+
+    <RouterView></RouterView>
   </DefaultLayout>
 </template>
 
 <script setup lang="ts">
-  import { ref, onBeforeMount } from 'vue';
-  import FormularioProfesional from '@/components/FormularioProfesional.vue';
-  import CardFuncionalidad from '@/components/CardFuncionalidad.vue';
-  import { etiquetaProfesional, getUbicacion, agendaliaBorderCard } from '@/helpers';
-  import useProfesionalStore from '@/store/profesional.store';
-  import useUsuarioStore from '@/store/usuario-logeado.store';
-  import { TAccionFormularioProfesional } from '@/models/types';
+  import { ref, onBeforeMount, watch } from 'vue';
   import router from '@/router';
+  import { useProfesionalStore } from '@/store';
+  import { etiquetaProfesional } from '@/helpers';
+  import TabConjunto from '@/components/Tab/TabConjunto.vue';
+  import TabUnidad from '@/components/Tab/TabUnidad.vue';
 
   const profesionalStore = useProfesionalStore();
-  const usuarioStore = useUsuarioStore();
 
-  const accionFormulario = ref<TAccionFormularioProfesional>('actualizar');
-  const selectedIndex = ref(0);
-  const selectedItem = ref(null);
+  // const indiceTabProfesionalSeleccionado = ref(0);
+  const tabsProfesionales = ref([]);
 
-  const procesoCrear = () => {
-    selectedIndex.value = -1;
-    selectedItem.value = { 
-      id: '',
-      idUsuario: '',
-      contactos: [],
-      direccion: { referencia: '', ubicacion: getUbicacion() },
-      etiqueta: 'otro',
-      fotoPerfil: '',
-      fotoPortada: '',
-      estado: 'habilitado',
-      fechaCreacion: new Date(),
-      fechaEliminacion: null,
-    };
-    accionFormulario.value = 'crear';
-  };
+  // const indiceTabFuncionalidadSeleccionado = ref(0);
+  const tabsFuncionalidad = ref([]);
 
-  const selectItem = (index: number) => {
-    selectedIndex.value = index;
-    selectedItem.value = { ...profesionalStore.listaProfesional[index] };
-    accionFormulario.value = 'actualizar';
-  };
+  // const procesoIndiceTabProfesionalSeleccionado = (indexTabProfesional: number) => {
+  //   indiceTabProfesionalSeleccionado.value = indexTabProfesional;
 
-  // const nombreEtiquetaProfesionalSimple = (etiqueta: string) => {
-  //   return etiquetaProfesional.simple(etiqueta);
-  //   etiquetaProfesional.propio(etiqueta)
+  //   // Creacion de profesional
+  //   if (indexTabProfesional === 0) return seleccionarProfesional(-1);
+    
+  //   // Proceso de operacion generico (detalles)
+  //   seleccionarProfesional(indexTabProfesional-1);
+  //   seleccionarFuncionalidad(0);
   // };
+
+  // const procesoIndiceTabFuncionalidadSeleccionado = (indexTab: number) => {
+  //   indiceTabFuncionalidadSeleccionado.value = indexTab;
+  //   const idFuncionalidadSeleccionado = tabsFuncionalidad[indiceTabFuncionalidadSeleccionado.value].id;
+    
+  //   const idProfesionalSeleccionado = tabsProfesionales[indiceTabProfesionalSeleccionado.value].id;
+  //   const profesionalSeleccionado = profesionalStore.listaProfesional.find(v => v.id === idProfesionalSeleccionado);
+  //   const rutaRedireccion = `/perfil-profesional/${profesionalSeleccionado.etiqueta}/${idFuncionalidadSeleccionado}`;
+
+  //   if (obtenerCurrentFullPath() !== rutaRedireccion) router.push(rutaRedireccion);    
+  // };
+
+  // const seleccionarProfesional = (index: number) => {
+  //   indiceTabProfesionalSeleccionado.value = index;
+    
+  //   const idProfesionalSeleccionado = tabsProfesionales[indiceTabProfesionalSeleccionado.value].id;
+  //   const profesionalSeleccionado = profesionalStore.listaProfesional.find(v => v.id === idProfesionalSeleccionado);
+
+  //   if (index === -1 && !estaEnPaginaCreacionProfesional()) {
+  //     // Proceso de creacion -> /perfil-profesional/crear
+  //     router.push('/perfil-profesional/crear');
+  //   } else {
+  //     // Proceso de ir a detalles -> /perfil-profesional/:etiqueta/detalles
+  //     const rutaRedireccion = `/perfil-profesional/${profesionalSeleccionado.etiqueta}/detalles`;
+  //     if (obtenerCurrentFullPath() !== rutaRedireccion) router.push(rutaRedireccion);
+  //   }
+  // };
+
+  // const seleccionarFuncionalidad = (index: number) => {
+  //   indiceTabFuncionalidadSeleccionado.value = index;
+
+  // };
+
+  const actualizarTabDeProfesionales = () => {
+    tabsProfesionales.value = [
+      { 
+        id: 'nuevo-profesional', 
+        name: '+ Nuevo profesional', 
+        icon: null,
+        textColor: { habilitado: 'green', deshabilitado: 'green' },
+        iconColor: { habilitado: '#16a34a', deshabilitado: '#22c55e' },
+        to: '/perfil-profesional/crear',
+      },
+    ];
+
+    profesionalStore.listaProfesional.map(v => {
+      tabsProfesionales.value.push({
+        id: v.id, 
+        name: getNombreEtiquetaProfesional(v.etiqueta, 'propio'), 
+        icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+        textColor: undefined,
+        iconColor: undefined,
+        to: `/perfil-profesional/${v.etiqueta}`,
+      });
+    });
+  };
+
+  const actualizacionTabDeFuncionalidad = () => {
+    // tabsFuncionalidad.value = [];
+    tabsFuncionalidad.value = [
+      {
+        id: 'detalles', 
+        name: 'Detalles', 
+        icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+        textColor: undefined,
+        iconColor: undefined,
+        to: `/perfil-profesional/${router.currentRoute.value.params.etiqueta}/detalles`,
+      },
+      {
+        id: 'config-ficha-profesional', 
+        name: 'Ficha', 
+        icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+        textColor: undefined,
+        iconColor: undefined,
+        to: `/perfil-profesional/${router.currentRoute.value.params.etiqueta}/config-ficha-profesional`,
+      },
+      {
+        id: 'config-mensajeria-profesional', 
+        name: 'Mensajería', 
+        icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+        textColor: undefined,
+        iconColor: undefined,
+        to: `/perfil-profesional/${router.currentRoute.value.params.etiqueta}/config-mensajeria-profesional`,
+      },
+      {
+        id: 'locales', 
+        name: 'Locales', 
+        icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+        textColor: undefined,
+        iconColor: undefined,
+        to: `/perfil-profesional/${router.currentRoute.value.params.etiqueta}/locales`,
+      },
+      {
+        id: 'servicio-profesional', 
+        name: 'Servicio profesional', 
+        icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+        textColor: undefined,
+        iconColor: undefined,
+        to: `/perfil-profesional/${router.currentRoute.value.params.etiqueta}/servicio-profesional`,
+      },
+    ];
+  };
+
+  const obtenerCurrentFullPath = () => {
+    return router.currentRoute.value.fullPath;
+  };
+
+  const estaEnPaginaCreacionProfesional = () => {
+    const fullPath = obtenerCurrentFullPath();
+    return fullPath === '/perfil-profesional/crear';
+  };
 
   const getNombreEtiquetaProfesional = (etiqueta: string, tipo: string) => {
     return etiquetaProfesional[tipo](etiqueta);
   };
 
-  onBeforeMount(async () => {
-    const i1 = profesionalStore.listaProfesional.findIndex(v => {
-      return v.id === profesionalStore.idProfesionalSeleccionado;
-    });
-
-    if (i1 === -1) {
-      await profesionalStore.cargarListaProfesional(usuarioStore.getUid);
-
-      const i2 = profesionalStore.listaProfesional.findIndex(v => {
+  const verificacionDeRutaPadreInicial = () => {
+    // Si esta en la rama inicial
+    if (obtenerCurrentFullPath() === '/perfil-profesional') {
+      // Comenzar busqueda del indice del profesional seleccionado
+      const i1 = profesionalStore.listaProfesional.findIndex(v => {
         return v.id === profesionalStore.idProfesionalSeleccionado;
       });
 
-      if (i2 === -1) return procesoCrear();
-
-      if (router.currentRoute.value.query['creacion-profesional']) return procesoCrear();
-
-      return selectItem(i2);
+      if (i1 === -1) return router.push('/perfil-profesional/crear');
+      
+      const rutaRedireccion = `/perfil-profesional/${profesionalStore.profesionalSeleccionado.etiqueta}/detalles`;
+      return router.push(rutaRedireccion);
     }
+  };
 
-    if (router.currentRoute.value.query['creacion-profesional']) return procesoCrear();
-    selectItem(i1);
+  watch(() => router.currentRoute.value.fullPath, () => {
+    // Verificar si la ruta es la ruta padre (inicial)
+    verificacionDeRutaPadreInicial();
+    
+    // Actualizar tab de funcionalidad
+    actualizacionTabDeFuncionalidad();
+  }, { deep: true });
+
+  onBeforeMount(async () => {
+    // Cargar los tab de profesional
+    actualizarTabDeProfesionales();
+
+    // Verificar si la ruta es la ruta padre (inicial)
+    verificacionDeRutaPadreInicial();
+
+    // Actualizar tab de funcionalidad
+    actualizacionTabDeFuncionalidad();
+
+    // if (!profesionalStore.listaProfesional.length || estaEnPaginaCreacionProfesional()) {
+    //   // Si no tiene profesionales o esta en pagina de creacion,
+    //   // seleccionar el indice del tab de profesionales
+    //   indiceTabProfesionalSeleccionado.value = 0;
+    //   return;
+    // }
+
+    // // Comenzar busqueda del indice del profesional seleccionado
+    // const i1 = profesionalStore.listaProfesional.findIndex(v => {
+    //   return v.id === profesionalStore.idProfesionalSeleccionado;
+    // });
+
+    // if (i1 === -1) {
+    //   // Si no existe, proceder a seleccionar indice para creacion 
+    //   indiceTabProfesionalSeleccionado.value = 0;
+    //   return;
+    // }
+    
+    // // Si tiene profesionales y no esta en la pagina de inicio
+    // // inicializar tabs de funcionalidades por profesional
+    // actualizacionTabDeFuncionalidad();
+    // indiceTabProfesionalSeleccionado.value = tabsProfesionales.value.findIndex(v => {
+    //   return v.id === profesionalStore.listaProfesional[i1].id;
+    // });
+    // indiceTabFuncionalidadSeleccionado.value = 0;
+
+    // seleccionarProfesional(i1);
   });
 </script>
 

@@ -57,7 +57,7 @@ import {
   ref,
   onMounted,
 } from 'vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import FormularioCliente from '@/components/FormularioCliente.vue';
 import ConfirmarEliminacion from '@/components/ConfirmarEliminacion.vue';
 import TooltipHover from '@/components/TooltipHover.vue';

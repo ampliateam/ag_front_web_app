@@ -226,7 +226,7 @@ import { ref, onMounted, computed, watch } from 'vue';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import TooltipHover from '@/components/TooltipHover.vue'
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import { agendaliaBorderCard } from '@/helpers';
 
 const infoSistemaStore = useInfoSistemaStore();

@@ -201,7 +201,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import usuarioLogeadoStore from '@/store/usuario-logeado.store';
+import { useUsuarioLogeadoStore } from '@/store';
 import router from '@/router';
 
 const email = ref('');
@@ -219,7 +219,7 @@ const erroresNombre = ref<{ [key: string]: boolean }>({});
 const erroresCodigo = ref<{ [key: string]: boolean }>({});
 
 async function registrarse() {
-  const userStore = usuarioLogeadoStore();
+  const userStore = useUsuarioLogeadoStore();
   await userStore.registrarUsuarioPersona({
     correo: email.value,
     codigo: codigo.value,
