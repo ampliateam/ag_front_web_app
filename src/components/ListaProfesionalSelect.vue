@@ -47,7 +47,7 @@
           <li
             class="px-4 py-2 text-gray-500 font-bold"
           >
-            Otros
+            Funcionalidades
           </li>
           
           <li 

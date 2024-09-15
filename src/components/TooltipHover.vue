@@ -114,7 +114,7 @@ export default {
           left = containerRect.left + containerRect.width / 2;
           break;
         case 'abajo':
-          top = containerRect.bottom + 8;
+          top = containerRect.bottom + 8 - tooltipRect.height - 8;
           // left = containerRect.left + containerRect.width / 2 - tooltipRect.width / 2;
           left = containerRect.left + containerRect.width / 2;
           break;

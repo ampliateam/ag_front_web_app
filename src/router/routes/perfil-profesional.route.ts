@@ -42,6 +42,11 @@ export const routes: Array<RouteRecordRaw> = [
             path: 'config-mensajeria-profesional',
             component: () => import('../../views/perfil-profesional/etiqueta/config-mensajeria-profesional.vue'),
           },
+          {
+            // /perfil-profesional/:etiqueta/servicio-profesional
+            path: 'servicio-profesional',
+            component: () => import('../../views/perfil-profesional/etiqueta/servicio-profesional.vue'),
+          },
         ]
       },
       

@@ -4,15 +4,17 @@
       <div :class="agendaliaBorderCard">
         <!-- Formulario -->
         <TooltipHover
-          :text="'HJGIO HGOUIDFHOUI GFDHUIO GHDFUOI'"
+          :text="'Onboarding en proceso...'"
           :position="'derecha'"
-          :disabled="false"
+          :disabled="true"
         >
-          <FormularioProfesional
-            v-if="profesionalSeleccionado"
-            :accion="accionFormulario"
-            :modeloInicial="profesionalSeleccionado"
-          />
+          <div>
+            <FormularioProfesional
+              v-if="profesionalSeleccionado"
+              :accion="accionFormulario"
+              :modeloInicial="profesionalSeleccionado"
+            />
+          </div>
         </TooltipHover>
       </div>
     </div>
