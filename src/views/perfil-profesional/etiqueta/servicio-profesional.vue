@@ -1,0 +1,3 @@
+<template>
+  servicio-profesional
+</template>

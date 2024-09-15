@@ -1,38 +1,39 @@
 <template>
   <div>
-    <Tooltip2 
+    <TooltipHover
       v-if="infoSistemaStore.getOperacionGlobal.dataInicial.accion !== 'crear-cliente' && !clienteEliminado"
-      style="display: inline-block;"
-      button-class="bg-red-500 text-white rounded-md px-3 py-1 mb-5 text-sm"
-      tooltip-text="Eliminar cliente"
-      tipo-tooltip="bottom"
-      @click="modalEliminarCliente = !modalEliminarCliente;"
-      :disabled="!clienteData"
+      text="Eliminar cliente"
+      position="derecha"
     >
-      <svg
-        style="display: inline-block;"
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="#e8eaed"
+      <button
+        class="bg-red-500 text-white rounded-md px-3 py-1 mb-5 text-sm"
+        @click="modalEliminarCliente = !modalEliminarCliente;"
+        :disabled="!clienteData"
       >
-        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-      </svg>
+        <svg
+          style="display: inline-block;"
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#e8eaed"
+        >
+          <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+        </svg>
 
-      <span
-        class="ml-1"
-        style="display: inline-block;"
-      >
-        Eliminar
-      </span>
-    </Tooltip2>
+        <span
+          class="ml-1"
+          style="display: inline-block;"
+        >
+          Eliminar
+        </span>
+      </button>
+    </TooltipHover>
 
     <FormularioCliente
       v-if="clienteData && !clienteEliminado"
-      :componenteVisible="props.componenteVisible"
       :accion="accionFormulario"
-      :dataCliente="clienteData"
+      :modeloInicial="clienteData"
       @actualizacionFormulario="actualizarDataGlobal($event)"
     />
 
@@ -54,28 +55,20 @@
 <script setup lang="ts">
 import {
   ref,
-  watch,
-  onBeforeMount,
-  defineProps,
+  onMounted,
 } from 'vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import FormularioCliente from '@/components/FormularioCliente.vue';
 import ConfirmarEliminacion from '@/components/ConfirmarEliminacion.vue';
-import Tooltip2 from '@/components/Tooltip2.vue';
+import TooltipHover from '@/components/TooltipHover.vue';
 import { TAccionFormularioCliente } from '@/models/types';
+import { getUbicacion } from '@/helpers';
 
 const infoSistemaStore = useInfoSistemaStore();
 const accionFormulario = ref<TAccionFormularioCliente>('obtener');
 const clienteData = ref(null);
 const modalEliminarCliente = ref(false);
 const clienteEliminado = ref(false);
-
-const props = defineProps({
-  componenteVisible: {
-    type: Boolean,
-    required: true
-  }
-});
 
 const obtenerCliente = async (idCliente: string) => {
   const d = {};
@@ -88,7 +81,7 @@ const obtenerCliente = async (idCliente: string) => {
   d['direccion'] = {};
   d['contactos'] = [];
   d['direccion'].referencia = 'Una referencia';
-  d['direccion'].ubicacion = [0,0];
+  d['direccion'].ubicacion = getUbicacion() as any;
   d['contactos'].push(...[
     {
       tipo: 'telefono-movil',
@@ -117,31 +110,36 @@ const inicializarDatosDeCliente = async () => {
   
   // Si no hay data en OG quiere decir que hubo un cambio de operacion
   const hayDataEnOG = Object.keys(infoSistemaStore.getOperacionGlobal.data).length;
-
-  if (hayDataEnOG) {
-    clienteData.value = JSON.parse(JSON.stringify(infoSistemaStore.getOperacionGlobal.data));
-    return;
-  }
+  const clienteDataAux = JSON.parse(JSON.stringify(infoSistemaStore?.getOperacionGlobal?.data || {}));
 
   if (infoSistemaStore.getOperacionGlobal.dataInicial.accion === 'crear-cliente') {
     accionFormulario.value = 'crear';
-    clienteData.value = {
-      id: '',
-      nombre: '',
-      apellido: '',
-      nota: '',
-      fechaNacimiento: '',
-      direccion: { referencia: '', ubicacion: [0,0] },
-      contactos: [],
-    };
+    if (hayDataEnOG) clienteData.value = clienteDataAux;
+    else {
+      clienteData.value = {
+        id: '',
+        nombre: '',
+        apellido: '',
+        nota: '',
+        fechaNacimiento: '',
+        direccion: { referencia: '', ubicacion: getUbicacion() },
+        contactos: [],
+      };
+    }
   } else if (infoSistemaStore.getOperacionGlobal.dataInicial.accion === 'ver-cliente') {
     accionFormulario.value = 'obtener';
-    const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
-    clienteData.value = d;
+    if (hayDataEnOG) clienteData.value = clienteDataAux;
+    else {
+      const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
+      clienteData.value = d;
+    }
   } else if (infoSistemaStore.getOperacionGlobal.dataInicial.accion === 'actualizar-cliente') {
     accionFormulario.value = 'actualizar';
-    const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
-    clienteData.value = d;
+    if (hayDataEnOG) clienteData.value = clienteDataAux;
+    else {
+      const d = await obtenerCliente(infoSistemaStore.getOperacionGlobal.dataInicial.idCliente);
+      clienteData.value = d;
+    }
   }
 
   infoSistemaStore.setOperacionGlobal({
@@ -153,12 +151,7 @@ const actualizarDataGlobal = (data: object) => {
   infoSistemaStore.setOperacionGlobal({ data });
 };
 
-watch(() => props.componenteVisible, async () => {
-  if (!props.componenteVisible) return;
-  await inicializarDatosDeCliente();
-}, { deep: true });
-
-onBeforeMount(async () => {
+onMounted(async () => {
   await inicializarDatosDeCliente();
 });
 </script>

@@ -63,3 +63,39 @@
     width: 100%;
   }
 }
+
+.overlay-og {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
+  /* Asegúrate de que esté por encima del contenido principal pero por debajo del sidebar */
+  z-index: 600; 
+  transition: 0.6s;
+}
+
+.no-overlay-og {
+  display: none;
+  transition: 0.6s;
+}
+
+@media (max-width: 918px) {
+  .overlay-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Negro con 50% de opacidad */
+    /* Asegúrate de que esté por encima del contenido principal pero por debajo del sidebar */
+    z-index: 200; 
+    transition: 0.6s;
+  }
+
+  .no-overlay-sidebar {
+    display: none;
+    transition: 0.6s;
+  }
+}

@@ -1,15 +1,18 @@
 <template>
   <ais-instant-search
+    v-if="filtros"
     :search-client="searchClient"
     :index-name="indexName"
   >
-    <ais-configure :hitsPerPage="10" />
+  <ais-configure :filters="filtros" :hitsPerPage="10" />
 
-    <div class="containerV2">
+    <div :class="agendaliaBorderCard">
       <div class="search-and-button">
         <ais-search-box style="width: 100% !important;">
           <template #default="{ currentRefinement, isSearchStalled, refine }">
+            <!-- <span v-if="isSearchStalled">Loading...</span> -->
             <BuscadorGenerico
+              :disabled="!cantidadClientePorProfesional"
               propPlaceholder="Busca clientes"
               @escritura="obtenerEscritura"
               :configAlgolia="{
@@ -32,7 +35,7 @@
         </button>
       </div>
 
-      <div class="table-container">
+      <div v-if="cantidadClientePorProfesional > 0" class="table-container">
         <ais-hits :transform-items="transformItems">
           <template #default="{ items }">
             <table class="patient-table">
@@ -69,20 +72,6 @@
                   v-for="(item, index) in items"
                   :key="item.objectID"
                 >
-                  <!-- <td class="table-cell">
-                    <a :href="`/cliente/${item.id}`" target="_blank">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="#5d5fef"
-                        class="verCliente"
-                      >
-                        <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/>
-                      </svg>
-                    </a>
-                  </td> -->
                   <td class="table-cell patient-name">
                     {{ item.nombre }} {{ item.apellido }}
                   </td>
@@ -99,7 +88,7 @@
                     {{ item.doble_recordatorio ? 'Si' : 'No' }}
                   </td>
                   <td class="table-cell">
-                    <a :href="`/ficha/${item.id}`" target="_blank">
+                    <a :href="`/ficha/${item._id}`" target="_blank">
                       <button class="action-button" style="font-size: small;">
                         Ver Ficha
                       </button>
@@ -116,7 +105,7 @@
                       @click="infoSistemaStore.abrirSideBarOG('operacion-cliente', {
                         dataInicial: {
                           accion: 'actualizar-cliente',
-                          idCliente: item.id
+                          idCliente: item._id
                         }
                       })"
                     >
@@ -130,7 +119,33 @@
         </ais-hits>
       </div>
 
-      <ais-pagination>
+      <div v-else-if="cantidadClientePorProfesional === 0" class="flex items-center justify-center">
+        <div class="text-center bg-white p-8 rounded-lg">
+          <!-- Imagen arriba -->
+          <img src="@/assets/images/searching.png" alt="Placeholder Image" class="mx-auto mb-4" />
+
+          <!-- Texto debajo -->
+          <p class="text-lg font-semibold mb-4">
+            Aún no tienes clientes <span>:(</span>
+          </p>
+
+          <!-- Botón debajo del texto -->
+          <button
+            class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+            @click="infoSistemaStore.abrirSideBarOG('operacion-cliente', {
+              dataInicial: { accion: 'crear-cliente' }
+            })"
+          >
+            Agregar mi primer cliente
+          </button>
+        </div>
+      </div>
+
+      <div v-else>
+        Cargando..
+      </div>
+
+      <ais-pagination class="mb-5">
         <template #default="{ currentRefinement, nbPages, pages, isFirstPage, isLastPage, refine, createURL }">
           <ul class="pagination">
             <li :class="{ 'disabled': isFirstPage }">
@@ -163,20 +178,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import algoliasearch from 'algoliasearch/lite';
 
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore, useProfesionalStore } from '@/store';
+import { agendaliaBorderCard } from '@/helpers';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
-import { TOperacionGlobalID } from '@/models/types';
 
 const searchClient = algoliasearch(
   'BSDBYRKOOD',
   'a7ab8d03e87c362513e7ea4076a29be3'
 );
+const { VITE_ID_DEV_AMPLIA: idDevAmplia } = import.meta.env;
 const indexName = 'cliente';
 const searchQuery = ref('');
 const infoSistemaStore = useInfoSistemaStore();
+const profesionalStore = useProfesionalStore();
+const filtros = ref('');
+const cantidadClientePorProfesional = ref(-1);
 
 const obtenerEscritura = async (val: string) => {
   searchQuery.value = val;
@@ -200,6 +219,14 @@ const transformItems = (items: any[], data: any) => {
 
 obtenerEscritura('');
 
+onMounted(() => {
+  filtros.value += `idDevAmplia:${idDevAmplia} `;
+  filtros.value += `AND idProfesional:${profesionalStore.getIdProfesionalSeleccionado} `;
+});
+
+onBeforeMount(() => {
+  cantidadClientePorProfesional.value = 1;
+});
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="containerV2 mt-6 mb-6">
+    <div :class="`${agendaliaBorderCard} my-4`">
       <div class="calendar-container">
         <!-- Cabecera con selectores y botones -->
         <div class="flex flex-col md-custom:flex-row justify-between items-start md-custom:items-center mb-4 space-y-4 md-custom:space-y-0">
@@ -8,6 +8,7 @@
             <select
               v-model="selectedYear"
               class="bg-indigo-500 text-white rounded-md px-3 py-1"
+              style="cursor: pointer;"
             >
               <option
                 v-for="year in yearOptions"
@@ -20,6 +21,7 @@
             <select
               v-model="selectedMonth"
               class="bg-indigo-500 text-white rounded-md px-3 py-1"
+              style="cursor: pointer;"
             >
               <option
                 v-for="(month, index) in monthOptions"
@@ -36,68 +38,90 @@
               Hoy
             </button>
             <div class="flex mt-2 sm:mt-0 mr-2 space-x-2">
-              <TooltipButton 
-                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
-                tooltip-text="Semana anterior"
-                @click="previousWeek"
+              <TooltipHover 
+                position="arriba"
+                text="Semana anterior"
               >
-                &lt; <!-- Flecha izquierda -->
-              </TooltipButton>
-              <TooltipButton
-                button-class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
-                tooltip-text="Semana siguiente"
-                @click="nextWeek"
+                <button
+                  @click="previousWeek"
+                  class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
+                >
+                  &lt; <!-- Flecha izquierda -->
+                </button>
+              </TooltipHover>
+              <TooltipHover 
+                position="arriba"
+                text="Semana siguiente"
               >
-                &gt; <!-- Flecha derecha -->
-              </TooltipButton>
+                <button
+                  @click="nextWeek"
+                  class="px-3 py-1 bg-gray-200 text-gray-600 rounded-lg"
+                >
+                  &gt; <!-- Flecha derecha -->
+                </button>
+              </TooltipHover>
             </div>
           </div>
           <div class="flex space-x-2 acciones">
-            <TooltipButton 
-              button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
-              tooltip-text="Agendar paciente"
-              @click="infoSistemaStore.abrirSideBarOG('agendar-cliente', {
-                dataInicial: { }
-              })"
+            <TooltipHover 
+              position="arriba"
+              text="Agendar paciente"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#e8eaed"
-              ><path d="M680-80v-120H560v-80h120v-120h80v120h120v80H760v120h-80Zm-480-80q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h40v-80h80v80h240v-80h80v80h40q33 0 56.5 23.5T760-720v244q-20-3-40-3t-40 3v-84H200v320h280q0 20 3 40t11 40H200Zm0-480h480v-80H200v80Zm0 0v-80 80Z" /></svg>
-            </TooltipButton>
-            <TooltipButton 
-              button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
-              tooltip-text="Modificar agenda"
-              @click="infoSistemaStore.abrirSideBarOG('modificar-agenda', {
-                dataInicial: { }
-              })"
+              <button
+                class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
+                @click="infoSistemaStore.abrirSideBarOG('agendar-cliente', {
+                  dataInicial: { }
+                })"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#e8eaed"
+                ><path d="M680-80v-120H560v-80h120v-120h80v120h120v80H760v120h-80Zm-480-80q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h40v-80h80v80h240v-80h80v80h40q33 0 56.5 23.5T760-720v244q-20-3-40-3t-40 3v-84H200v320h280q0 20 3 40t11 40H200Zm0-480h480v-80H200v80Zm0 0v-80 80Z" /></svg>
+              </button>
+            </TooltipHover>
+
+            <TooltipHover 
+              position="arriba"
+              text="Modificar agenda"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#e8eaed"
-              ><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" /></svg>
-            </TooltipButton>
-            <TooltipButton 
-              button-class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
-              tooltip-text="Agregar hora libre"
-              @click="infoSistemaStore.abrirSideBarOG('agregar-hora-libre', {
-                dataInicial: { }
-              })"
+              <button
+                class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
+                @click="infoSistemaStore.abrirSideBarOG('modificar-agenda', {
+                  dataInicial: { }
+                })"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#e8eaed"
+                ><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" /></svg>
+              </button>
+            </TooltipHover>
+
+            <TooltipHover 
+              position="arriba"
+              text="Agregar hora libre"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#e8eaed"
-              ><path d="M662-60 520-202l56-56 85 85 170-170 56 57L662-60ZM296-280l-56-56 64-64-64-64 56-56 64 64 64-64 56 56-64 64 64 64-56 56-64-64-64 64ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v254l-80 81v-175H200v400h250l79 80H200Zm0-560h560v-80H200v80Zm0 0v-80 80Z" /></svg>
-            </TooltipButton>
+              <button
+                class="bg-indigo-500 text-white rounded-md px-3 py-1 text-sm"
+                @click="infoSistemaStore.abrirSideBarOG('agregar-hora-libre', {
+                  dataInicial: { }
+                })"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#e8eaed"
+                ><path d="M662-60 520-202l56-56 85 85 170-170 56 57L662-60ZM296-280l-56-56 64-64-64-64 56-56 64 64 64-64 56 56-64 64 64 64-56 56-64-64-64 64ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v254l-80 81v-175H200v400h250l79 80H200Zm0-560h560v-80H200v80Zm0 0v-80 80Z" /></svg>
+              </button>
+            </TooltipHover>
           </div>
         </div>
 
@@ -212,8 +236,9 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import TooltipButton from '@/components/TooltipButton.vue'
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import TooltipHover from '@/components/TooltipHover.vue'
+import { useInfoSistemaStore } from '@/store';
+import { agendaliaBorderCard } from '@/helpers';
 
 const infoSistemaStore = useInfoSistemaStore();
 
@@ -519,8 +544,6 @@ onMounted(() => {
 </script>
 
 <style>
-body{background-color: #F8F9FA;}
-
 @media (max-width: 727px) {
   .calendar-container {
     overflow-x:scroll;

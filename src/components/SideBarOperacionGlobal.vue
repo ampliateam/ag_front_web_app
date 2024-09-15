@@ -14,7 +14,7 @@
             ×
           </button>
         </header>
-        <div class="modal-body">
+        <div class="modal-body" v-if="props.isOpen">
           <slot />
         </div>
       </div>
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 const infoSistemaStore = useInfoSistemaStore();
 
 const props = defineProps({

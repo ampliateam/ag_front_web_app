@@ -14,10 +14,13 @@
           >
             <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
           </svg>
-          <h1 class="tituloNavBar text-2xl font-bold text-gray-900">
-            {{ obtenerTituloNavbar() }}
-          </h1>
         </div>
+
+        <ListaProfesionalSelect
+          :options="['agendalia-dev', 'agendalia-dev-5934417py', 'agendalia-test']"
+          defaultOption="agendalia-dev"
+        />
+
         <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end">
           <div class="max-w-lg w-full lg:max-w-xs">
             <BuscadorGenerico :conSlot="true">
@@ -32,7 +35,7 @@
             </BuscadorGenerico>
           </div>
         </div>
-        <div class="ml-4 flex items-center md:ml-6">
+        <div ignore-click-menu-perfil="true" class="flex items-center">
           <div class="ml-3 relative">
             <div>
               <button
@@ -63,11 +66,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+// import { ref, onMounted } from 'vue';
 // import algoliasearch from 'algoliasearch/lite';
-import useInfoSistemaStore from '@/store/info-sistema.store';
+import { useInfoSistemaStore } from '@/store';
 import BuscadorGenerico from '@/components/BuscadorGenerico.vue';
+import ListaProfesionalSelect from '@/components/ListaProfesionalSelect.vue';
 import MenuPerfil from '@/components/MenuPerfil.vue';
 
 // const searchClient = algoliasearch(
@@ -75,16 +78,7 @@ import MenuPerfil from '@/components/MenuPerfil.vue';
 //   'a7ab8d03e87c362513e7ea4076a29be3'
 // );
 // const indexName: 'cliente';
-const selectedIndex = ref(0);
 const infoSistemaStore = useInfoSistemaStore();
-
-const obtenerTituloNavbar = () => {
-  if (selectedIndex.value === 1) return 'Agenda';
-  else if (selectedIndex.value === 2) return 'Clientes';
-  else if (selectedIndex.value === 3) return 'Configuracion';
-  else if (selectedIndex.value === 4) return 'Perfil';
-  else return 'Agendalia'
-};
 
 const cambioEstadoSideBar = () => {
   infoSistemaStore.setSidebar(!infoSistemaStore.getSideBar);
@@ -93,22 +87,6 @@ const cambioEstadoSideBar = () => {
 const toggleProfileMenu = () => {
   infoSistemaStore.setMenuPerfil(!infoSistemaStore.getMenuPerfil);
 };
-
-onMounted(() => {
-  const route = useRoute();
-
-  if (route.path.startsWith('/agenda')) {
-    selectedIndex.value = 1;
-  } else if (route.path.startsWith('/clientes') || route.path.startsWith('/pacientes')) {
-    selectedIndex.value = 2;
-  } else if (route.path.startsWith('/configuracion')) {
-    selectedIndex.value = 3;
-  } else if (route.path.startsWith('/perfil')) {
-    selectedIndex.value = 4;
-  } else {
-    selectedIndex.value = 0;
-  }
-});
 
 </script>
 

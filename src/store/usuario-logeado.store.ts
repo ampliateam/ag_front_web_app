@@ -3,10 +3,10 @@ import { defineStore } from 'pinia';
 import * as services from '../domain/services';
 import { UsuarioLogeado } from '@/models/models';
 import { IniciarSesionConCorreoYContrasenaDTO, RegistrarConCorreoYContrasenaDTO } from '@/models/dto';
-import { setUsuarioLogeadoLS, setUsuarioLogeadoTokenLS } from '@/helpers';
-import useInfoSistemaStore from './info-sistema.store';
+import { useInfoSistemaStore } from './info-sistema.store';
 
-const useUsuarioStore = defineStore('usuario-logeado', {
+export const useUsuarioLogeadoStore = defineStore('usuario-logeado', {
+  persist: true,
   state: ():UsuarioLogeado => {
     return {
       uid: '',
@@ -24,12 +24,6 @@ const useUsuarioStore = defineStore('usuario-logeado', {
       this.uid = dto?.uid || '';
       this.email = dto?.email || '';
       this.token = dto?.token || '';
-      setUsuarioLogeadoTokenLS(this.token);
-      setUsuarioLogeadoLS({
-        uid: this.uid,
-        email: this.email,
-        token: this.token,
-      });
     },
     async registrarUsuarioPersona(dto: RegistrarConCorreoYContrasenaDTO) {
       try {
@@ -75,5 +69,3 @@ const useUsuarioStore = defineStore('usuario-logeado', {
     }
   },
 });
-
-export default useUsuarioStore;

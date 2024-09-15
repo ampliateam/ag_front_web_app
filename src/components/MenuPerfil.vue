@@ -2,6 +2,7 @@
   <div
     v-if="infoSistemaStore.getMenuPerfil"
     class="profile-card"
+    ref="profileCard"
   >
     <button
       class="close-button"
@@ -10,7 +11,6 @@
       ×
     </button>
     <div class="card-content">
-      <!-- <span class="email">{{ userStore.email }}</span> -->
       <div class="profile-info">
         <img
           src="https://router.vuejs.org/mp-pinia-logo.svg"
@@ -24,19 +24,19 @@
 
       <hr class="divider">
 
-      <router-link to="/perfil">
+      <router-link to="/perfil" @click="clickCerrarMenu();">
         <button class="action-button-menu-perfil">
           Administrar tu cuenta
         </button>
       </router-link>
 
-      <router-link to="/perfil-profesional">
+      <router-link to="/perfil-profesional" @click="clickCerrarMenu();">
         <button class="action-button-menu-perfil">
           Perfil profesional
         </button>
       </router-link>
 
-      <router-link to="/planes-y-suscripciones">
+      <router-link to="/planes-y-suscripciones" @click="clickCerrarMenu();">
         <button class="action-button-menu-perfil">
           Planes y suscripciones
         </button>
@@ -46,7 +46,7 @@
 
       <button
         class="action-button-menu-perfil"
-        @click="logout"
+        @click="clickCerrarMenu(); logout();"
       >
         Cerrar sesión
       </button>
@@ -66,22 +66,49 @@
 </template>
 
 <script setup lang="ts">
-import useInfoSistemaStore from '@/store/info-sistema.store';
-import usuarioLogeadoStore from '@/store/usuario-logeado.store';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useInfoSistemaStore, useUsuarioLogeadoStore } from '@/store';
 import router from '@/router';
 
 const infoSistemaStore = useInfoSistemaStore();
+const profileCard = ref(null);
 
 const cambiarEstado = () => {
   infoSistemaStore.setMenuPerfil(!infoSistemaStore.getMenuPerfil);
-}
+};
 
 const logout = async () => {
-  const userStore = usuarioLogeadoStore();
+  const userStore = useUsuarioLogeadoStore();
   await userStore.logout();
   router.push('/inicio-sesion');
-}
+};
 
+const clickCerrarMenu = () => {
+  infoSistemaStore.setMenuPerfil(!infoSistemaStore.getMenuPerfil);
+};
+
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+
+  // Verificaciones adicionales para ignorar componentes específicos
+  const ignoredElements = [
+    // Atributos
+    '[ignore-click-menu-perfil]'
+  ];
+  const isIgnored = ignoredElements.some(selector => target.closest(selector));
+  
+  if (profileCard.value && !profileCard.value.contains(event.target as Node) && !isIgnored) {
+    infoSistemaStore.setMenuPerfil(false);
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
@@ -110,7 +137,6 @@ const logout = async () => {
   margin-right: 10px;
   transition: all 0.3s ease-in-out;
 }
-
 
 .close-button {
   margin: 5px 19px 0 0;
@@ -196,7 +222,6 @@ const logout = async () => {
   }
 
   .card-content {
-    /* min-height: 50%; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
