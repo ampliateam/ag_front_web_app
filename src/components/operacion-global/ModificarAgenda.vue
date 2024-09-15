@@ -20,7 +20,7 @@
               Horario de atención
             </div>
             <div class="text-center">
-              Horario de almuerzo
+              Cantidad de recesos
             </div>
             <div class="text-center">
               Acciones
@@ -30,26 +30,32 @@
           <!-- Lista de días -->
           <ul>
             <!-- Lunes -->
-            <li class="border-b">
+            <li
+              v-for="dia, index in dias"
+              :key="index"
+              class="border-b"
+            >
               <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Lunes</div>
+                <div>{{ dia.diaTitulo }}</div>
                 <div class="text-center">
                   <input
                     type="checkbox"
                     class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[0].esDiaLaboral"
+                    v-model="agendaActualizada[index].esDiaLaboral"
                   >
                 </div>
                 <div class="text-center">
-                  {{ agendaActualizada[0].atencion.horaInicio }} hasta {{ agendaActualizada[0].atencion.horaFin }}
+                  {{ agendaActualizada[index].atencion.horaInicio }} hasta {{ agendaActualizada[index].atencion.horaFin }}
                 </div>
-                <div class="text-center">
-                  {{ agendaActualizada[0].almuerzo.horaInicio }} hasta {{ agendaActualizada[0].almuerzo.horaFin }}
+                <div
+                  class="text-center"
+                >
+                  {{ agendaActualizada[index].recesos.length }} recesos
                 </div>
                 <div class="text-center">
                   <button
                     class="action-button"
-                    @click="toggleDropdown('lunes')"
+                    @click="toggleDropdown(dia.diaCodigo)"
                   >
                     Modificar horas
                   </button>
@@ -57,632 +63,136 @@
               </div>
               <!-- Dropdown para Lunes -->
               <div
-                id="dropdown-lunes"
+                :id="'dropdown-'+dia.diaCodigo"
                 class="hidden p-4"
               >
+                <h2 class="text-gray-700 text-lg font-bold mb-2">
+                  Horario de atención
+                </h2>
                 <div class="grid grid-cols-2 gap-4">
                   <div>
                     <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-lunes"
+                      class="block text-gray-700 text-sm"
                     >
-                      Atención - Hora Inicio
+                      Hora Inicio
                     </label>
                     <input
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-lunes"
                       type="time"
-                      v-model="agendaActualizada[0].atencion.horaInicio"
+                      v-model="agendaActualizada[index].atencion.horaInicio"
                     >
                   </div>
                   <div>
                     <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-lunes"
+                      class="block text-gray-700 text-sm"
                     >
-                      Atención - Hora Fin
+                      Hora Fin
                     </label>
                     <input
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-lunes"
                       type="time"
-                      v-model="agendaActualizada[0].atencion.horaFin"
+                      v-model="agendaActualizada[index].atencion.horaFin"
                     >
                   </div>
-                  <div>
+                </div>
+                <h2 class="text-gray-700 text-lg font-bold mb-2 mt-2">
+                  Horario de recesos
+                </h2>
+                <div
+                  v-for="receso, indexReceso of agendaActualizada[index].recesos"
+                  class="flex justify-between items-center mb-4"
+                >
+                  <div class="flex-1 mr-2">
                     <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-lunes"
+                      class="block text-gray-700 text-sm"
                     >
-                      Almuerzo - Hora Inicio
+                      Nota
                     </label>
                     <input
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-lunes"
-                      type="time"
-                      v-model="agendaActualizada[0].almuerzo.horaInicio"
+                      type="text"
+                      v-model="receso.nota"
                     >
                   </div>
-                  <div>
+                  <div class="flex-1 mr-2">
                     <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-lunes"
+                      class="block text-gray-700 text-sm"
                     >
-                      Almuerzo - Hora Fin
+                      Hora Inicio
+                    </label>
+                    <input
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
+                      type="time"
+                      v-model="receso.horaInicio"
+                    >
+                  </div>
+                  <div class="flex-1 mr-2">
+                    <label
+                      class="block text-gray-700 text-sm"
+                    >
+                      Hora Fin
                     </label>
                     <input
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-lunes"
                       type="time"
-                      v-model="agendaActualizada[0].atencion.horaFin"
+                      v-model="receso.horaFin"
                     >
                   </div>
-                </div>
-              </div>
-            </li>
-
-            <!-- martes -->
-            <li class="border-b">
-              <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Martes</div>
-                <div class="text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[1].esDiaLaboral"
-                  >
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[1].atencion.horaInicio }} hasta {{ agendaActualizada[1].atencion.horaFin }}
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[1].almuerzo.horaInicio }} hasta {{ agendaActualizada[1].almuerzo.horaFin }}
-                </div>
-                <div class="text-center">
                   <button
-                    class="action-button"
-                    @click="toggleDropdown('martes')"
+                    type="button"
+                    @click="eliminarReceso(index, indexReceso)"
+                    class="text-red-500 hover:text-red-600 mt-4"
                   >
-                    Modificar horas
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
                   </button>
                 </div>
-              </div>
-              <!-- Dropdown para martes -->
-              <div
-                id="dropdown-martes"
-                class="hidden p-4"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-martes"
-                    >
-                      Atención - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-martes"
-                      type="time"
-                      v-model="agendaActualizada[1].atencion.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-martes"
-                    >
-                      Atención - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-martes"
-                      type="time"
-                      v-model="agendaActualizada[1].atencion.horaFin"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-martes"
-                    >
-                      Almuerzo - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-martes"
-                      type="time"
-                      v-model="agendaActualizada[1].almuerzo.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-martes"
-                    >
-                      Almuerzo - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-martes"
-                      type="time"
-                      v-model="agendaActualizada[1].atencion.horaFin"
-                    >
-                  </div>
-                </div>
-              </div>
-            </li>
-            
-            <!-- miercoles -->
-            <li class="border-b">
-              <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Miércoles</div>
-                <div class="text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[2].esDiaLaboral"
+                <button
+                  type="button"
+                  @click="addReceso(index)"
+                  class="text-blue-500 hover:text-blue-600 mt-5 mb-5"
+                >
+                  <svg
+                    class="w-5 h-5 inline-block mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[2].atencion.horaInicio }} hasta {{ agendaActualizada[2].atencion.horaFin }}
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[2].almuerzo.horaInicio }} hasta {{ agendaActualizada[2].almuerzo.horaFin }}
-                </div>
-                <div class="text-center">
-                  <button
-                    class="action-button"
-                    @click="toggleDropdown('miercoles')"
-                  >
-                    Modificar horas
-                  </button>
-                </div>
-              </div>
-              <!-- Dropdown para miercoles -->
-              <div
-                id="dropdown-miercoles"
-                class="hidden p-4"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-miercoles"
-                    >
-                      Atención - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-miercoles"
-                      type="time"
-                      v-model="agendaActualizada[2].atencion.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-miercoles"
-                    >
-                      Atención - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-miercoles"
-                      type="time"
-                      v-model="agendaActualizada[2].atencion.horaFin"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-miercoles"
-                    >
-                      Almuerzo - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-miercoles"
-                      type="time"
-                      v-model="agendaActualizada[2].almuerzo.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-miercoles"
-                    >
-                      Almuerzo - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-miercoles"
-                      type="time"
-                      v-model="agendaActualizada[2].atencion.horaFin"
-                    >
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <!-- jueves -->
-            <li class="border-b">
-              <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Jueves</div>
-                <div class="text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[3].esDiaLaboral"
-                  >
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[3].atencion.horaInicio }} hasta {{ agendaActualizada[3].atencion.horaFin }}
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[3].almuerzo.horaInicio }} hasta {{ agendaActualizada[3].almuerzo.horaFin }}
-                </div>
-                <div class="text-center">
-                  <button
-                    class="action-button"
-                    @click="toggleDropdown('jueves')"
-                  >
-                    Modificar horas
-                  </button>
-                </div>
-              </div>
-              <!-- Dropdown para jueves -->
-              <div
-                id="dropdown-jueves"
-                class="hidden p-4"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-jueves"
-                    >
-                      Atención - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-jueves"
-                      type="time"
-                      v-model="agendaActualizada[3].atencion.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-jueves"
-                    >
-                      Atención - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-jueves"
-                      type="time"
-                      v-model="agendaActualizada[3].atencion.horaFin"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-jueves"
-                    >
-                      Almuerzo - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-jueves"
-                      type="time"
-                      v-model="agendaActualizada[3].almuerzo.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-jueves"
-                    >
-                      Almuerzo - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-jueves"
-                      type="time"
-                      v-model="agendaActualizada[3].atencion.horaFin"
-                    >
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <!-- viernes -->
-            <li class="border-b">
-              <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Viernes</div>
-                <div class="text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[4].esDiaLaboral"
-                  >
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[4].atencion.horaInicio }} hasta {{ agendaActualizada[4].atencion.horaFin }}
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[4].almuerzo.horaInicio }} hasta {{ agendaActualizada[4].almuerzo.horaFin }}
-                </div>
-                <div class="text-center">
-                  <button
-                    class="action-button"
-                    @click="toggleDropdown('viernes')"
-                  >
-                    Modificar horas
-                  </button>
-                </div>
-              </div>
-              <!-- Dropdown para viernes -->
-              <div
-                id="dropdown-viernes"
-                class="hidden p-4"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-viernes"
-                    >
-                      Atención - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-viernes"
-                      type="time"
-                      v-model="agendaActualizada[4].atencion.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-viernes"
-                    >
-                      Atención - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-viernes"
-                      type="time"
-                      v-model="agendaActualizada[4].atencion.horaFin"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-viernes"
-                    >
-                      Almuerzo - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-viernes"
-                      type="time"
-                      v-model="agendaActualizada[4].almuerzo.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-viernes"
-                    >
-                      Almuerzo - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-viernes"
-                      type="time"
-                      v-model="agendaActualizada[4].atencion.horaFin"
-                    >
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <!-- sabado -->
-            <li class="border-b">
-              <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Sábado</div>
-                <div class="text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[5].esDiaLaboral"
-                  >
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[5].atencion.horaInicio }} hasta {{ agendaActualizada[5].atencion.horaFin }}
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[5].almuerzo.horaInicio }} hasta {{ agendaActualizada[5].almuerzo.horaFin }}
-                </div>
-                <div class="text-center">
-                  <button
-                    class="action-button"
-                    @click="toggleDropdown('sabado')"
-                  >
-                    Modificar horas
-                  </button>
-                </div>
-              </div>
-              <!-- Dropdown para sabado -->
-              <div
-                id="dropdown-sabado"
-                class="hidden p-4"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-sabado"
-                    >
-                      Atención - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-sabado"
-                      type="time"
-                      v-model="agendaActualizada[5].atencion.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-sabado"
-                    >
-                      Atención - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-sabado"
-                      type="time"
-                      v-model="agendaActualizada[5].atencion.horaFin"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-sabado"
-                    >
-                      Almuerzo - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-sabado"
-                      type="time"
-                      v-model="agendaActualizada[5].almuerzo.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-sabado"
-                    >
-                      Almuerzo - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-sabado"
-                      type="time"
-                      v-model="agendaActualizada[5].atencion.horaFin"
-                    >
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <!-- domingo -->
-            <li class="border-b">
-              <div class="p-4 grid grid-cols-5 gap-4 items-center">
-                <div>Domingo</div>
-                <div class="text-center">
-                  <input
-                    type="checkbox"
-                    class="form-checkbox h-5 w-5 text-blue-600"
-                    v-model="agendaActualizada[6].esDiaLaboral"
-                  >
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[6].atencion.horaInicio }} hasta {{ agendaActualizada[6].atencion.horaFin }}
-                </div>
-                <div class="text-center">
-                  {{ agendaActualizada[6].almuerzo.horaInicio }} hasta {{ agendaActualizada[6].almuerzo.horaFin }}
-                </div>
-                <div class="text-center">
-                  <button
-                    class="action-button"
-                    @click="toggleDropdown('domingo')"
-                  >
-                    Modificar horas
-                  </button>
-                </div>
-              </div>
-              <!-- Dropdown para domingo -->
-              <div
-                id="dropdown-domingo"
-                class="hidden p-4"
-              >
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionInicio-domingo"
-                    >
-                      Atención - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionInicio-domingo"
-                      type="time"
-                      v-model="agendaActualizada[6].atencion.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="atencionFin-domingo"
-                    >
-                      Atención - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="atencionFin-domingo"
-                      type="time"
-                      v-model="agendaActualizada[6].atencion.horaFin"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoInicio-domingo"
-                    >
-                      Almuerzo - Hora Inicio
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"                      
-                      id="almuerzoInicio-domingo"
-                      type="time"
-                      v-model="agendaActualizada[6].almuerzo.horaInicio"
-                    >
-                  </div>
-                  <div>
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      for="almuerzoFin-domingo"
-                    >
-                      Almuerzo - Hora Fin
-                    </label>
-                    <input
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      id="almuerzoFin-domingo"
-                      type="time"
-                      v-model="agendaActualizada[6].atencion.horaFin"
-                    >
-                  </div>
-                </div>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
+                  </svg>
+                  Agregar receso
+                </button>
               </div>
             </li>
           </ul>
         </div>
+      </div>
   
-        <div class="mt-4 text-right">
-          <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
-            Cancelar
-          </button>
-          <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-r">
-            Actualizar
-          </button>
-        </div>
+      <div class="mt-4 text-right">
+        <button
+          type="submit"
+          class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 "
+        >
+          Guardar
+        </button>
       </div>
     </form>
   </div>
@@ -697,6 +207,16 @@ import 'dayjs/locale/es';
 dayjs.locale('es');
 
 const agenda = ref([])
+
+const dias = ref([{diaCodigo: 'lunes', diaTitulo: 'Lunes'},
+{diaCodigo: 'martes', diaTitulo: 'Martes'},
+{diaCodigo: 'miercoles', diaTitulo: 'Miércoles'},
+{diaCodigo: 'jueves', diaTitulo: 'Jueves'},
+{diaCodigo: 'viernes', diaTitulo: 'Viernes'},
+{diaCodigo: 'sabado', diaTitulo: 'Sábado'}, {diaCodigo: 'domingo', diaTitulo: 'Domingo'}
+])
+
+
 const agendaActualizada = ref([
           {
             dia: 'lunes',
@@ -705,10 +225,11 @@ const agendaActualizada = ref([
               horaInicio: '08:00',
               horaFin: '19:00'
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '12:00',
-              horaFin: '13:00'
-            },
+              horaFin: '13:00',
+              nota: ''
+            }],
           },
           {
             dia: 'martes',
@@ -717,10 +238,11 @@ const agendaActualizada = ref([
               horaInicio: '09:00',
               horaFin: '18:00'
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '13:00',
-              horaFin: '14:00'
-            },
+              horaFin: '14:00',
+              nota: ''
+            }],
           },
           {
             dia: 'miercoles',
@@ -729,10 +251,11 @@ const agendaActualizada = ref([
               horaInicio: '09:00',
               horaFin: '18:00'
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '12:00',
-              horaFin: '13:00'
-            },
+              horaFin: '13:00',
+              nota: ''
+            }],
           },
           {
             dia: 'jueves',
@@ -741,10 +264,11 @@ const agendaActualizada = ref([
               horaInicio: '09:00',
               horaFin: '18:00'
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '12:00',
-              horaFin: '13:00'
-            },
+              horaFin: '13:00',
+              nota: ''
+            }],
           },
           {
             dia: 'viernes',
@@ -753,22 +277,24 @@ const agendaActualizada = ref([
               horaInicio: '09:00',
               horaFin: '18:00'
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '12:00',
-              horaFin: '13:00'
-            },
+              horaFin: '13:00',
+              nota: ''
+            }],
           },
           {
             dia: 'sabado',
             esDiaLaboral: false,
             atencion: {
               horaInicio: '00:00',
-              horaFin: '00:00'
+              horaFin: '00:00',
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '00:00',
-              horaFin: '00:00'
-            },
+              horaFin: '00:00',
+              nota: ''
+            }],
           },
           {
             dia: 'domingo',
@@ -777,10 +303,11 @@ const agendaActualizada = ref([
               horaInicio: '00:00',
               horaFin: '00:00'
             },
-            almuerzo: {
+            recesos: [{
               horaInicio: '00:00',
-              horaFin: '00:00'
-            },
+              horaFin: '00:00',
+              nota: ''
+            }],
           },
         ],)
 
@@ -843,6 +370,18 @@ const obtenerFecha = (fecha) => {
 
 const obtenerHora = (fecha) => {
   return dayjs(fecha).format('HH:mm');
+}
+
+const addReceso = (index) => {
+  agendaActualizada.value[index].recesos.push({
+    horaInicio: '00:00',
+    horaFin: '00:00',
+    nota: ''
+  })
+}
+
+const eliminarReceso = (index, indexReceso) => {
+  agendaActualizada.value[index].recesos.splice(indexReceso, 1);
 }
 
 

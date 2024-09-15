@@ -175,12 +175,8 @@
                 :style="getAgendamientoStyle(agendamiento, date)"
                 class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded cursor-pointer"
                 @click="infoSistemaStore.abrirSideBarOG('ver-agendamiento', {
-                  dataInicial: { 
-                    idCliente: agendamiento.idCliente, 
-                    idAgendamiento: agendamiento.id,
-                    nombre: agendamiento.nombre,
-                    agendamientoInicio: agendamiento.agendamientoInicio,
-                    agendamientoFin: agendamiento.agendamientoFin
+                  dataInicial: {
+                    agendamiento: agendamiento
                   }
                 })"
               >
@@ -188,6 +184,21 @@
                 <br>
                 {{ formatTime(agendamiento.agendamientoInicio) }} -
                 {{ formatTime(agendamiento.agendamientoFin) }}
+              </div>
+              <div
+                v-for="receso, indexR in agenda[index].recesos"
+                :key="indexR"
+                class="absolute w-11/12 px-1 py-0.5 text-xs overflow-hidden rounded cursor-pointer"
+                :class="getAgendamientoClass(receso)"
+                :style="getRecesoStyle(receso, date)"
+                @click="infoSistemaStore.abrirSideBarOG('modificar-agenda', {
+                  dataInicial: { }
+                })"
+              >
+                Receso
+                <br>
+                {{ receso.horaInicio }} -
+                {{ receso.horaFin }}
               </div>
             </div>
           </div>
@@ -237,10 +248,100 @@ const weekDays = ref([]);
 const weekDates = ref([]);
 const agendamientos = ref([]);
 
-// const hours = ref([
-//   '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
-//   '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00',
-// ]);
+const agenda = ref([
+          {
+            dia: 'lunes',
+            esDiaLaboral: true,
+            atencion: {
+              horaInicio: '08:00',
+              horaFin: '19:00'
+            },
+            recesos: [{
+              horaInicio: '12:00',
+              horaFin: '13:00',
+              nota: ''
+            }],
+          },
+          {
+            dia: 'martes',
+            esDiaLaboral: true,
+            atencion: {
+              horaInicio: '09:00',
+              horaFin: '18:00'
+            },
+            recesos: [{
+              horaInicio: '13:00',
+              horaFin: '14:00',
+              nota: ''
+            }],
+          },
+          {
+            dia: 'miercoles',
+            esDiaLaboral: true,
+            atencion: {
+              horaInicio: '09:00',
+              horaFin: '18:00'
+            },
+            recesos: [{
+              horaInicio: '12:00',
+              horaFin: '13:00',
+              nota: ''
+            }],
+          },
+          {
+            dia: 'jueves',
+            esDiaLaboral: true,
+            atencion: {
+              horaInicio: '09:00',
+              horaFin: '18:00'
+            },
+            recesos: [{
+              horaInicio: '12:00',
+              horaFin: '13:00',
+              nota: ''
+            }],
+          },
+          {
+            dia: 'viernes',
+            esDiaLaboral: true,
+            atencion: {
+              horaInicio: '09:00',
+              horaFin: '18:00'
+            },
+            recesos: [{
+              horaInicio: '12:00',
+              horaFin: '13:00',
+              nota: ''
+            }],
+          },
+          {
+            dia: 'sabado',
+            esDiaLaboral: false,
+            atencion: {
+              horaInicio: '00:00',
+              horaFin: '00:00',
+            },
+            recesos: [{
+              horaInicio: '00:00',
+              horaFin: '00:00',
+              nota: ''
+            }],
+          },
+          {
+            dia: 'domingo',
+            esDiaLaboral: false,
+            atencion: {
+              horaInicio: '00:00',
+              horaFin: '00:00'
+            },
+            recesos: [{
+              horaInicio: '00:00',
+              horaFin: '00:00',
+              nota: ''
+            }],
+          },
+        ],)
+
 const hours = ref([
   '07:00',
   '08:00',
@@ -351,6 +452,21 @@ const getAgendamientoStyle = (agendamiento, date) => {
     'margin-left': '4.1666%',
   };
 };
+const getRecesoStyle = (receso, dateString) => {
+  const date = new Date(dateString);
+  const startOfDay = dayjs(date).startOf('day').hour(7); // 7:00 AM
+  const start = dayjs(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${receso.horaInicio}`);
+  const end = dayjs(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${receso.horaFin}`);
+
+  const topPosition = (start.diff(startOfDay, 'minute') / 60) * 48; // 40px per hour
+  const height = (end.diff(start, 'minute') / 60) * 48;
+
+  return {
+    top: `${topPosition}px`,
+    height: `${height}px`,
+    'margin-left': '4.1666%',
+  };
+};
 
 const getAgendamientoClass = (agendamiento) => {
   switch (agendamiento.nombre) {
@@ -384,10 +500,11 @@ onMounted(() => {
   agendamientos.value = [
     {
       id: '1',
-      idCliente: '',
+      idCliente: 'aaaaaaa00000000000000002',
       nombre: 'Cris Velazquez',
       agendamientoInicio: dayjs().day(2).hour(10).minute(0).toDate(),
       agendamientoFin: dayjs().day(2).hour(12).minute(0).toDate(),
+      estado:'pendiente'
     },
     {
       id: '2',
@@ -395,6 +512,7 @@ onMounted(() => {
       nombre: 'Guillermo Paiva',
       agendamientoInicio: dayjs().day(3).hour(9).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(11).minute(0).toDate(),
+      estado:'confirmado'
     },
     {
       id: '3',
@@ -402,41 +520,15 @@ onMounted(() => {
       nombre: 'Cris Velazquez',
       agendamientoInicio: dayjs().day(3).hour(11).minute(0).toDate(),
       agendamientoFin: dayjs().day(3).hour(11).minute(30).toDate(),
-    },
-    {
-      id: '4',
-      idCliente: '',
-      nombre: 'Hora libre',
-      agendamientoInicio: dayjs().day(1).hour(12).minute(0).toDate(),
-      agendamientoFin: dayjs().day(1).hour(13).minute(0).toDate(),
-    },
-    {
-      id: '5',
-      idCliente: '',
-      nombre: 'Hora libre',
-      agendamientoInicio: dayjs().day(2).hour(12).minute(0).toDate(),
-      agendamientoFin: dayjs().day(2).hour(13).minute(0).toDate(),
-    },
-    {
-      id: '6',
-      idCliente: '',
-      nombre: 'Hora libre',
-      agendamientoInicio: dayjs().day(3).hour(12).minute(0).toDate(),
-      agendamientoFin: dayjs().day(3).hour(13).minute(0).toDate(),
+      estado:'pendiente'
     },
     {
       id: '7',
       idCliente: '',
       nombre: 'Hora libre',
-      agendamientoInicio: dayjs().day(4).hour(12).minute(0).toDate(),
-      agendamientoFin: dayjs().day(4).hour(13).minute(0).toDate(),
-    },
-    {
-      id: '8',
-      idCliente: '',
-      nombre: 'Hora libre',
-      agendamientoInicio: dayjs().day(5).hour(12).minute(0).toDate(),
-      agendamientoFin: dayjs().day(5).hour(13).minute(0).toDate(),
+      agendamientoInicio: dayjs().day(4).hour(16).minute(0).toDate(),
+      agendamientoFin: dayjs().day(4).hour(17).minute(0).toDate(),
+      estado:''
     },
     {
       id: '2',
@@ -444,6 +536,7 @@ onMounted(() => {
       nombre: 'Guillermo Paiva',
       agendamientoInicio: dayjs().day(5).hour(14).minute(30).toDate(),
       agendamientoFin: dayjs().day(5).hour(15).minute(30).toDate(),
+      estado:'cancelado'
     },
     // Agrega más agendamientos según la imagen
   ];

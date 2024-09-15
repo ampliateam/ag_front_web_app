@@ -200,12 +200,14 @@
             </div>
           </div>
         </div>
-        <button
-          type="submit"
-          class="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Guardar
-        </button>
+        <div class="mt-4 text-right">
+          <button
+            type="submit"
+            class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 "
+          >
+            Guardar
+          </button>
+        </div>
       </form>
     </ais-instant-search>
   </div>

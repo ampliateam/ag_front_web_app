@@ -1,19 +1,42 @@
 <template>
   <div class="">
     <div class="card-content">
-      <h2 class="text-2xl font-bold mb-6 text-gray-800">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 mr-4">
         Agendamiento
       </h2>
-
-      <button
-        class="action-button text-sm font-medium"
+      <label
+        class="text-base font-bold mb-6 text-teal-300 mt-1"
+        v-if="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.estado === 'confirmado'"
       >
-        Nuevo cliente
-      </button>
+        Confirmado
+      </label>
+      <label
+        class="text-base font-bold mb-6 text-yellow-500 mt-1"
+        v-if="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.estado === 'pendiente'"
+      >
+        No confirmado
+      </label>
+      <label
+        class="text-base font-bold mb-6 text-red-500 mt-1"
+        v-if="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.estado === 'cancelado'"
+      >
+        Cancelado
+      </label>
+      <label
+        class="text-base font-bold mb-6 text-red-500 mt-1"
+        v-if="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.estado === 'cancelado-por-profesional'"
+      >
+        Cancelado por profesional
+      </label>
+      <label
+        class="text-base font-bold mb-6 text-gray-500 mt-1"
+        v-if="!infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.idCliente"
+      >
+        Hora libre
+      </label>
     </div>
     <form
       @submit.prevent="crearCliente"
-      v-if="!!infoSistemaStore.getOperacionGlobal.dataInicial.idCliente"
     >
       <p class="text-sm text-gray-600 mb-4">
         Los campos con * son obligatorios
@@ -27,7 +50,7 @@
               class="block text-sm font-medium text-gray-700 mb-1"
             >Nombre y apellido *</label>
             <input
-              :value="infoSistemaStore.getOperacionGlobal.dataInicial.nombre"
+              :value="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.nombre"
               type="text"
               id="nombre"
               required
@@ -41,33 +64,36 @@
               class="block text-sm font-medium text-gray-700 mb-1"
             >Nota</label>
             <input
-              :value="infoSistemaStore.getOperacionGlobal.dataInicial.nota"
+              :value="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.nota"
               type="text"
               id="apellido"
-              disabled
+              :disabled="!!infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.idCliente"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
           </div>
-          <div>
+          <div v-if="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.idCliente">
             <label
               for="nota"
               class="block text-sm font-medium text-gray-700 mb-1"
             >Contacto</label>
             <input
-              :value="infoSistemaStore.getOperacionGlobal.dataInicial.contacto"
+              :value="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.contacto"
               type="text"
               id="nota"
               disabled
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
           </div>
-          <div class="mb-4">
+          <div
+            class="mb-4"
+            v-if="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.idCliente"
+          >
             <label
               for="nota"
               class="block text-sm font-medium text-gray-700 mb-1"
             >Dirección</label>
             <input
-              :value="infoSistemaStore.getOperacionGlobal.dataInicial.direccion"
+              :value="infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.direccion"
               type="text"
               id="nota"
               disabled
@@ -83,7 +109,7 @@
               class="block text-sm font-medium text-gray-700 mb-1"
             >Fecha *</label>
             <input
-              :value="obtenerFecha(infoSistemaStore.getOperacionGlobal.dataInicial.agendamientoInicio)"
+              :value="obtenerFecha(infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.agendamientoInicio)"
               type="date"
               id="fechaNacimiento"
               :required="false"
@@ -96,7 +122,7 @@
               class="block text-sm font-medium text-gray-700 mb-1"
             >Hora inicio *</label>
             <input
-              :value="obtenerHora(infoSistemaStore.getOperacionGlobal.dataInicial.agendamientoInicio)"
+              :value="obtenerHora(infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.agendamientoInicio)"
               type="time"
               id="apellido"
               required
@@ -109,7 +135,7 @@
               class="block text-sm font-medium text-gray-700 mb-1"
             >Hora fin *</label>
             <input
-              :value="obtenerHora(infoSistemaStore.getOperacionGlobal.dataInicial.agendamientoFin)"
+              :value="obtenerHora(infoSistemaStore.getOperacionGlobal.dataInicial.agendamiento.agendamientoFin)"
               type="time"
               id="nota"
               required
@@ -118,12 +144,30 @@
           </div>
         </div>
       </div>
-      <button
-        type="submit"
-        class="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-      >
-        Guardar
-      </button>
+      <div class="flex espaciado ">
+        <div class="flex">
+          <button
+            type="submit"
+            class="bg-white text-indigo-600 border border-indigo-600 py-2 px-4 rounded-md hover:bg-indigo-600  mr-2 hover:text-white"
+          >
+            Cancelar agendamiento
+          </button>
+          <button
+            type="submit"
+            class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600"
+          >
+            Enviar recordatorio
+          </button>
+        </div>
+        <div class="flex">
+          <button
+            type="submit"
+            class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 "
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </template>
@@ -208,7 +252,7 @@ const crearCliente = async () => {
 }
 
 const obtenerFecha = (fecha) => {
-  return dayjs(fecha).format('DD/MM/YYYY');
+  return dayjs(fecha).format('YYYY-MM-DD');
 }
 
 const obtenerHora = (fecha) => {
@@ -324,8 +368,15 @@ const obtenerHora = (fecha) => {
     /* min-height: 50%; */
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
   }
+
+.espaciado {
+  /* min-height: 50%; */
+  display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 @media (max-width: 600px) {
   .search-and-button {
